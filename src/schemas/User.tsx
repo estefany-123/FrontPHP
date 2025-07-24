@@ -61,9 +61,16 @@ export const UserSchema = z.object({
     password: z
         .string({ message: "Contraseña es obligatoria" })
         .min(8, { message: "Contraseña es requerida" }),
+    password_confirmation : z
+        .string()
+        .min(8, { message: "minimo 8 caracteres" }),
     fk_rol: z
         .number({ message: "Rol es requerido y debe ser un numero" })
 })
+    .refine((data)=> data.password === data.password_confirmation,{
+        message: "Las contraseñas no coinciden",
+        path:["password_confirmation"]
+    })
 
 export type User = z.infer<typeof UserSchema>
 
