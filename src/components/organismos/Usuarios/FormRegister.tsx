@@ -25,10 +25,14 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
     addRol,
   } = useRol();
 
+  console.log("rolesentabla",roles)
+
+
   const {
     control,
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<User>({
     resolver: zodResolver(UserSchema),
@@ -158,7 +162,8 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
         {!loadinRoles && !errorRoles && roles && (
           <Controller
             control={control}
-            name="fkRol"
+            name="fk_rol"
+
             render={({ field }) => (
               <div className="w-full flex">
                 <Select
@@ -166,20 +171,20 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
                   value={field.value ?? 0}
                   onChange={(e) => field.onChange(Number(e.target.value))}
                   placeholder="Selecciona un rol..."
-                  isInvalid={!!errors.fkRol}
-                  errorMessage={errors.fkRol?.message}
+                  isInvalid={!!errors.fk_rol}
+                  errorMessage={errors.fk_rol?.message}
                 >
                   {roles?.length ? (
                     roles
                       .filter((r) => r.estado === true)
                       .map((rol) => (
-                        <SelectItem key={rol.idRol} textValue={rol.nombre}>
+                        <SelectItem key={rol.id_rol} textValue={rol.nombre}>
                           {rol.nombre}
                         </SelectItem>
                       ))
-                  ) : (
-                    <SelectItem isDisabled>No hay roles disponibles</SelectItem>
-                  )}
+                    ) : (
+                      <SelectItem isDisabled>No hay roles disponibles</SelectItem>
+                    )}
                 </Select>
                 <Buton
                   type="button"
@@ -192,6 +197,8 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
             )}
           />
         )}
+        {watch("fk_rol")}
+  
       </Form>
       <Modal
         ModalTitle="Agregar Rol"

@@ -10,11 +10,9 @@ import { Card, CardBody } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import { User } from "@/types/Usuario";
 import FormRegisterMasivo from "@/components/organismos/Usuarios/FormRegisterMasivo";
-import usePermissions from "@/hooks/Usuarios/usePermissions";
 
 const UsersTable = () => {
 
-  const { userHasPermission } = usePermissions();
 
   const { users, isLoading, isError, error, addUser, changeState } =
     useUsuario();
@@ -42,7 +40,7 @@ const UsersTable = () => {
   };
 
   const handleState = async (user: User) => {
-    await changeState(user.idUsuario as number);
+    await changeState(user.id as number);
   };
 
   const handleAddUser = async (user: User) => {
@@ -79,13 +77,13 @@ const UsersTable = () => {
   }
 
   const usersWithKey = users
-    ?.filter((user): user is User & { idUsuario: number } => user?.idUsuario !== undefined)
+    ?.filter((user): user is User & { id: number } => user?.id !== undefined)
     .map((user) => ({
       ...user,
-      key: user.idUsuario ? user.idUsuario.toString() : crypto.randomUUID(),
+      key: user.id ? user.id.toString() : crypto.randomUUID(),
+      
       estado: Boolean(user.estado),
     }));
-
   return (
 
     <div className="p-4"> 
@@ -95,12 +93,12 @@ const UsersTable = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Usuarios</h1>
               <div className="flex gap-2">
-                {userHasPermission(34) && //listar roles
+               
                   <Buton
                     text="Gestionar Roles"
                     onPress={handleGoToRol}
                   />
-                }
+              
               </div>
             </div>
           </CardBody>
@@ -129,7 +127,7 @@ const UsersTable = () => {
 
             <Modall ModalTitle="Editar Usuario" isOpen={IsOpenUpdate} onOpenChange={handleCloseUpdate}>
                 {selectedUser && (
-                    <FormUpdate Users={usersWithKey ?? []} userId={selectedUser.idUsuario as number} id="FormUpdate" onclose={handleCloseUpdate} />
+                    <FormUpdate Users={usersWithKey ?? []} userId={selectedUser.id as number} id="FormUpdate" onclose={handleCloseUpdate} />
                 )}
 
             </Modall>
@@ -145,7 +143,7 @@ const UsersTable = () => {
         {selectedUser && (
           <FormUpdate
             Users={usersWithKey ?? []}
-            userId={selectedUser.idUsuario as number}
+            userId={selectedUser.id as number}
             id="FormUpdate"
             onclose={handleCloseUpdate}
           />
@@ -153,7 +151,7 @@ const UsersTable = () => {
       </Modall>
             <Modall ModalTitle="Editar Usuario" isOpen={IsOpenUpdate} onOpenChange={handleCloseUpdate}>
                 {selectedUser && (
-                    <FormUpdate Users={usersWithKey ?? []} userId={selectedUser.idUsuario as number} id="FormUpdate" onclose={handleCloseUpdate} />
+                    <FormUpdate Users={usersWithKey ?? []} userId={selectedUser.id as number} id="FormUpdate" onclose={handleCloseUpdate} />
                 )}
 
             </Modall>
@@ -163,20 +161,19 @@ const UsersTable = () => {
         </Modall>
       
       
-      {userHasPermission(3) && usersWithKey && (
+      {usersWithKey && (
         <Globaltable
           data={usersWithKey} 
           columns={columns}
-          onEdit={userHasPermission(4) ? handleEdit : undefined}
-          onDelete={userHasPermission(5) ? handleState : undefined}
+          onEdit={ handleEdit}
+          onDelete={handleState }
           extraHeaderContent={
             <div className="flex gap-2">
-              {userHasPermission(1) &&
+              
                 <Buton onPress={() => setIsOpen(true)}>Añadir usuario</Buton>
-              }
-              {userHasPermission(2) &&
+
                 <Buton onPress={() => setIsOpenMasivo(true)}>Subir masivamente</Buton>
-              }
+              
             </div>
           }
         />

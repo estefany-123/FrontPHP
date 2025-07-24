@@ -31,7 +31,7 @@ export default function useLogin(){
             setError(undefined);
             // setPermissions(permissions);
             //Redirection
-            navigate("/usuarios");
+            navigate("/");
         }
         catch(error:any){
             console.log("Error backend",error)

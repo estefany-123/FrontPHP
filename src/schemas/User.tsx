@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const UserUpdateSchema = z.object({
-    idUsuario: z
+    id: z
         .number().optional(),
     nombre: z
         .string()
@@ -61,7 +61,7 @@ export const UserSchema = z.object({
     password: z
         .string({ message: "Contraseña es obligatoria" })
         .min(8, { message: "Contraseña es requerida" }),
-    fkRol: z
+    fk_rol: z
         .number({ message: "Rol es requerido y debe ser un numero" })
 })
 
