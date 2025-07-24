@@ -25,9 +25,6 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
     addRol,
   } = useRol();
 
-  console.log("rolesentabla",roles)
-
-
   const {
     control,
     register,
@@ -46,7 +43,6 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
   const handleClose = () => setShowModalRol(false);
 
   const onSubmit = async (data: User) => {
-    console.log(data);
     try {
       await addData(data);
       onClose();
@@ -130,7 +126,7 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
               onChange={(e) => field.onChange(e.target.value === "true")}
               isInvalid={!!errors.estado}
               errorMessage={errors.estado?.message}
-              isDisabled
+
               defaultSelectedKeys={["true"]}
             >
               <SelectItem key="true">Activo</SelectItem>
@@ -159,6 +155,15 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
           errorMessage={errors.password?.message}
         />
 
+        <Input
+          label="Confirme la contraseña"
+          type="password"
+          placeholder="password_confirmation"
+          {...register("password_confirmation")}
+          isInvalid={!!errors.password_confirmation}
+          errorMessage={errors.password_confirmation?.message}
+        />
+
         {!loadinRoles && !errorRoles && roles && (
           <Controller
             control={control}
@@ -182,9 +187,9 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
                           {rol.nombre}
                         </SelectItem>
                       ))
-                    ) : (
-                      <SelectItem isDisabled>No hay roles disponibles</SelectItem>
-                    )}
+                  ) : (
+                    <SelectItem isDisabled>No hay roles disponibles</SelectItem>
+                  )}
                 </Select>
                 <Buton
                   type="button"
@@ -198,7 +203,7 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
           />
         )}
         {watch("fk_rol")}
-  
+
       </Form>
       <Modal
         ModalTitle="Agregar Rol"
