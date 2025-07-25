@@ -32,13 +32,13 @@ export function useUsuario() {
 
   const getUserById = (id: number, usersList: User[]): User | null => {
     if (!usersList) return null;
-    return usersList.find((user) => user.idUsuario === id) || null;
+    return usersList.find((user) => user.id === id) || null;
   };
 
   const updateUserMutation = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: putUser }) => {
-      const { idUsuario, ...resto } = data;
-      return updateUsuario(id, resto);
+    mutationFn: ({ idUser, data }: { idUser: number; data: putUser }) => {
+      const { id, ...resto } = data;
+      return updateUsuario(idUser, resto);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -74,12 +74,12 @@ export function useUsuario() {
     return addUserMutation.mutateAsync(usuario);
   };
 
-  const updateUser = async (id: number, data: putUser) => {
-    return updateUserMutation.mutateAsync({ id, data });
+  const updateUser = async (idUser: number, data: putUser) => {
+    return updateUserMutation.mutateAsync({ idUser, data });
   };
 
-  const changeState = async (idUsuario: number) => {
-    return changeStateMutation.mutateAsync(idUsuario);
+  const changeState = async (id: number) => {
+    return changeStateMutation.mutateAsync(id);
   };
 
   return {

@@ -15,19 +15,19 @@ export default function Layout() {
   const { notificaciones } = useNotificaciones(idUsuario!);
   const cantidadNoLeidas = notificaciones?.filter(n => !n.leido).length ?? 0;
 
-  useEffect(() => {
-    if (idUsuario) {
-      console.log("✅ idUsuario disponible:", idUsuario);
-    }
-  }, [idUsuario]);  
+  // useEffect(() => {
+  //   if (idUsuario) {
+  //     console.log("✅ idUsuario disponible:", idUsuario);
+  //   }
+  // }, [idUsuario]);  
 
-  useSocketNotificaciones(idUsuario!, (noti) => {
-    console.log("🔔 Nueva notificación:", noti);
-  });
+  // useSocketNotificaciones(idUsuario!, (noti) => {
+  //   console.log("🔔 Nueva notificación:", noti);
+  // });
 
-  if (!idUsuario) {
-    return <div className="text-center mt-10">🔄 Cargando usuario...</div>;
-  }
+  // if (!idUsuario) {
+  //   return <div className="text-center mt-10">🔄 Cargando usuario...</div>;
+  // }
 
   return (
     <div className="flex h-screen overflow-hidden dark:bg-zinc-900 text-black dark:text-white">

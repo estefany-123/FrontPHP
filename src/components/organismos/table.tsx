@@ -303,10 +303,10 @@ if (mostrarFiltroEstado) {
                 // Encuentra la configuración de la columna
                 return (
                   <TableCell className="text-center">
+
                     {columns.find((c) => c.key === columnKey)?.render
                       ? columns.find((c) => c.key === columnKey)!.render!(item)
                       : getKeyValue(item, columnKey)}
-
                     {showEstado && columnKey === "estado" && (
                       <Chip
                         className={`px-2 py-1 rounded ${
@@ -341,6 +341,7 @@ if (mostrarFiltroEstado) {
                 );
               }}
             </TableRow>
+            
           )}
         </TableBody>
       </Table>
