@@ -1,6 +1,6 @@
 
 export type User = {
-    idUsuario?: number;
+    id?: number;
     documento?: number;
     nombre: string;
     apellido: string;
@@ -10,7 +10,7 @@ export type User = {
     estado?: boolean;
     cargo?: string;
     password?: string;
-    fkRol?: number;
+    fk_rol?: number;
 }
 
 export type Perfil={
@@ -21,7 +21,7 @@ export type Perfil={
     telefono : string,
     correo : string,
     perfil: string,
-    fkRol: {
+    fk_rol: {
         nombre: string
     }
 
@@ -45,11 +45,12 @@ export type postUser = {
     estado?: boolean;
     cargo?: string;
     password?: string;
-    fkRol?: number;
+    password_confirmation?:string;
+    fk_rol?: number;
 }
 
 export type putUser = {
-    idUsuario?: number;
+    id?: number;
     nombre: string;
     apellido: string | null;
     edad: number | null;

@@ -29,6 +29,7 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
     control,
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<User>({
     resolver: zodResolver(UserSchema),
@@ -42,7 +43,6 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
   const handleClose = () => setShowModalRol(false);
 
   const onSubmit = async (data: User) => {
-    console.log(data);
     try {
       await addData(data);
       onClose();
@@ -126,7 +126,7 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
               onChange={(e) => field.onChange(e.target.value === "true")}
               isInvalid={!!errors.estado}
               errorMessage={errors.estado?.message}
-              isDisabled
+
               defaultSelectedKeys={["true"]}
             >
               <SelectItem key="true">Activo</SelectItem>
@@ -155,10 +155,20 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
           errorMessage={errors.password?.message}
         />
 
+        <Input
+          label="Confirme la contraseña"
+          type="password"
+          placeholder="password_confirmation"
+          {...register("password_confirmation")}
+          isInvalid={!!errors.password_confirmation}
+          errorMessage={errors.password_confirmation?.message}
+        />
+
         {!loadinRoles && !errorRoles && roles && (
           <Controller
             control={control}
-            name="fkRol"
+            name="fk_rol"
+
             render={({ field }) => (
               <div className="w-full flex">
                 <Select
@@ -166,14 +176,14 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
                   value={field.value ?? 0}
                   onChange={(e) => field.onChange(Number(e.target.value))}
                   placeholder="Selecciona un rol..."
-                  isInvalid={!!errors.fkRol}
-                  errorMessage={errors.fkRol?.message}
+                  isInvalid={!!errors.fk_rol}
+                  errorMessage={errors.fk_rol?.message}
                 >
                   {roles?.length ? (
                     roles
                       .filter((r) => r.estado === true)
                       .map((rol) => (
-                        <SelectItem key={rol.idRol} textValue={rol.nombre}>
+                        <SelectItem key={rol.id_rol} textValue={rol.nombre}>
                           {rol.nombre}
                         </SelectItem>
                       ))
@@ -192,6 +202,8 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
             )}
           />
         )}
+        {watch("fk_rol")}
+
       </Form>
       <Modal
         ModalTitle="Agregar Rol"

@@ -8,7 +8,7 @@ import Buton from "@/components/molecules/Button";
 import { addToast } from "@heroui/react";
 
 type FormuProps = {
-  Users: (UserUpdate & { idUsuario: number })[];
+  Users: (UserUpdate & { id: number })[];
   userId: number;
   id: string;
   onclose: () => void;
@@ -27,7 +27,7 @@ export const FormUpdate = ({ Users, userId, id, onclose }: FormuProps) => {
     resolver: zodResolver(UserUpdateSchema),
     mode: "onChange",
     defaultValues: {
-      idUsuario: foundUser.idUsuario,
+      id: foundUser.id,
       nombre: foundUser.nombre,
       apellido: foundUser.apellido,
       edad: Number(foundUser.edad),
@@ -39,9 +39,9 @@ export const FormUpdate = ({ Users, userId, id, onclose }: FormuProps) => {
 
   const onSubmit = async (data: UserUpdate) => {
     console.log(data);
-    if (!data.idUsuario) return;
+    if (!data.id) return;
     try {
-      await updateUser(data.idUsuario, data);
+      await updateUser(data.id, data);
       onclose();
       addToast({
         title: "Actualiacion Exitosa",
