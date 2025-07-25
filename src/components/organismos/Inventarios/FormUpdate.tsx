@@ -40,16 +40,16 @@ export const FormUpdate = ({
     resolver: zodResolver(InventarioUpdateSchema),
     mode: "onChange",
     defaultValues: {
-      idInventario: foundInventario.idInventario,
+      id_inventario: foundInventario.id_inventario,
       stock: foundInventario.stock,
     },
   });
 
   const onSubmit = async (data: InventarioUpdate) => {
     console.log("Enviando datos:", data);
-    if (!data.idInventario) return;
+    if (!data.id_inventario) return;
     try {
-      await updateInventario(data.idInventario, data);
+      await updateInventario(data.id_inventario, data);
       onclose();
       addToast({
         title: "Actualizacion Exitosa",

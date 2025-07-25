@@ -8,7 +8,7 @@ import { addToast } from "@heroui/react";
 import Buton from "@/components/molecules/Button";
 
 type Props = {
-  unidades: (UnidadUpdate & { idUnidad?: number })[];
+  unidades: (UnidadUpdate & { id_unidad?: number })[];
   unidadId: number;
   id: string;
   onclose: () => void;
@@ -27,16 +27,16 @@ export const FormUpdate = ({ unidades, unidadId, id, onclose }: Props) => {
     resolver: zodResolver(UnidadUpdateSchema),
     mode: "onChange",
     defaultValues: {
-      idUnidad: foundUnidad.idUnidad ?? 0,
+      id_unidad: foundUnidad.id_unidad ?? 0,
       nombre: foundUnidad.nombre,
     },
   });
 
   const onSubmit = async (data: UnidadUpdate) => {
     console.log(data);
-    if (!data.idUnidad) return;
+    if (!data.id_unidad) return;
     try {
-      await updateUnidad(data.idUnidad, data);
+      await updateUnidad(data.id_unidad, data);
       onclose();
       addToast({
         title: "Actualizacion Exitosa",

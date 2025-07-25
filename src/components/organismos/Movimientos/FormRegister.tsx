@@ -25,7 +25,7 @@ type FormularioProps = {
 };
 
 type CodigoDisponible = {
-  idCodigoInventario: number;
+  id_codigo_inventario: number;
   codigo: string;
 };
 
@@ -42,14 +42,14 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
       cantidad: 0,
       estado: true,
       aceptado: false,
-      enProceso: true,
+      en_proceso: true,
       cancelado: false,
       devolutivo: false,
-      noDevolutivo: true,
-      horaIngreso: "00:00",
-      horaSalida: "00:00",
-      fechaDevolucion: undefined,
-      lugarDestino: undefined,
+      no_devolutivo: true,
+      hora_ingreso: "00:00",
+      hora_salida: "00:00",
+      fecha_devolucion: undefined,
+      lugar_destino: undefined,
       codigos: [],
     },
   });
@@ -84,14 +84,14 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
     const payload = {
       ...mapMovimiento(data),
       codigos: data.codigos?.map((c) => c.trim()),
-      horaIngreso: data.horaIngreso || undefined,
-      horaSalida: data.horaSalida || undefined,
-      fechaDevolucion: data.fechaDevolucion
-        ? new Date(data.fechaDevolucion)
+      hora_ingreso: data.hora_ingreso || undefined,
+      hora_salida: data.hora_salida || undefined,
+      fecha_devolucion: data.fecha_devolucion
+        ? new Date(data.fecha_devolucion)
         : undefined,
     };
 
-    console.log("🎯 Inventario seleccionado:", data.fkInventario);
+    console.log("🎯 Inventario seleccionado:", data.fk_inventario);
     console.log("🎯 Códigos seleccionados:", data.codigos);
 
     // Mostrar todos los valores del formulario con su tipo de dato
@@ -168,9 +168,9 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
         <Input
           label="Destino"
           type="text"
-          {...register("lugarDestino")}
-          isInvalid={!!errors.lugarDestino}
-          errorMessage={errors.lugarDestino?.message}
+          {...register("lugar_destino")}
+          isInvalid={!!errors.lugar_destino}
+          errorMessage={errors.lugar_destino?.message}
         />
 
         <Controller
@@ -203,15 +203,15 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
         {isDevolutivo && (
           <Controller
             control={control}
-            name="fechaDevolucion"
+            name="fecha_devolucion"
             render={({ field }) => (
               <Input
                 {...field}
                 type="date"
                 label="Fecha de Devolución"
                 onChange={(e) => field.onChange(e.target.value || null)}
-                isInvalid={!!errors.fechaDevolucion}
-                errorMessage={errors.fechaDevolucion?.message}
+                isInvalid={!!errors.fecha_devolucion}
+                errorMessage={errors.fecha_devolucion?.message}
                 value={field.value ?? ""}
               />
             )}
@@ -220,7 +220,7 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
 
         <Controller
           control={control}
-          name="fkUsuario"
+          name="fk_usuario"
           render={({ field }) => (
             <>
               <div className="w-full flex">
@@ -229,8 +229,8 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
                   placeholder="Selecciona un usuario"
                   {...field}
                   onChange={(e) => field.onChange(Number(e.target.value))}
-                  isInvalid={!!errors.fkUsuario}
-                  errorMessage={errors.fkUsuario?.message}
+                  isInvalid={!!errors.fk_usuario}
+                  errorMessage={errors.fk_usuario?.message}
                 >
                   {(users ?? []).map((usuario) => (
                     <SelectItem
@@ -255,7 +255,7 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
 
         <Controller
           control={control}
-          name="fkTipoMovimiento"
+          name="fk_tipo_movimiento"
           render={({ field }) => (
             <>
               <div className="flex w-full">
@@ -266,16 +266,16 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
                   onChange={(e) => {
                     const id = Number(e.target.value);
                     field.onChange(id);
-                    const tipo = tipos?.find((t) => t.idTipo === id);
+                    const tipo = tipos?.find((t) => t.id_tipo === id);
                     setTipoMovimientoSeleccionado(
                       tipo?.nombre.toLowerCase() ?? null
                     );
                   }}
-                  isInvalid={!!errors.fkTipoMovimiento}
-                  errorMessage={errors.fkTipoMovimiento?.message}
+                  isInvalid={!!errors.fk_tipo_movimiento}
+                  errorMessage={errors.fk_tipo_movimiento?.message}
                 >
                   {(tipos ?? []).map((tipo) => (
-                    <SelectItem key={tipo.idTipo} textValue={tipo.nombre}>
+                    <SelectItem key={tipo.id_tipo} textValue={tipo.nombre}>
                       {tipo.nombre}
                     </SelectItem>
                   ))}
@@ -296,9 +296,9 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
           <Input
             label="Hora de Ingreso"
             type="time"
-            {...register("horaIngreso")}
-            isInvalid={!!errors.horaIngreso}
-            errorMessage={errors.horaIngreso?.message}
+            {...register("hora_ingreso")}
+            isInvalid={!!errors.hora_ingreso}
+            errorMessage={errors.hora_ingreso?.message}
           />
         ) : tipoMovimientoSeleccionado &&
           ["salida", "baja", "préstamo"].includes(
@@ -307,15 +307,15 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
           <Input
             label="Hora de Salida"
             type="time"
-            {...register("horaSalida")}
-            isInvalid={!!errors.horaSalida}
-            errorMessage={errors.horaSalida?.message}
+            {...register("hora_salida")}
+            isInvalid={!!errors.hora_salida}
+            errorMessage={errors.hora_salida?.message}
           />
         ) : null}
 
         <Controller
           control={control}
-          name="fkSitio"
+          name="fk_sitio"
           render={({ field }) => (
             <>
               <div className="w-full flex">
@@ -328,8 +328,8 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
                     field.onChange(sitioId);
                     setSitioSeleccionado(sitioId);
                   }}
-                  isInvalid={!!errors.fkSitio}
-                  errorMessage={errors.fkSitio?.message}
+                  isInvalid={!!errors.fk_sitio}
+                  errorMessage={errors.fk_sitio?.message}
                 >
                   {(sitios ?? []).map((sitio) => (
                     <SelectItem key={sitio.idSitio} textValue={sitio.nombre}>
@@ -352,7 +352,7 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
         {sitioSeleccionado && (
           <Controller
             control={control}
-            name="fkInventario"
+            name="fk_inventario"
             render={({ field }) => (
               <>
                 <div className="flex w-full">
@@ -365,7 +365,7 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
                       field.onChange(id);
                       setInventarioSeleccionado(id);
                       const inventario = (inventarios ?? []).find(
-                        (i) => i.idInventario === id
+                        (i) => i.id_inventario === id
                       );
                       if (
                         inventario?.codigos &&
@@ -376,7 +376,7 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
                         );
                         setCodigosDisponibles(
                           disponibles.map((c) => ({
-                            idCodigoInventario: c.idCodigoInventario,
+                            id_codigo_inventario: c.id_codigo_inventario,
                             codigo: c.codigo,
                           }))
                         );
@@ -386,29 +386,29 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
                         setTieneCaracteristicas(false);
                       }
                     }}
-                    isInvalid={!!errors.fkInventario}
-                    errorMessage={errors.fkInventario?.message}
+                    isInvalid={!!errors.fk_inventario}
+                    errorMessage={errors.fk_inventario?.message}
                   >
                     {(inventarios ?? [])
 
-                      .filter((i) => i.fkSitio.idSitio === sitioSeleccionado)
+                      .filter((i) => i.fk_sitio.id_sitio === sitioSeleccionado)
                       .filter((i) => i.estado === true)
                       .map((inventario) => {
                         console.log(
                           "Inventarios del sitio seleccionado:",
                           inventarios?.filter(
-                            (i) => i.fkSitio.idSitio === sitioSeleccionado
+                            (i) => i.fk_sitio.id_sitio === sitioSeleccionado
                           )
                         );
                         return (
                           <SelectItem
-                            key={inventario.idInventario}
+                            key={inventario.id_inventario}
                             textValue={
-                              inventario.fkElemento?.nombre ||
+                              inventario.fk_elemento?.nombre ||
                               "Elemento no disponible"
                             }
                           >
-                            {inventario.fkElemento?.nombre ||
+                            {inventario.fk_elemento?.nombre ||
                               "Elemento no disponible"}
                           </SelectItem>
                         );
@@ -444,7 +444,7 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
                       </label>
                       {codigosDisponibles.map((codigoObj) => (
                         <div
-                          key={codigoObj.idCodigoInventario}
+                          key={codigoObj.id_codigo_inventario}
                           className="flex items-center gap-2"
                         >
                           <input

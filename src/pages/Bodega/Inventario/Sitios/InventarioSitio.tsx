@@ -25,7 +25,7 @@ export const InventarioSitio = () => {
       <h1 className="text-2xl font-bold text-center mb-4">
         Inventario del sitio {sitio.nombre}
       </h1>
-      <InventariosTable idSitio={idSitios} />
+      <InventariosTable id_sitio={idSitios} />
     </div>
   );
 };

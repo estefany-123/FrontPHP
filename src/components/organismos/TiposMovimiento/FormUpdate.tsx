@@ -8,7 +8,7 @@ import { addToast } from "@heroui/react";
 import Buton from "@/components/molecules/Button";
 
 type Props = {
-  tipos: (TipoUpdate & { idTipo?: number })[];
+  tipos: (TipoUpdate & { id_tipo?: number })[];
   tipoId: number;
   id: string;
   onclose: () => void;
@@ -27,16 +27,16 @@ export const FormUpdate = ({ tipos, tipoId, id, onclose }: Props) => {
     resolver: zodResolver(TipoUpdateSchema),
     mode: "onChange",
     defaultValues: {
-      idTipo: foundRol.idTipo,
+      id_tipo: foundRol.id_tipo,
       nombre: foundRol.nombre,
     },
   });
 
   const onSubmit = async (data: TipoUpdate) => {
     console.log(data);
-    if (!data.idTipo) return;
+    if (!data.id_tipo) return;
     try {
-      await updateTipoMovimiento(data.idTipo, data);
+      await updateTipoMovimiento(data.id_tipo, data);
       onclose();
       addToast({
         title: "Actualizacion Exitosa",

@@ -1,11 +1,11 @@
 export type CodigoInventario = {
-    idCodigoInventario?:number
+    id_codigo_inventario?:number
     codigo?:string
     uso?:boolean
     baja?:boolean
-    createdAt?:string
-    updatedAt?:string
-    fkInventario?:{
-        idInventario?:number
+    created_at?:string
+    updated_at?:string
+    fk_inventario?:{
+        id_inventario?:number
     }
 }

@@ -8,7 +8,7 @@ import { CaracteristicaUpdate, CaracteristicaUpdateSchema } from "@/schemas/Cara
 import { useCaracteristica } from "@/hooks/Caracteristicas/useCaracteristicas";
 
 type Props = {
-  caracteristicas: (CaracteristicaUpdate & { idCaracteristica?: number })[];
+  caracteristicas: (CaracteristicaUpdate & { id_caracteristica?: number })[];
   caracteristicaId: number;
   id: string;
   onclose: () => void;
@@ -27,16 +27,16 @@ export const FormUpdate = ({ caracteristicas, caracteristicaId, id, onclose }: P
     resolver: zodResolver(CaracteristicaUpdateSchema),
     mode: "onChange",
     defaultValues: {
-      idCaracteristica: foundCaracteristica.idCaracteristica,
+      id_caracteristica: foundCaracteristica.id_caracteristica,
       nombre: foundCaracteristica.nombre,
     },
   });
 
   const onSubmit = async (data: CaracteristicaUpdate) => {
     console.log(data);
-    if (!data.idCaracteristica) return;
+    if (!data.id_caracteristica) return;
     try {
-      await updateCaracteristica(data.idCaracteristica, data);
+      await updateCaracteristica(data.id_caracteristica, data);
       onclose();
       addToast({
         title: "Actualizacion Exitosa",

@@ -1,54 +1,54 @@
 export type CodigoInventario = {
-  idCodigoInventario: number;
+  id_codigo_inventario: number;
   codigo: string;
   uso:boolean
   baja:boolean
 };
 
 export type Inventario = {
-  idInventario?: number;
+  id_inventario?: number;
   stock?: number;
   estado?: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-  fkSitio?: number;
-  fkElemento?: number;
-  imagenElemento?: string;
+  created_at?: string;
+  updated_at?: string;
+  fk_sitio?: number;
+  fk_elemento?: number;
+  imagen_elemento?: string;
   acciones?: string;
   codigos?: CodigoInventario[];
 };
 
 
 export type InventarioConSitio = Inventario & {
-  idInventario?: number;
+  id_inventario?: number;
   stock?: number;
   estado?: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-  imagenElemento?: string;
+  created_at?: string;
+  updated_at?: string;
+  imagen_elemento?: string;
   acciones?: string;
   codigos?: string[];
-  fkSitio: {
-    idSitio: number;
+  fk_sitio: {
+    id_sitio: number;
     nombre: string;
   };
-  fkElemento: {
-    idElemento: number;
+  fk_elemento: {
+    id_elemento: number;
     nombre: string;
-    imagenElemento?: string;
-    fkCaracteristica?: number
+    imagen_elemento?: string;
+    fk_caracteristica?: number
   };
 };
 
 export type InventarioConElemento = Inventario & {
-  fkSitio: {
-    idSitio: number;
+  fk_sitio: {
+    id_sitio: number;
     nombre: string;
   };
-  fkElemento: {
-    idElemento: number;
+  fk_elemento: {
+    id_elemento: number;
     nombre: string;
-    imagenElemento?: string;
-    fkCaracteristica: boolean;
+    imagen_elemento?: string;
+    fk_caracteristica: boolean;
   };
 };

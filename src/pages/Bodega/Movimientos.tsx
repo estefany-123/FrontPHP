@@ -59,8 +59,8 @@ export const MovimientoTable = () => {
   const columns: TableColumn<Movimiento>[] = [
     { key: "descripcion", label: "Descripcion" },
     { key: "cantidad", label: "Cantidad" },
-    { key: "horaIngreso", label: "Ingreso" },
-    { key: "horaSalida", label: "Salida" },
+    { key: "hora_ingreso", label: "Ingreso" },
+    { key: "hora_salida", label: "Salida" },
     {
       key: "tipo_bien",
       label: "Tipo Movimiento",
@@ -68,19 +68,19 @@ export const MovimientoTable = () => {
         <span>
           {movimiento.devolutivo
             ? "Devolutivo"
-            : movimiento.noDevolutivo
+            : movimiento.no_devolutivo
               ? "No Devolutivo"
               : "No especificado"}
         </span>
       ),
     },
     {
-      key: "createdAt",
+      key: "created_at",
       label: "Fecha Creación",
       render: (movimiento: Movimiento) => (
         <span>
-          {movimiento.createdAt
-            ? new Date(movimiento.createdAt).toLocaleDateString("es-ES", {
+          {movimiento.created_at
+            ? new Date(movimiento.created_at).toLocaleDateString("es-ES", {
                 year: "numeric",
                 month: "2-digit",
                 day: "2-digit",
@@ -90,12 +90,12 @@ export const MovimientoTable = () => {
       ),
     },
     {
-      key: "updatedAt",
+      key: "updated_at",
       label: "Fecha Actualización",
       render: (movimiento: Movimiento) => (
         <span>
-          {movimiento.updatedAt
-            ? new Date(movimiento.updatedAt).toLocaleDateString("es-ES", {
+          {movimiento.updated_at
+            ? new Date(movimiento.updated_at).toLocaleDateString("es-ES", {
                 year: "numeric",
                 month: "2-digit",
                 day: "2-digit",
@@ -120,7 +120,7 @@ export const MovimientoTable = () => {
               Cancelado
             </Chip>
           );
-        if (item.enProceso)
+        if (item.en_proceso)
           return (
             <Chip color="warning" variant="flat">
               Pendiente
@@ -140,13 +140,13 @@ export const MovimientoTable = () => {
   }
 
   const MovimientoWithKey = movimientos
-    ?.filter((movimiento) => movimiento?.idMovimiento !== undefined)
+    ?.filter((movimiento) => movimiento?.id_movimiento !== undefined)
     .map((movimiento) => ({
       ...movimiento,
-      key: movimiento.idMovimiento
-        ? movimiento.idMovimiento.toString()
+      key: movimiento.id_movimiento
+        ? movimiento.id_movimiento.toString()
         : crypto.randomUUID(),
-      idMovimiento: movimiento.idMovimiento || 0,
+      id_movimiento: movimiento.id_movimiento || 0,
     }));
 
     console.log("🧾 Datos para la tabla MovimientoWithKey:", MovimientoWithKey);
@@ -208,14 +208,14 @@ export const MovimientoTable = () => {
             movimientos={
               MovimientoWithKey?.map((mov) => ({
                 ...mov,
-                fechaDevolucion: mov.fechaDevolucion
-                  ? typeof mov.fechaDevolucion === "string"
-                    ? mov.fechaDevolucion
-                    : mov.fechaDevolucion.toISOString().split("T")[0]
+                fecha_devolucion: mov.fecha_devolucion
+                  ? typeof mov.fecha_devolucion === "string"
+                    ? mov.fecha_devolucion
+                    : mov.fecha_devolucion.toISOString().split("T")[0]
                   : undefined,
               })) ?? []
             }
-            movimientoId={selectedMovimiento.idMovimiento as number}
+            movimientoId={selectedMovimiento.id_movimiento as number}
             id="FormUpdate"
             onclose={handleCloseUpdate}
           />

@@ -8,7 +8,7 @@ import { addToast } from "@heroui/react";
 import Buton from "@/components/molecules/Button";
 
 type Props = {
-  movimientos: (MovimientoUpdate & { idMovimiento?: number })[];
+  movimientos: (MovimientoUpdate & { id_movimiento?: number })[];
   movimientoId: number;
   id: string;
   onclose: () => void;
@@ -39,9 +39,9 @@ export const FormUpdate = ({
 
   const onSubmit = async (data: MovimientoUpdate) => {
     console.log(data);
-    if (!data.idMovimiento) return;
+    if (!data.id_movimiento) return;
     try {
-      await updateMovimiento(data.idMovimiento, data);
+      await updateMovimiento(data.id_movimiento, data);
       onclose();
       addToast({
         title: "Actualizacion Exitosa",
@@ -81,17 +81,17 @@ export const FormUpdate = ({
         label="Hora Ingreso"
         placeholder="Seleccione la Hora Ingreso"
         type="time"
-        {...register("horaIngreso")}
-        isInvalid={!!errors.horaIngreso}
-        errorMessage={errors.horaIngreso?.message}
+        {...register("hora_ingreso")}
+        isInvalid={!!errors.hora_ingreso}
+        errorMessage={errors.hora_ingreso?.message}
       />
       <Input
         label="Hora Salida"
         placeholder="Ingrese la hora de Salida"
         type="time"
-        {...register("horaSalida")}
-        isInvalid={!!errors.horaSalida}
-        errorMessage={errors.horaSalida?.message}
+        {...register("hora_salida")}
+        isInvalid={!!errors.hora_salida}
+        errorMessage={errors.hora_salida?.message}
       />
       <div className="justify-center pl-10">
         <Buton

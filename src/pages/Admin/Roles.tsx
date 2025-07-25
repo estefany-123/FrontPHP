@@ -27,8 +27,8 @@ export const RolTable = () => {
   const [rolParaPermisos, setRolParaPermisos] = useState<number | null>(null);
   const [showPermisosModal, setShowPermisosModal] = useState(false);
 
-  const handleAsignarPermisos = (idRol: number) => {
-    setRolParaPermisos(idRol);
+  const handleAsignarPermisos = (id_rol: number) => {
+    setRolParaPermisos(id_rol);
     setShowPermisosModal(true);
   };
 
@@ -47,8 +47,8 @@ export const RolTable = () => {
     setSelectedRol(null);
   };
 
-  const handleState = async (idRol: number) => {
-    await changeState(idRol);
+  const handleState = async (id_rol: number) => {
+    await changeState(id_rol);
   };
 
   const handleAddRol = async (data: Rol) => {
@@ -61,7 +61,7 @@ export const RolTable = () => {
   };
 
   const handleEdit = (rol: Rol) => {
-    if (!rol || !rol.idRol) {
+    if (!rol || !rol.id_rol) {
       return;
     }
     setSelectedRol(rol);
@@ -72,12 +72,12 @@ export const RolTable = () => {
   const columns: TableColumn<Rol>[] = [
     { key: "nombre", label: "Nombre" },
     {
-      key: "createdAt",
+      key: "created_at",
       label: "Fecha CReacion",
       render: (rol: Rol) => (
         <span>
-          {rol.createdAt
-            ? new Date(rol.createdAt).toLocaleDateString("es-ES", {
+          {rol.created_at
+            ? new Date(rol.created_at).toLocaleDateString("es-ES", {
                 year: "numeric",
                 month: "2-digit",
                 day: "2-digit",
@@ -87,12 +87,12 @@ export const RolTable = () => {
       ),
     },
     {
-      key: "updatedAt",
+      key: "updated_at",
       label: "Fecha Actualización",
       render: (rol: Rol) => (
         <span>
-          {rol.updatedAt
-            ? new Date(rol.updatedAt).toLocaleDateString("es-ES", {
+          {rol.updated_at
+            ? new Date(rol.updated_at).toLocaleDateString("es-ES", {
                 year: "numeric",
                 month: "2-digit",
                 day: "2-digit",
@@ -108,7 +108,7 @@ export const RolTable = () => {
       render: (rol: Rol) => (
         <Buton
           text="Asignar"
-          onPress={() => handleAsignarPermisos(rol.idRol as number)}
+          onPress={() => handleAsignarPermisos(rol.id_rol as number)}
         />
       ),
     },
@@ -124,12 +124,12 @@ export const RolTable = () => {
 
   const rolesWithKey = roles
     ?.filter(
-      (rol) => rol?.idRol !== undefined && rol?.createdAt && rol?.updatedAt
+      (rol) => rol?.id_rol !== undefined && rol?.created_at && rol?.updated_at
     )
     .map((rol) => ({
       ...rol,
-      key: rol.idRol ? rol.idRol.toString() : crypto.randomUUID(),
-      idRol: rol.idRol || 0,
+      key: rol.id_rol ? rol.id_rol.toString() : crypto.randomUUID(),
+      id_rol: rol.id_rol || 0,
       estado: Boolean(rol.estado),
     }));
 
@@ -173,7 +173,7 @@ export const RolTable = () => {
         {selectedRol && (
           <FormUpdate
             roles={rolesWithKey ?? []}
-            rolId={selectedRol.idRol as number}
+            rolId={selectedRol.id_rol as number}
             id="FormUpdate"
             onclose={handleCloseUpdate}
           />
@@ -196,7 +196,7 @@ export const RolTable = () => {
           columns={columns}
           onEdit={userHasPermission(35) ? handleEdit : undefined}
           onDelete={
-            userHasPermission(36) ? (rol) => handleState(rol.idRol) : undefined
+            userHasPermission(36) ? (rol) => handleState(rol.id_rol) : undefined
           }
           extraHeaderContent={
             <div>

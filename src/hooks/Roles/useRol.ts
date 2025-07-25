@@ -33,12 +33,12 @@ export function useRol() {
     id: number,
     roles: Rol[] | undefined = data
   ): Rol | null => {
-    return roles?.find((rol) => rol.idRol === id) || null;
+    return roles?.find((rol) => rol.id_rol === id) || null;
   };
 
   const updateRolMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Rol }) =>{
-      const {idRol, ...resto} = data;
+      const {id_rol, ...resto} = data;
       return putRol(id, resto)},
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -78,8 +78,8 @@ export function useRol() {
     return updateRolMutation.mutateAsync({ id, data });
   };
 
-  const changeState = async (idRol: number) => {
-    return changeStateMutation.mutateAsync(idRol);
+  const changeState = async (id_rol: number) => {
+    return changeStateMutation.mutateAsync(id_rol);
   };
 
   return {

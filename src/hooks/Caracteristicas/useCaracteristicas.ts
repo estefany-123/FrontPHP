@@ -32,14 +32,14 @@ export function useCaracteristica() {
   ): Caracteristica | null => {
     return (
       caracteristicas?.find(
-        (caracteristica) => caracteristica.idCaracteristica === id
+        (caracteristica) => caracteristica.id_caracteristica === id
       ) || null
     );
   };
 
   const updateCaracteristicaMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Caracteristica }) => {
-      const { idCaracteristica, ...resto } = data;
+      const { id_caracteristica, ...resto } = data;
       return updateCategoria(id, resto);
     },
     onSuccess: () => {

@@ -24,10 +24,10 @@ export default function MovimientoDetalle() {
       <h1 className="text-2xl font-bold mb-4">Detalle del Movimiento</h1>
 
       <div className="space-y-2">
-        <p><strong>Tipo:</strong> {movimiento.fkTipoMovimiento?.nombre || "N/A"}</p>
-        <p><strong>Elemento:</strong> {movimiento.fkInventario?.fkElemento?.nombre || "N/A"}</p>
+        <p><strong>Tipo:</strong> {movimiento.fk_tipo_movimiento?.nombre || "N/A"}</p>
+        <p><strong>Elemento:</strong> {movimiento.fk_inventario?.fk_elemento?.nombre || "N/A"}</p>
         <p><strong>Cantidad:</strong> {movimiento.cantidad}</p>
-        <p><strong>Usuario:</strong> {movimiento?.fkUsuario?.nombre || "N/A"}</p>
+        <p><strong>Usuario:</strong> {movimiento?.fk_usuario?.nombre || "N/A"}</p>
         <p><strong>Estado:</strong> {
           movimiento.aceptado ? "Aceptado" :
           movimiento.cancelado ? "Rechazado" :
@@ -36,7 +36,7 @@ export default function MovimientoDetalle() {
         <p><strong>Descripción:</strong> {movimiento.descripcion || "Sin descripción"}</p>
       </div>
 
-      {movimiento.enProceso && (
+      {movimiento.en_proceso && (
         <div className="mt-6 flex gap-4">
           <button
             onClick={async () => {

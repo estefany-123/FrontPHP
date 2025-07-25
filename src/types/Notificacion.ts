@@ -1,20 +1,20 @@
 export type NotificacionEstado = "aceptado" | "cancelado" | "enProceso" | null;
 
 export type Notificacion = {
-  idNotificacion: number;
+  id_notificacion: number;
   titulo: string;
   mensaje: string | null;
   leido: boolean;
-  requiereAccion: boolean;
+  requiere_accion: boolean;
   estado: NotificacionEstado;
   data: {
-    idMovimiento?: number;
-    idElemento?: number;
+    id_movimiento?: number;
+    id_elemento?: number;
     [key: string]: any;
   } | null;
-  createdAt: string;
-  fkUsuario: {
-    idUsuario: number;
+  created_at: string;
+  fk_usuario: {
+    id_usuario: number;
     nombre: string;
 
 };

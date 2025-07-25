@@ -35,12 +35,12 @@ export const FormUpdate = ({ elementos, elementoId, id, onclose }: Props) => {
     
   });
 
-  const imagen = watch("imagen");
+  const imagen = watch("imagen_elemento");
 
   const onSubmit = async (data: ElementoUpdate) => {
-    if (!data.idElemento) return;
+    if (!data.id_elemento) return;
     try {
-      await updateElemento(data.idElemento, data);
+      await updateElemento(data.id_elemento, data);
       onclose();
       addToast({
         title: "Elemento actualizado",
@@ -103,7 +103,7 @@ export const FormUpdate = ({ elementos, elementoId, id, onclose }: Props) => {
         accept="image/*"
         onChange={(e) => {
           const file = e.target.files?.[0];
-          if (file) setValue("imagen", file);
+          if (file) setValue("imagen_elemento", file);
         }}
       />
 

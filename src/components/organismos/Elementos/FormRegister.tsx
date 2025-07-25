@@ -15,7 +15,7 @@ import FormCategorias from "../Categorias/FormCategorias";
 import FormularioCaracteristicas from "../Caracteristicas/FormRegister";
 
 type FormularioProps = {
-  addData: (elemento: ElementoCreate) => Promise<{ idElemento: number }>;
+  addData: (elemento: ElementoCreate) => Promise<{ id_elemento: number }>;
   onClose: () => void;
   id: string;
 };
@@ -60,9 +60,9 @@ export default function FormularioElementos({
       await addData({
         ...data,
         estado: data.estado,
-        tipoElemento: data.tipoElemento as "perecedero" | "noPerecedero",
-        fkCaracteristica: tieneCaracteristica
-          ? data.fkCaracteristica
+        tipoElemento: data.tipoElemento as "perecedero" | "no_perecedero",
+        fk_caracteristica: tieneCaracteristica
+          ? data.fk_caracteristica
           : undefined,
       });
 
@@ -114,13 +114,13 @@ export default function FormularioElementos({
                 const value = e.target.value;
                 field.onChange(value);
                 setValue("perecedero", value === "perecedero");
-                setValue("noPerecedero", value === "noPerecedero");
+                setValue("no_perecedero", value === "no_perecedero");
               }}
               isInvalid={!!errors.tipoElemento}
               errorMessage={errors.tipoElemento?.message}
             >
               <SelectItem key="perecedero">Perecedero</SelectItem>
-              <SelectItem key="noPerecedero">No Perecedero</SelectItem>
+              <SelectItem key="no_perecedero">No Perecedero</SelectItem>
             </Select>
           )}
         />
@@ -128,14 +128,14 @@ export default function FormularioElementos({
         {tipoElemento === "perecedero" && (
           <Controller
             control={control}
-            name="fechaVencimiento"
+            name="fecha_vencimiento"
             render={({ field }) => (
               <Input
                 type="date"
                 label="Fecha de Vencimiento"
                 {...field}
-                isInvalid={!!errors.fechaVencimiento}
-                errorMessage={errors.fechaVencimiento?.message}
+                isInvalid={!!errors.fecha_vencimiento}
+                errorMessage={errors.fecha_vencimiento?.message}
               />
             )}
           />
@@ -168,13 +168,13 @@ export default function FormularioElementos({
           accept="image/*"
           onChange={(e) => {
             const file = e.target.files?.[0] ?? undefined;
-            setValue("imagen", file);
+            setValue("imagen_elemento", file);
           }}
         />
 
         <Controller
           control={control}
-          name="fkUnidadMedida"
+          name="fk_unidad_medida"
           render={({ field }) => (
             <div className="w-full flex">
               <Select
@@ -184,15 +184,15 @@ export default function FormularioElementos({
                 placeholder="Selecciona una unidad de medida..."
                 aria-label="Seleccionar Unidad de Medida"
                 onChange={(e) => field.onChange(Number(e.target.value))}
-                isInvalid={!!errors.fkUnidadMedida}
-                errorMessage={errors.fkUnidadMedida?.message}
+                isInvalid={!!errors.fk_unidad_medida}
+                errorMessage={errors.fk_unidad_medida?.message}
               >
                 {unidades?.length ? (
                   unidades
                     .filter((u) => u.estado === true)
                     .map((unidad) => (
                       <SelectItem
-                        key={unidad.idUnidad}
+                        key={unidad.id_unidad}
                         textValue={unidad.nombre}
                       >
                         {unidad.nombre}
@@ -217,7 +217,7 @@ export default function FormularioElementos({
 
         <Controller
           control={control}
-          name="fkCategoria"
+          name="fk_categoria"
           render={({ field }) => (
             <div className="w-full flex">
               <Select
@@ -230,8 +230,8 @@ export default function FormularioElementos({
                   const value = Number(e.target.value);
                   field.onChange(value);
                 }}
-                isInvalid={!!errors.fkCategoria}
-                errorMessage={errors.fkCategoria?.message}
+                isInvalid={!!errors.fk_categoria}
+                errorMessage={errors.fk_categoria?.message}
               >
                 {categorias?.length ? (
                   categorias
@@ -271,7 +271,7 @@ export default function FormularioElementos({
             <div className="flex w-full">
               <Controller
                 control={control}
-                name="fkCaracteristica"
+                name="fk_caracteristica"
                 render={({ field }) => (
                   <Select
                     label="Característica"
@@ -279,12 +279,12 @@ export default function FormularioElementos({
                     className="w-full"
                     placeholder="Selecciona una característica..."
                     onChange={(e) => field.onChange(Number(e.target.value))}
-                    isInvalid={!!errors.fkCaracteristica}
-                    errorMessage={errors.fkCaracteristica?.message}
+                    isInvalid={!!errors.fk_caracteristica}
+                    errorMessage={errors.fk_caracteristica?.message}
                   >
                     {caracteristicas?.length ? (
                       caracteristicas.map((cat) => (
-                        <SelectItem key={cat.idCaracteristica}>
+                        <SelectItem key={cat.id_caracteristica}>
                           {cat.nombre}
                         </SelectItem>
                       ))

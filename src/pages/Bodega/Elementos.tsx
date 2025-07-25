@@ -46,22 +46,22 @@ export const ElementosTable = () => {
     setSelectedElemento(null);
   };
 
-  const handleState = async (idElemento: number) => {
-    await changeState(idElemento);
+  const handleState = async (id_elemento: number) => {
+    await changeState(id_elemento);
   };
 
   const handleAddElemento = async (
     elemento: ElementoCreate
-  ): Promise<{ idElemento: number }> => {
+  ): Promise<{ id_elemento: number }> => {
     try {
       const response = await addElemento(elemento);
-      if (!response || !response.idElemento) {
+      if (!response || !response.id_elemento) {
         throw new Error(
-          "No se pudo agregar el elemento. La respuesta no contiene idElemento."
+          "No se pudo agregar el elemento. La respuesta no contiene id_elemento."
         );
       }
       handleClose(); // Cierra el modal solo si se ha agregado correctamente
-      return { idElemento: response.idElemento };
+      return { id_elemento: response.id_elemento };
     } catch (error) {
       console.error("Error al agregar el usuario:", error);
       throw new Error("Error al agregar el elemento: ");
@@ -102,19 +102,19 @@ export const ElementosTable = () => {
         <span>
           {elementos.perecedero
             ? "Perecedero"
-            : elementos.noPerecedero
+            : elementos.no_perecedero
               ? "No Perecedero"
               : "No Especificado"}
         </span>
       ),
     },
     {
-      key: "createdAt",
+      key: "created_at",
       label: "Fecha Creación",
       render: (elemento: Elemento) => (
         <span>
-          {elemento.createdAt
-            ? new Date(elemento.createdAt).toLocaleDateString("es-ES", {
+          {elemento.created_at
+            ? new Date(elemento.created_at).toLocaleDateString("es-ES", {
               year: "numeric",
               month: "2-digit",
               day: "2-digit",
@@ -124,12 +124,12 @@ export const ElementosTable = () => {
       ),
     },
     {
-      key: "updatedAt",
+      key: "updated_at",
       label: "Fecha Actualización",
       render: (elemento: Elemento) => (
         <span>
-          {elemento.updatedAt
-            ? new Date(elemento.updatedAt).toLocaleDateString("es-ES", {
+          {elemento.updated_at
+            ? new Date(elemento.updated_at).toLocaleDateString("es-ES", {
               year: "numeric",
               month: "2-digit",
               day: "2-digit",
@@ -150,13 +150,13 @@ export const ElementosTable = () => {
   }
 
   const ElementosWithKey = elementos
-    ?.filter((elemento) => elemento?.idElemento !== undefined)
+    ?.filter((elemento) => elemento?.id_elemento !== undefined)
     .map((elemento) => ({
       ...elemento,
-      key: elemento.idElemento
-        ? elemento.idElemento.toString()
+      key: elemento.id_elemento
+        ? elemento.id_elemento.toString()
         : crypto.randomUUID(),
-      idElemento: elemento.idElemento || 0,
+      id_elemento: elemento.id_elemento || 0,
       estado: Boolean(elemento.estado),
     }));
 
@@ -217,7 +217,7 @@ export const ElementosTable = () => {
         {selectedElemento && (
           <FormUpdate
             elementos={ElementosWithKey ?? []}
-            elementoId={selectedElemento.idElemento as number}
+            elementoId={selectedElemento.id_elemento as number}
             id="FormUpdate"
             onclose={handleCloseUpdate}
           />
@@ -229,7 +229,7 @@ export const ElementosTable = () => {
           data={ElementosWithKey}
           columns={columns}
           onEdit={userHasPermission(20) ? handleEdit : undefined}
-          onDelete={userHasPermission(21) ? (elemento) => handleState(elemento.idElemento) : undefined}
+          onDelete={userHasPermission(21) ? (elemento) => handleState(elemento.id_elemento) : undefined}
           extraHeaderContent={
             <div>
               {userHasPermission(18) &&

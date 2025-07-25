@@ -1,7 +1,6 @@
 import { axiosAPI } from "../axiosAPI";
 
 export interface TipoPostData {
-    id_tipo?: number;
     nombre: string;
     estado?: boolean;
 }

@@ -17,12 +17,12 @@ import { DocumentTextIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 
 interface InventariosTableProps {
   inventarios?: Inventario[];
-  idSitio?: number;
+  id_sitio?: number;
 }
 
 export const InventariosTable = ({
   inventarios: inventariosProp,
-  idSitio,
+  id_sitio,
 }: InventariosTableProps) => {
   const { userHasPermission } = usePermissions();
 
@@ -58,8 +58,8 @@ export const InventariosTable = ({
     setSelectedInventarioStock(null);
   };
 
-  const handleState = async (idInventario: number) => {
-    await changeState(idInventario);
+  const handleState = async (id_inventario: number) => {
+    await changeState(id_inventario);
   };
 
   const handleOpenAddStock = (inventario: InventarioConElemento) => {
@@ -70,25 +70,25 @@ export const InventariosTable = ({
 
   const columns: TableColumn<Inventario>[] = [
     {
-      key: "fkElemento",
+      key: "fk_elemento",
       label: "Elemento",
       render: (inventario: Inventario) => {
-        const fkElemento = (inventario as any).fkElemento;
+        const fk_elemento = (inventario as any).fk_elemento;
 
         const nombre =
-          typeof fkElemento === "object" && fkElemento?.nombre
-            ? fkElemento.nombre
+          typeof fk_elemento === "object" && fk_elemento?.nombre
+            ? fk_elemento.nombre
             : "No encontrado";
 
         return <span>{nombre}</span>;
       },
     },
     {
-      key: "imagenElemento",
+      key: "imagen_elemento",
       label: "Imagen",
       render: (inventario: Inventario) => {
-        const fkElemento = (inventario as any).fkElemento;
-        const imagen = fkElemento?.imagen;
+        const fk_elemento = (inventario as any).fk_elemento;
+        const imagen = fk_elemento?.imagen;
 
         if (!imagen) return <span>No encontrado</span>;
 
@@ -131,12 +131,12 @@ export const InventariosTable = ({
       },
     },
     {
-      key: "createdAt",
+      key: "created_at",
       label: "Fecha Creación",
       render: (inventario: Inventario) => (
         <span>
-          {inventario.createdAt
-            ? new Date(inventario.createdAt).toLocaleDateString("es-ES", {
+          {inventario.created_at
+            ? new Date(inventario.created_at).toLocaleDateString("es-ES", {
                 year: "numeric",
                 month: "2-digit",
                 day: "2-digit",
@@ -146,12 +146,12 @@ export const InventariosTable = ({
       ),
     },
     {
-      key: "updatedAt",
+      key: "updated_at",
       label: "Fecha Actualización",
       render: (inventario: Inventario) => (
         <span>
-          {inventario.updatedAt
-            ? new Date(inventario.updatedAt).toLocaleDateString("es-ES", {
+          {inventario.updated_at
+            ? new Date(inventario.updated_at).toLocaleDateString("es-ES", {
                 year: "numeric",
                 month: "2-digit",
                 day: "2-digit",
@@ -203,29 +203,29 @@ export const InventariosTable = ({
   const InventariosWithKey = filtered
     ?.filter(
       (inventario) =>
-        inventario?.idInventario !== undefined &&
-        (idSitio ? inventario.fkSitio?.idSitio === idSitio : true)
+        inventario?.id_inventario !== undefined &&
+        (id_sitio ? inventario.fk_sitio?.id_sitio === id_sitio : true)
     )
     .map((inventario) => ({
       ...inventario,
-      key: inventario.idInventario
-        ? inventario.idInventario.toString()
+      key: inventario.id_inventario
+        ? inventario.id_inventario.toString()
         : crypto.randomUUID(),
-      idInventario: inventario.idInventario || 0,
+      id_inventario: inventario.id_inventario || 0,
       estado: Boolean(inventario.estado),
       tieneCaracteristicas: Array.isArray(
-        inventario.fkElemento?.fkCaracteristica
+        inventario.fk_elemento?.fk_caracteristica
       )
-        ? inventario.fkElemento.fkCaracteristica.length > 0
-        : !!inventario.fkElemento?.fkCaracteristica,
+        ? inventario.fk_elemento.fk_caracteristica.length > 0
+        : !!inventario.fk_elemento?.fk_caracteristica,
     }));
 
   console.log("Inventarios filtrados:", filtered);
-  console.log("idSitio recibido por props:", idSitio);
+  console.log("id_sitio recibido por props:", id_sitio);
 
   return (
     <div className="p-4">
-      {!idSitio && (
+      {!id_sitio && (
         <h1 className="text-2xl font-bold mb-4 text-center">
           Inventarios Registrados
         </h1>
@@ -237,17 +237,17 @@ export const InventariosTable = ({
         onOpenChange={handleCloseUpdate}
       >
         {selectedInventarioStock ? (
-          selectedInventarioStock.fkElemento?.fkCaracteristica ? (
+          selectedInventarioStock.fk_elemento?.fk_caracteristica ? (
             <FormAgregateStock
-              fkInventario={selectedInventarioStock.idInventario!}
-              fkElemento={selectedInventarioStock.fkElemento.idElemento!}
-              fkSitio={selectedInventarioStock.fkSitio.idSitio!}
+              fk_inventario={selectedInventarioStock.id_inventario!}
+              fk_elemento={selectedInventarioStock.fk_elemento.id_elemento!}
+              fk_sitio={selectedInventarioStock.fk_sitio.id_sitio!}
               onClose={handleCloseUpdate}
             />
           ) : (
             <FormUpdate
               inventarios={InventariosWithKey ?? []}
-              inventarioId={selectedInventarioStock.idInventario!}
+              inventarioId={selectedInventarioStock.id_inventario!}
               id="FormUpdate"
               onclose={handleCloseUpdate}
             />
@@ -261,11 +261,11 @@ export const InventariosTable = ({
       >
         {inventarioCodigos && (
           <CodigoInventario
-            idInventario={inventarioCodigos.idInventario!}
+            id_inventario={inventarioCodigos.id_inventario!}
             tieneCaracteristicas={
-              Array.isArray(inventarioCodigos.fkElemento?.fkCaracteristica)
-                ? inventarioCodigos.fkElemento.fkCaracteristica.length > 0
-                : !!inventarioCodigos.fkElemento?.fkCaracteristica
+              Array.isArray(inventarioCodigos.fk_elemento?.fk_caracteristica)
+                ? inventarioCodigos.fk_elemento.fk_caracteristica.length > 0
+                : !!inventarioCodigos.fk_elemento?.fk_caracteristica
             }
             isOpen={isOpenCodigos}
             onClose={handleCloseCodigos}
@@ -280,7 +280,7 @@ export const InventariosTable = ({
           // onEdit={userHasPermission(30) ? handleEdit : undefined}
           onDelete={
             userHasPermission(31)
-              ? (inventario) => handleState(inventario.idInventario)
+              ? (inventario) => handleState(inventario.id_inventario)
               : undefined
           }
         />
