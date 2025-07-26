@@ -157,14 +157,14 @@ export const resetPasswordSchema = z.object({
         .string()
         .min(1, { message: "Contraseña es requerido" })
         .min(8, { message: "minimo 8 caracteres" }),
-    confirmPassword: z
+    password_confirmation: z
         .string()
         .min(1, { message: "Contraseña es requerido" })
         .min(8, { message: "minimo 8 caracteres" }),
 })
-    .refine((data) => data.password === data.confirmPassword, {
+    .refine((data) => data.password === data.password_confirmation, {
         message: "Las contraseñas no coinciden",
-        path: ["confirmPassword"]
+        path: ["password_confirmation"]
     });
 
 export type resetPass = z.infer<typeof resetPasswordSchema>

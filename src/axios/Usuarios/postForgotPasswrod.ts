@@ -5,7 +5,7 @@ export async function postForgotPassword(
     data: forgotPassword
   ): Promise<any> {
     const response = await axiosAPI.post(
-      "auth/forgot-password",
+      "/forgot-password",
       data
     );
     return response.data; 
