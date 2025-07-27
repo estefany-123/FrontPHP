@@ -29,7 +29,6 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
     control,
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<User>({
     resolver: zodResolver(UserSchema),
@@ -202,7 +201,6 @@ export default function FormularioU({ addData, onClose, id }: FormularioProps) {
             )}
           />
         )}
-        {watch("fk_rol")}
 
       </Form>
       <Modal
