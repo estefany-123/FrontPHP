@@ -22,7 +22,7 @@ export function useNotificaciones(usuarioId: number) {
 
   useSocketNotificaciones(usuarioId, (nueva: Notificacion) => {
     setNotificaciones((prev) => {
-      const yaExiste = prev.some((n) => n.idNotificacion === nueva.idNotificacion);
+      const yaExiste = prev.some((n) => n.id_notificacion === nueva.id_notificacion);
       if (yaExiste) return prev;
       return [nueva, ...prev];
     });
@@ -33,7 +33,7 @@ export function useNotificaciones(usuarioId: number) {
     onSuccess: (_, idNoti) => {
       setNotificaciones((prev) =>
         prev.map((n) =>
-          n.idNotificacion === idNoti ? { ...n, leido: true } : n
+          n.id_notificacion === idNoti ? { ...n, leido: true } : n
         )
       );
     },
@@ -45,7 +45,7 @@ const { mutate: cambiarEstado,  } = useMutation({
   onSuccess: (_, { id, estado }) => {
     setNotificaciones((prev) =>
       prev.map((n) =>
-        n.idNotificacion === id ? { ...n, estado, leido: true } : n
+        n.id_notificacion === id ? { ...n, estado, leido: true } : n
       )
     );
   },

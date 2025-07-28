@@ -37,13 +37,13 @@ export function useMovimiento() {
     movimientos: Movimiento[] | undefined = data
   ): Movimiento | null => {
     return (
-      movimientos?.find((movimiento) => movimiento.idMovimiento === id) || null
+      movimientos?.find((movimiento) => movimiento.id_movimiento === id) || null
     );
   };
 
   const updateMovimientoMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: MovimientoPostData }) => {
-      const { idMovimiento, ...resto } = data;
+      const { id_movimiento, ...resto } = data;
       return putMovimiento(id, resto);
     },
     onSuccess: () => {
@@ -85,7 +85,7 @@ export function useMovimiento() {
   };
 
   return {
-    movimientos: data,
+    movimientos: Array.isArray(data) ? data : [],
     isLoading,
     isError,
     error,

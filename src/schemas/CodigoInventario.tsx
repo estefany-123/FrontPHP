@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const CodigoInventarioUpdateSchema = z.object({
-  idCodigoInventario: z
+  id_codigo_inventario: z
     .number({
       required_error: "El ID del código es obligatorio",
     }).optional(),

@@ -1,7 +1,7 @@
 export type Caracteristica = {
-  idCaracteristica?: number;
+  id_caracteristica?: number;
   nombre: string;
   simbolo?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  created_at?: string;
+  updated_at?: string;
 };

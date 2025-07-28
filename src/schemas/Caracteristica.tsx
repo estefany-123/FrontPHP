@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const CaracteristicaCreateSchema = z.object({
-  idCaracteristica: z.number().optional(),
+  id_caracteristica: z.number().optional(),
   nombre: z
     .string()
     .min(1, { message: "Es necesario un nombre" })
@@ -14,7 +14,7 @@ export const CaracteristicaCreateSchema = z.object({
 export type CaracteristicaCreate = z.infer<typeof CaracteristicaCreateSchema>;
 
 export const CaracteristicaUpdateSchema = z.object({
-  idCaracteristica: z.number().optional(),
+  id_caracteristica: z.number().optional(),
   nombre: z
     .string()
     .min(1, { message: "Es necesario un nombre" })

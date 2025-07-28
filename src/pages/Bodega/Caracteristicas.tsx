@@ -54,12 +54,12 @@ console.log("Características recibidas:", caracteristicas);
   const columns: TableColumn<Caracteristica>[] = [
     { key: "nombre", label: "Nombre" },
     {
-      key: "createdAt",
+      key: "created_at",
       label: "Fecha Creación",
       render: (caracteristica: Caracteristica) => (
         <span>
-          {caracteristica.createdAt
-            ? new Date(caracteristica.createdAt).toLocaleDateString("es-ES", {
+          {caracteristica.created_at
+            ? new Date(caracteristica.created_at).toLocaleDateString("es-ES", {
                 year: "numeric",
                 month: "2-digit",
                 day: "2-digit",
@@ -69,12 +69,12 @@ console.log("Características recibidas:", caracteristicas);
       ),
     },
     {
-      key: "updatedAt",
+      key: "updated_at",
       label: "Fecha Actualización",
       render: (caracteristica: Caracteristica) => (
         <span>
-          {caracteristica.updatedAt
-            ? new Date(caracteristica.updatedAt).toLocaleDateString("es-ES", {
+          {caracteristica.updated_at
+            ? new Date(caracteristica.updated_at).toLocaleDateString("es-ES", {
                 year: "numeric",
                 month: "2-digit",
                 day: "2-digit",
@@ -94,13 +94,13 @@ console.log("Características recibidas:", caracteristicas);
   }
 
   const CaracteristicassWithKey = caracteristicas
-    ?.filter((caracteristica) => caracteristica?.idCaracteristica !== undefined)
+    ?.filter((caracteristica) => caracteristica?.id_caracteristica !== undefined)
     .map((caracteristica) => ({
       ...caracteristica,
-      key: caracteristica.idCaracteristica
-        ? caracteristica.idCaracteristica.toString()
+      key: caracteristica.id_caracteristica
+        ? caracteristica.id_caracteristica.toString()
         : crypto.randomUUID(),
-      idCaracteristica: caracteristica.idCaracteristica || 0,
+      id_caracteristica: caracteristica.id_caracteristica || 0,
     }));
 
   return (
@@ -145,7 +145,7 @@ console.log("Características recibidas:", caracteristicas);
           <FormUpdate
             caracteristicas={CaracteristicassWithKey ?? []}
             caracteristicaId={
-              selectedCaracteristicas.idCaracteristica as number
+              selectedCaracteristicas.id_caracteristica as number
             }
             id="FormUpdate"
             onclose={handleCloseUpdate}

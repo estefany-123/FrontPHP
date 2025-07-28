@@ -4,7 +4,7 @@ export interface UnidadPutData {
     nombre: string;
 }
 
-export async function putUnidad(idUnidad:number, data:UnidadPutData):Promise<any> {
-    const res = await axiosAPI.patch(`unidades-medida/${idUnidad}`, data);
+export async function putUnidad(id_unidad:number, data:UnidadPutData):Promise<any> {
+    const res = await axiosAPI.patch(`unidades/${id_unidad}`, data);
     return res.data
 }

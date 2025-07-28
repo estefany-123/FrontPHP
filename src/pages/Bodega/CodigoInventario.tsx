@@ -6,14 +6,14 @@ import Buton from "@/components/molecules/Button";
 import { FormUpdate } from "@/components/organismos/CodigoInventario/FormUpdate";
 
 type Props = {
-  idInventario: number;
+  id_inventario: number;
   tieneCaracteristicas: boolean;
   isOpen: boolean;
   onClose: () => void;
 };
 
 export const CodigoInventario = ({
-  idInventario,
+  id_inventario,
   tieneCaracteristicas,
   isOpen,
 }: Props) => {
@@ -26,7 +26,7 @@ export const CodigoInventario = ({
   const cargarCodigos = async () => {
     setIsLoading(true);
     try {
-      const disponibles = getCodigosPorInventario(idInventario, codigosAll ?? []).filter(
+      const disponibles = getCodigosPorInventario(id_inventario, codigosAll ?? []).filter(
         (c) => !c.uso
       );
       setCodigos(disponibles);
@@ -41,7 +41,7 @@ export const CodigoInventario = ({
     if (isOpen && tieneCaracteristicas) {
       cargarCodigos();
     }
-  }, [idInventario, tieneCaracteristicas, isOpen, codigosAll]);
+  }, [id_inventario, tieneCaracteristicas, isOpen, codigosAll]);
 
   const handleAbrirEdicion = (idCodigo: number) => {
     setCodigoIdSeleccionado(idCodigo);
@@ -70,14 +70,14 @@ export const CodigoInventario = ({
         <ul className="space-y-2">
           {codigos.map((codigo, index) => (
             <li
-              key={codigo.idCodigoInventario ?? `temp-${index}`}
+              key={codigo.id_codigo_inventario ?? `temp-${index}`}
               className="flex justify-between items-center border p-2 rounded"
             >
               <span>{codigo.codigo}</span>
               <Buton
                 text="Editar"
                 className="text-sm px-3 py-1 rounded-xl"
-                onPress={() => handleAbrirEdicion(codigo.idCodigoInventario!)}
+                onPress={() => handleAbrirEdicion(codigo.id_codigo_inventario!)}
               />
             </li>
           ))}

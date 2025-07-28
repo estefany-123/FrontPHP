@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const TipoUpdateSchema = z.object({
-  idTipo: z.number().optional(),
+  id_tipo: z.number().optional(),
 
   nombre: z
     .string()

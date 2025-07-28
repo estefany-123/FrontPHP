@@ -1,7 +1,7 @@
 import { axiosAPI } from "../axiosAPI";
 
 export interface InventarioPostData {
-    idInventario?: number;
+    id_inventario?: number;
     stock?: number;
     estado?: boolean;
     fkSitio?: number;
@@ -9,7 +9,7 @@ export interface InventarioPostData {
 }
 
 export async function postInventario(data:InventarioPostData):Promise<any> {
-    const {idInventario, ...resto} = data
+    const {id_inventario, ...resto} = data
     const res = await axiosAPI.post(`inventarios`, resto);
     return res.data;
 }

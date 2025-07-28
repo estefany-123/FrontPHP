@@ -98,7 +98,7 @@ export default function FormularioInventario({
         {!loadingSitios && !errorSitios && Array.isArray(sitios) && (
           <Controller
             control={control}
-            name="fkSitio"
+            name="fk_sitio"
             defaultValue={typeof idSitio === "number" ? idSitio : undefined}
             render={({ field }) => {
               const sitioActual = sitios.find((s) => s.idSitio === idSitio);
@@ -123,8 +123,8 @@ export default function FormularioInventario({
                         const sitioId = Number(e.target.value);
                         field.onChange(sitioId);
                       }}
-                      isInvalid={!!errors.fkSitio}
-                      errorMessage={errors.fkSitio?.message}
+                      isInvalid={!!errors.fk_sitio}
+                      errorMessage={errors.fk_sitio?.message}
                     >
                       {sitios
                         .filter((i) => i.estado === true)
@@ -147,7 +147,7 @@ export default function FormularioInventario({
         {!loadingElementos && !errorElementos && elementos && (
           <Controller
             control={control}
-            name="fkElemento"
+            name="fk_elemento"
             render={({ field }) => (
               <div className="w-full flex">
                 <Select
@@ -161,15 +161,15 @@ export default function FormularioInventario({
                     const elementoId = Number(e.target.value);
                     field.onChange(elementoId);
                   }}
-                  isInvalid={!!errors.fkElemento}
-                  errorMessage={errors.fkElemento?.message}
+                  isInvalid={!!errors.fk_elemento}
+                  errorMessage={errors.fk_elemento?.message}
                 >
                   {elementos.length ? (
                     elementos
                       .filter((e) => e.estado === true)
                       .map((elemento) => (
                         <SelectItem
-                          key={elemento.idElemento}
+                          key={elemento.id_elemento}
                           textValue={elemento.nombre}
                         >
                           {elemento.nombre}

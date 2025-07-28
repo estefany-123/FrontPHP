@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const UnidadUpdateSchema = z.object({
-  idUnidad: z.number().optional(),
+  id_unidad: z.number().optional(),
 
   nombre: z
     .string()

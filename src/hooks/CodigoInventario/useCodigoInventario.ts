@@ -16,14 +16,14 @@ export function useCodigoInventario() {
   });
 
   const getCodigosPorInventario = (
-    idInventario: number,
+    id_inventario: number,
     codigosData: CodigoInventario[] = data ?? []
   ): CodigoInventario[] => {
     return codigosData.filter((c) => {
-      if (typeof c.fkInventario === "object" && c.fkInventario !== null) {
-        return c.fkInventario.idInventario === idInventario;
+      if (typeof c.fk_inventario === "object" && c.fk_inventario !== null) {
+        return c.fk_inventario.id_inventario === id_inventario;
       }
-      return c.fkInventario === idInventario;
+      return c.fk_inventario === id_inventario;
     });
   };
 
@@ -31,12 +31,12 @@ export function useCodigoInventario() {
     id: number,
     codigos: CodigoInventario[] | undefined = data
   ): CodigoInventario | null => {
-    return codigos?.find((codigo) => codigo.idCodigoInventario === id) || null;
+    return codigos?.find((codigo) => codigo.id_codigo_inventario === id) || null;
   };
 
   const updateCodigoMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: CodigoInventario }) => {
-      const { idCodigoInventario, ...resto } = data;
+      const { id_codigo_inventario, ...resto } = data;
       return putCodigoInventario(id, resto);
     },
     onSuccess: () => {

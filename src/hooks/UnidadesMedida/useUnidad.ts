@@ -33,12 +33,12 @@ export function useUnidad() {
     id: number,
     unidades: Unidad[] | undefined = data
   ): Unidad | null => {
-    return unidades?.find((unidad) => unidad.idUnidad === id) || null;
+    return unidades?.find((unidad) => unidad.id_unidad === id) || null;
   };
 
   const updateUnidadMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Unidad }) => {
-      const { idUnidad, ...resto } = data;
+      const { id_unidad, ...resto } = data;
       return putUnidad(id, resto);
     },
     onSuccess: () => {
@@ -79,8 +79,8 @@ export function useUnidad() {
     return updateUnidadMutation.mutateAsync({ id, data });
   };
 
-  const changeState = async (idUnidad: number) => {
-    return changeStateMutation.mutateAsync(idUnidad);
+  const changeState = async (id_unidad: number) => {
+    return changeStateMutation.mutateAsync(id_unidad);
   };
 
   return {

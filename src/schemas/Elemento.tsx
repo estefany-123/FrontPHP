@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const ElementoUpdateSchema = z.object({
-  idElemento: z.number(),
+  id_elemento: z.number(),
 
   nombre: z
     .string()
@@ -13,7 +13,7 @@ export const ElementoUpdateSchema = z.object({
     .min(1, { message: "Descripcion es requerida" })
     .min(2, { message: "Longitud minima 2" }),
 
-imagen: z
+imagen_elemento: z
   .any()
   .refine(
     (file) =>
@@ -31,7 +31,7 @@ imagen: z
 export type ElementoUpdate = z.infer<typeof ElementoUpdateSchema>;
 
 export const ElementoCreateSchema = z.object({  
-  idElemento: z.number().optional(),
+  id_elemento: z.number().optional(),
   nombre: z
     .string()
     .min(1, { message: "Nombre es  requerido" })
@@ -44,32 +44,32 @@ export const ElementoCreateSchema = z.object({
 
   perecedero: z.boolean(),
 
-  noPerecedero: z.boolean(),
+  no_perecedero: z.boolean(),
 
   estado: z.boolean({ required_error: "Estado es requerido" }),
 
   baja: z.boolean({ required_error: "baja es requerida" }).default(false).optional(),
 
-imagen: z
+imagen_elemento: z
     .any()
     .refine(
       (file) =>
         file === undefined || file instanceof File || typeof file === "string",
       {
-        message: "La imagen debe ser un archivo o una URL válida",
+        message: "La imagen_elemento debe ser un archivo o una URL válida",
       }
     ),
 
-  fechaVencimiento: z.string({ message: "Fecha es requerida" }).optional(),
+  fecha_vencimiento: z.string({ message: "Fecha es requerida" }).optional(),
 
 
-  fkUnidadMedida: z.number({ required_error: "Unidad es requerida" }),
+  fk_unidad_medida: z.number({ required_error: "Unidad es requerida" }),
 
-  fkCategoria: z.number({ required_error: "Categoria es requerida" }),
+  fk_categoria: z.number({ required_error: "Categoria es requerida" }),
 
-  fkCaracteristica: z.number({ required_error: "Caracteristica es requerida" }).optional(),
+  fk_caracteristica: z.number({ required_error: "Caracteristica es requerida" }).optional(),
 
-  tipoElemento: z.enum(["perecedero", "noPerecedero"], {
+  tipoElemento: z.enum(["perecedero", "no_perecedero"], {
     required_error: "Debe seleccionar un tipo de elemento",
   }),
 
