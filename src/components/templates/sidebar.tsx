@@ -12,12 +12,14 @@ import {
   GlobeAmericasIcon,
   TagIcon,
   ClipboardDocumentCheckIcon,
+  ArrowRightStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
+import useLogin from "@/hooks/Usuarios/useLogin";
 
 
 const menuItems = [
-  {name: "Inicio", icon: HomeIcon, href:"/"},
+  { name: "Inicio", icon: HomeIcon, href: "/" },
   {
     name: "Admin",
     icon: UserIcon,
@@ -27,7 +29,7 @@ const menuItems = [
       { name: "Fichas", icon: TagIcon, href: "/admin/fichas" },
       { name: "Areas", icon: GlobeAmericasIcon, href: "/admin/areas" },
       { name: "Sitios", icon: BuildingOfficeIcon, href: "/admin/sitios" },
-      { name: "Permisos", icon: ClipboardDocumentCheckIcon  , href: "/admin/permisos" },
+      { name: "Permisos", icon: ClipboardDocumentCheckIcon, href: "/admin/permisos" },
     ],
   },
 
@@ -54,12 +56,14 @@ const menuItems = [
 ];
 
 
-export default function Sidebar (){
+export default function Sidebar() {
   const [openItems, setOpenItems] = useState<string[]>([]);
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
 
-   const toggleItem = (name: string) => {
+  const { logout } = useLogin();
+
+  const toggleItem = (name: string) => {
     setOpenItems((prev) =>
       prev.includes(name)
         ? prev.filter((item) => item !== name)
@@ -70,9 +74,8 @@ export default function Sidebar (){
 
   return (
     <aside
-      className={`h-screen ${
-        collapsed ? "w-15" : "w-64"
-      } bg-blue-950 text-white dark:bg-zinc-800 dark:text-white flex flex-col transition-all duration-300`}
+      className={`h-screen ${collapsed ? "w-15" : "w-64"
+        } bg-blue-950 text-white dark:bg-zinc-800 dark:text-white flex flex-col transition-all duration-300`}
     >
       <div className="flex items-center justify-between p-4">
         {!collapsed && (
@@ -98,11 +101,10 @@ export default function Sidebar (){
             <Link
               to={item.href}
               onClick={() => toggleItem(item.name)}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg w-full text-left transition-colors ${
-                location.pathname === item.href
+              className={`flex items-center gap-3 px-3 py-2 rounded-lg w-full text-left transition-colors ${location.pathname === item.href
                   ? "bg-blue-600 text-white"
                   : "hover:bg-blue-600 text-black-300"
-              }`}
+                }`}
             >
               <item.icon className="w-6 h-6" />
               {!collapsed && <span>{item.name}</span>}
@@ -113,11 +115,10 @@ export default function Sidebar (){
                   <Link
                     key={subItem.name}
                     to={subItem.href}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-lg w-full text-left transition-colors ${
-                      location.pathname === subItem.href
+                    className={`flex items-center gap-3 px-3 py-2 rounded-lg w-full text-left transition-colors ${location.pathname === subItem.href
                         ? "bg-blue-600 text-white"
                         : "hover:bg-blue-600 text-black-300"
-                    }`}
+                      }`}
                   >
                     <subItem.icon className="w-6 h-6" />
                     {!collapsed && <span>{subItem.name}</span>}
@@ -128,6 +129,9 @@ export default function Sidebar (){
           </div>
         ))}
       </nav>
+      <div className="flex">
+        <ArrowRightStartOnRectangleIcon onClick={logout} height={26} className={`hover:text-red-500 cursor-pointer transition mb-4 ${collapsed ? 'mx-auto' : 'ms-auto me-6'}`} />
+      </div>
     </aside>
   );
 }

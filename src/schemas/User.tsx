@@ -23,6 +23,9 @@ export const UserUpdateSchema = z.object({
         .email({ message: "Correo es requerido" }),
     cargo: z
         .string().min(1, { message: "Cargo es requerido" }).optional(),
+    fk_rol: z
+        .number({ message: "Debe ser un numero" }).optional()
+    
 })
 
 export type UserUpdate = z.infer<typeof UserUpdateSchema>
@@ -57,7 +60,7 @@ export const UserSchema = z.object({
         .boolean({ required_error: "Estado es requerido" }),
     cargo: z
         .string()
-        .min(6, { message: "Cargo es requerido" }),
+        .min(5, { message: "Minimo 5 caracteres" }),
     password: z
         .string({ message: "Contraseña es obligatoria" })
         .min(8, { message: "Contraseña es requerida" }),
@@ -157,14 +160,14 @@ export const resetPasswordSchema = z.object({
         .string()
         .min(1, { message: "Contraseña es requerido" })
         .min(8, { message: "minimo 8 caracteres" }),
-    confirmPassword: z
+    password_confirmation: z
         .string()
         .min(1, { message: "Contraseña es requerido" })
         .min(8, { message: "minimo 8 caracteres" }),
 })
-    .refine((data) => data.password === data.confirmPassword, {
+    .refine((data) => data.password === data.password_confirmation, {
         message: "Las contraseñas no coinciden",
-        path: ["confirmPassword"]
+        path: ["password_confirmation"]
     });
 
 export type resetPass = z.infer<typeof resetPasswordSchema>

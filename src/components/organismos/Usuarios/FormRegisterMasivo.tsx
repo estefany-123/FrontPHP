@@ -29,6 +29,7 @@ export default function FormRegisterMasivo(){
         const formData = new FormData();
     
         formData.append("excel",file);
+
         try{
             await postMassiveUsuarios(formData);
             addToast({
@@ -41,20 +42,30 @@ export default function FormRegisterMasivo(){
                 queryKey: ["users"]
             });
         }
-        catch(error){
-            console.log(error);
-                console.log("esto es formdata",formData)
-            addToast({
-                title: "Error subiendo usuarios",
-                description: "Hubo un error intentando subir los usuarios",
-                color: "danger"
-            })
+        catch(error:any){
+            console.log(error.response.data)
+            if(error.status === 400){
+                addToast({
+                    title: error.response.data.msg.duplicated || error.response.data.msg.missing_data,
+                    description: "Revisa los datos enviados",
+                    color: "warning"
+                })
+            }
+
+            if(error.status === 500){
+                
+                addToast({
+                    title: "Error subiendo usuarios",
+                    description: "Hubo un error intentando subir los usuarios",
+                    color: "danger"
+                })
+            }
         }
     }
 
     return(
         <Form onSubmit={onSubmit} className="flex flex-col gap-6">
-            <a href={`${import.meta.env.VITE_API_CLIENT}img/excel/FORMATO EXCEL.xlsx`} download><Button variant="bordered" color="success">Descargar formato</Button></a>
+            <a href={`http://127.0.0.1:8000/storage/excel/FORMATO EXCEL.xlsx`} download><Button variant="bordered" color="success">Descargar formato</Button></a>
             <Input onChange={handleFileChange} type="file" accept=".xlsx,.xls" />
             {file && <p>Selected file: {file.name}</p>}
 

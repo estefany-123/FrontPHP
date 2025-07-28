@@ -73,7 +73,7 @@ export type LoginRes = {
 
 export type resetPassword = {
     password:string
-    confirmPassword:string
+    password_confirmation:string
 }
 
 export type forgotPassword = {
