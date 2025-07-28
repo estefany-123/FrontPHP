@@ -85,7 +85,7 @@ export function useMovimiento() {
   };
 
   return {
-    movimientos: data,
+    movimientos: Array.isArray(data) ? data : [],
     isLoading,
     isError,
     error,

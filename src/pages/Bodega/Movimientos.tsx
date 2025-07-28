@@ -10,10 +10,8 @@ import { FormUpdate } from "@/components/organismos/Movimientos/FormUpdate";
 import { Chip } from "@heroui/chip";
 import { useNavigate } from "react-router-dom";
 import { Card, CardBody } from "@heroui/react";
-import usePermissions from "@/hooks/Usuarios/usePermissions";
 
 export const MovimientoTable = () => {
-  const { userHasPermission } = usePermissions();
 
   const { movimientos, isLoading, isError, error, addMovimiento } =
     useMovimiento();
@@ -149,7 +147,7 @@ export const MovimientoTable = () => {
       id_movimiento: movimiento.id_movimiento || 0,
     }));
 
-    console.log("🧾 Datos para la tabla MovimientoWithKey:", MovimientoWithKey);
+  console.log("🧾 Datos para la tabla MovimientoWithKey:", MovimientoWithKey);
 
   return (
     <div className="p-4">
@@ -159,20 +157,16 @@ export const MovimientoTable = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Movimientos</h1>
               <div className="flex gap-2">
-                {userHasPermission(72) && (
-                  <Buton
-                    text="Gestionar Tipos Movimiento"
-                    className="rounded-xl"
-                    onPress={handleGoToTipo}
-                  />
-                )}
-                {userHasPermission(15) && (
-                  <Buton
-                    text="Gestionar Sitios"
-                    className="rounded-xl"
-                    onPress={handleGoToSitio}
-                  />
-                )}
+                <Buton
+                  text="Gestionar Tipos Movimiento"
+                  className="rounded-xl"
+                  onPress={handleGoToTipo}
+                />
+                <Buton
+                  text="Gestionar Sitios"
+                  className="rounded-xl"
+                  onPress={handleGoToSitio}
+                />
               </div>
             </div>
           </CardBody>
@@ -222,24 +216,17 @@ export const MovimientoTable = () => {
         )}
       </Modall>
 
-      {userHasPermission(23) && MovimientoWithKey && (
-        <Globaltable
-          data={MovimientoWithKey}
-          columns={columns}
-          onEdit={userHasPermission(24) ? handleEdit : undefined}
-          showEstado={false}
-          extraHeaderContent={
-            <div>
-              {userHasPermission(22) && (
-                <Buton
-                  text="Nuevo Movimiento"
-                  onPress={() => setIsOpen(true)}
-                />
-              )}
-            </div>
-          }
-        />
-      )}
+      <Globaltable
+        data={MovimientoWithKey}
+        columns={columns}
+        onEdit={handleEdit}
+        showEstado={false}
+        extraHeaderContent={
+          <div>
+            <Buton text="Nuevo Movimiento" onPress={() => setIsOpen(true)} />
+          </div>
+        }
+      />
     </div>
   );
 };

@@ -234,7 +234,7 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
                 >
                   {(users ?? []).map((usuario) => (
                     <SelectItem
-                      key={usuario.idUsuario}
+                      key={usuario.id}
                       textValue={usuario.nombre}
                     >
                       {usuario.nombre}

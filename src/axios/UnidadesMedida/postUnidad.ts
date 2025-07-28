@@ -6,6 +6,6 @@ export interface UnidadPostData {
 }
 
 export async function postUnidad(data:UnidadPostData):Promise<any> {
-    const res = await axiosAPI.post(`unidades-medida`, data);
+    const res = await axiosAPI.post(`unidades`, data);
     return res.data
 }

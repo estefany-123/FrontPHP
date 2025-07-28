@@ -9,12 +9,9 @@ import { FormUpdate } from "@/components/organismos/Elementos/FormUpdate";
 import { Card, CardBody } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import { ElementoCreate } from "@/schemas/Elemento";
-import usePermissions from "@/hooks/Usuarios/usePermissions";
 import FormularioElementos from "@/components/organismos/Elementos/FormRegister";
 
 export const ElementosTable = () => {
-
-  const { userHasPermission } = usePermissions();
 
   const { elementos, isLoading, isError, error, addElemento, changeState } =
     useElemento();
@@ -80,7 +77,7 @@ export const ElementosTable = () => {
       render: (item: Elemento) => {
         const imagen = item.imagen;
         console.log(imagen);
-  
+
         return imagen ? (
           <img
             src={`http://localhost:3000/img/img/elementos/${imagen}`}
@@ -115,10 +112,10 @@ export const ElementosTable = () => {
         <span>
           {elemento.created_at
             ? new Date(elemento.created_at).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
@@ -130,10 +127,10 @@ export const ElementosTable = () => {
         <span>
           {elemento.updated_at
             ? new Date(elemento.updated_at).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
@@ -168,21 +165,15 @@ export const ElementosTable = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Elementos</h1>
               <div className="flex gap-2">
-                {userHasPermission(60) &&
-                  <Buton text="Gestionar Unidad" onPress={handleGoToUnidad} />
-                }
-                {userHasPermission(64) &&
-                  <Buton
-                    text="Gestionar Categoria"
-                    onPress={handleGoToCategoria}
-                  />
-                }
-                {userHasPermission(68) &&
-                  <Buton
-                    text="Gestionar Caracteristica"
-                    onPress={handleGoToCaracteristica}
-                  />
-                }
+                <Buton text="Gestionar Unidad" onPress={handleGoToUnidad} />
+                <Buton
+                  text="Gestionar Categoria"
+                  onPress={handleGoToCategoria}
+                />
+                <Buton
+                  text="Gestionar Caracteristica"
+                  onPress={handleGoToCaracteristica}
+                />
               </div>
             </div>
           </CardBody>
@@ -224,21 +215,17 @@ export const ElementosTable = () => {
         )}
       </Modall>
 
-      {userHasPermission(19) && ElementosWithKey && (
-        <Globaltable
-          data={ElementosWithKey}
-          columns={columns}
-          onEdit={userHasPermission(20) ? handleEdit : undefined}
-          onDelete={userHasPermission(21) ? (elemento) => handleState(elemento.id_elemento) : undefined}
-          extraHeaderContent={
-            <div>
-              {userHasPermission(18) &&
-                <Buton text="Nuevo elemento" onPress={() => setIsOpen(true)} />
-              }
-            </div>
-          }
-        />
-      )}
+      <Globaltable
+        data={ElementosWithKey ?? []}
+        columns={columns}
+        onEdit={handleEdit}
+        onDelete={(elemento) => handleState(elemento.id_elemento)}
+        extraHeaderContent={
+          <div>
+            {<Buton text="Nuevo elemento" onPress={() => setIsOpen(true)} />}
+          </div>
+        }
+      />
     </div>
   );
 };

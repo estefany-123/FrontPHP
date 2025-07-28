@@ -12,7 +12,6 @@ import {
 import { FormAgregateStock } from "@/components/organismos/Inventarios/FormAgregateStock";
 import { FormUpdate } from "@/components/organismos/Inventarios/FormUpdate";
 import { CodigoInventario } from "../../CodigoInventario";
-import usePermissions from "@/hooks/Usuarios/usePermissions";
 import { DocumentTextIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 
 interface InventariosTableProps {
@@ -24,7 +23,7 @@ export const InventariosTable = ({
   inventarios: inventariosProp,
   id_sitio,
 }: InventariosTableProps) => {
-  const { userHasPermission } = usePermissions();
+
 
   const {
     inventarios: inventariosHook,
@@ -41,7 +40,6 @@ export const InventariosTable = ({
   const [isOpenCodigos, setIsOpenCodigos] = useState(false);
   const [inventarioCodigos, setInventarioCodigos] =
     useState<InventarioConElemento | null>(null);
-  // const [, setSelectedInventario] = useState<Inventario | null>(null);
 
   const handleCloseCodigos = () => {
     setIsOpenCodigos(false);
@@ -66,7 +64,6 @@ export const InventariosTable = ({
     setSelectedInventarioStock(inventario);
     setIsOpenUpdate(true);
   };
-
 
   const columns: TableColumn<Inventario>[] = [
     {
@@ -273,18 +270,11 @@ export const InventariosTable = ({
         )}
       </Modall>
 
-      {userHasPermission(29) && InventariosWithKey && (
-        <Globaltable
-          data={InventariosWithKey}
-          columns={columns ?? []}
-          // onEdit={userHasPermission(30) ? handleEdit : undefined}
-          onDelete={
-            userHasPermission(31)
-              ? (inventario) => handleState(inventario.id_inventario)
-              : undefined
-          }
-        />
-      )}
+      <Globaltable
+        data={InventariosWithKey}
+        columns={columns ?? []}
+        onDelete={(inventario) => handleState(inventario.id_inventario)}
+      />
     </div>
   );
 };

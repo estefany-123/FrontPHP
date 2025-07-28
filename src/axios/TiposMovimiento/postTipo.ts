@@ -6,6 +6,6 @@ export interface TipoPostData {
 }
 
 export async function postTipo(data:TipoPostData):Promise<any> {
-    const res = await axiosAPI.post(`tipos-movimiento`, data);
+    const res = await axiosAPI.post(`tipos`, data);
     return res.data;
 }
