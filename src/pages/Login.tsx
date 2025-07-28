@@ -36,7 +36,7 @@ function Login({ }: Props) {
               
               {isError && <p className="text-red-500 text-center">{error}</p>}
               {isLoading && <Spinner className="flex justify-center" />}
-
+   
               <p className="text-center"><a className=" text-blue-600 hover:text-blue-700 cursor-pointer" href="/forgotPass">He olvidado mi contraseña</a></p>
               <div className="flex">
                 <Buton type="submit" className="text-white px-8 mx-auto">Ingresar</Buton>

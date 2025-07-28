@@ -7,11 +7,11 @@ import { useForm } from "react-hook-form";
 import Buton from '@/components/molecules/Button';
 import { ArrowLeftCircleIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import { Input } from '@heroui/input';
-import { addToast, Link } from '@heroui/react';
+import { addToast, Link, Spinner } from '@heroui/react';
 
 function ForgotPassword() {
 
-  const { forgotPassword, isError, error } = usePassword();
+  const { forgotPassword ,isLoading} = usePassword();
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: zodResolver(forgotPasswordSchema),
@@ -19,6 +19,7 @@ function ForgotPassword() {
   });
 
   const onSubmit = async (data: forgotPass) => {
+
 
     try {
       await forgotPassword(data)
@@ -62,8 +63,9 @@ function ForgotPassword() {
             <Input {...register("correo")} label='correo' type='email' placeholder='correo@gmail.com' isInvalid={!!errors.correo}
                 errorMessage={errors.correo?.message}/>
             
-            {isError && <p>{error}</p>}
             
+           {isLoading && <Spinner className="flex justify-center" />}
+
             <Buton className='block mx-auto' type='submit'>
               Enviar al correo
             </Buton>

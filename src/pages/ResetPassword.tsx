@@ -5,6 +5,7 @@ import { resetPasswordSchema } from '@/schemas/User'
 import { resetPassword } from '@/types/Usuario'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { Input } from '@heroui/input'
+import { Spinner } from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -17,7 +18,7 @@ const ResetPassword = () => {
     const [searchParams] = useSearchParams();
     const token = searchParams.get("token") as string;
 
-    const { resetPassword } = usePassword()
+    const { resetPassword, isLoading,isError,error } = usePassword()
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: zodResolver(resetPasswordSchema),
@@ -48,12 +49,14 @@ const ResetPassword = () => {
                         <h1 className="text-center font-sans text-xl font-bold mb-6">Restablece tu contraseña</h1>
                         <p className='text-center text-sm pb-5'>Ingresa una nueva contraseña </p>
 
-                        <Input {...register("password")} label='Nueva contraseña' type='password' placeholder='escribe tu nueva contraseña'  isInvalid={!!errors.password} errorMessage={errors.password?.message}/>
-                        
+                        <Input {...register("password")} label='Nueva contraseña' type='password' placeholder='escribe tu nueva contraseña' isInvalid={!!errors.password} errorMessage={errors.password?.message} />
 
-                        <Input {...register("confirmPassword")} label='Confirma tu contraseña' type='password' placeholder='confirma tu contraseña'   isInvalid={!!errors.confirmPassword}errorMessage={errors.confirmPassword?.message} />
-                        
 
+                        <Input {...register("password_confirmation")} label='Confirma tu contraseña' type='password' placeholder='confirma tu contraseña' isInvalid={!!errors.password_confirmation} errorMessage={errors.password_confirmation?.message} />
+
+                        {isError && <p className="text-red-500 text-center">{error}</p>}
+                        {isLoading && <Spinner className="flex justify-center" />}
+                        
                         <Buton className='block mx-auto' type='submit'>
                             Restablecer contraseña
                         </Buton>
