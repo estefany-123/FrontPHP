@@ -34,12 +34,12 @@ export function useAreas() {
     id: number,
     areas: Area[] | undefined = data
   ): Area | null => {
-    return areas?.find((area) => area.idArea === id) || null;
+    return areas?.find((area) => area.id_area === id) || null;
   };
 
   const updateAreaMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Area }) => {
-      const { idArea, ...resto } = data;
+      const { id_area, ...resto } = data;
       return putArea(id, resto);
     },
     onSuccess: () => {
@@ -80,8 +80,8 @@ export function useAreas() {
     return updateAreaMutation.mutateAsync({ id, data });
   };
 
-  const changeState = async (idArea: number) => {
-    return changeStateMutation.mutateAsync(idArea);
+  const changeState = async (id_area: number) => {
+    return changeStateMutation.mutateAsync(id_area);
   };
 
   return {

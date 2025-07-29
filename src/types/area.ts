@@ -1,9 +1,9 @@
 export type Area = {
-    idArea?: number;
-    nombre: string;
-    estado?: boolean;
-    createdAt?:string;
-    updatedAt?:string;
-    fkUsuario?:number
-    fkSede?: number;
-}
+  id_area?: number;
+  nombre: string;
+  estado?: boolean;
+  created_at?: string;
+  updated_at?: string;
+  fk_usuario?: number;
+  fk_sede?: number;
+};

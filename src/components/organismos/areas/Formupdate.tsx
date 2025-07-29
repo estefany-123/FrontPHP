@@ -27,15 +27,15 @@ export const FormUpdate = ({ areas, areaId, id, onclose }: FormuProps) => {
     mode: "onChange",
     defaultValues: {
       nombre: foundArea.nombre,
-      idArea: foundArea.idArea,
+      id_area: foundArea.id_area,
     },
   });
 
   const onSubmit = async (data: AreaUpdate) => {
     console.log("Enviando datos:", data);
-    if (!data.idArea) return;
+    if (!data.id_area) return;
     try {
-      await updateArea(data.idArea, { nombre: data.nombre });
+      await updateArea(data.id_area, { nombre: data.nombre });
       onclose();
       addToast({
         title: "Actualizacion Exitosa",

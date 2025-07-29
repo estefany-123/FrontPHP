@@ -1,4 +1,4 @@
-import Globaltable from "@/components/organismos/table.tsx"; 
+import Globaltable from "@/components/organismos/table.tsx";
 import { TableColumn } from "@/components/organismos/table.tsx";
 import Buton from "@/components/molecules/Button";
 import Modall from "@/components/organismos/modal";
@@ -8,13 +8,9 @@ import { useAreas } from "@/hooks/areas/useAreas";
 import { Card, CardBody } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import { FormUpdate } from "@/components/organismos/areas/Formupdate";
-import usePermissions from "@/hooks/Usuarios/usePermissions";
 import FormularioArea from "@/components/organismos/areas/FormRegister";
 
 const AreaTable = () => {
-
-  const { userHasPermission } = usePermissions();
-
   const { areas, isLoading, isError, error, addArea, changeState } = useAreas();
 
   //Modal agregar
@@ -38,13 +34,13 @@ const AreaTable = () => {
     setSelectedArea(null);
   };
 
-  const handleState = async (idArea: number) => {
-    await changeState(idArea);
+  const handleState = async (id_area: number) => {
+    await changeState(id_area);
   };
 
   const handleAddArea = async (area: Area) => {
     try {
-      const areaToAdd = { ...area, idArea: area.idArea || 0 };
+      const areaToAdd = { ...area, id_area: area.id_area || 0 };
       await addArea(areaToAdd);
       handleClose();
     } catch (error) {
@@ -61,31 +57,31 @@ const AreaTable = () => {
   const columns: TableColumn<Area>[] = [
     { key: "nombre", label: "Nombre" },
     {
-      key: "createdAt",
+      key: "created_at",
       label: "Fecha Creación",
       render: (Area: Area) => (
         <span>
-          {Area.createdAt
-            ? new Date(Area.createdAt).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+          {Area.created_at
+            ? new Date(Area.created_at).toLocaleDateString("es-ES", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
     },
     {
-      key: "updatedAt",
+      key: "updated_at",
       label: "Fecha Actualizacion",
       render: (Area: Area) => (
         <span>
-          {Area.updatedAt
-            ? new Date(Area.updatedAt).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+          {Area.updated_at
+            ? new Date(Area.updated_at).toLocaleDateString("es-ES", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
@@ -103,13 +99,14 @@ const AreaTable = () => {
 
   const areasWithKey = areas
     ?.filter(
-      (area) => area?.idArea !== undefined && area?.createdAt && area?.updatedAt
+      (area) =>
+        area?.id_area !== undefined && area?.created_at && area?.updated_at
     )
     .map((area) => ({
       ...area,
-      key: area.idArea ? area.idArea.toString() : crypto.randomUUID(), // Asegurando que el key sea único
+      key: area.id_area ? area.id_area.toString() : crypto.randomUUID(), // Asegurando que el key sea único
       estado: Boolean(area.estado), // Asegurar que estado sea un booleano
-      idArea: area.idArea || 0, // Asegurar que idArea no sea undefined, asignando 0 si es necesario
+      id_area: area.id_area || 0, // Asegurar que id_area no sea undefined, asignando 0 si es necesario
     }));
 
   return (
@@ -120,12 +117,9 @@ const AreaTable = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Areas</h1>
               <div className="flex gap-2">
-                {userHasPermission(44) &&
-                  <Buton text="Gestionar Sedes" onPress={handleGoToSede} />
-                }
-                {userHasPermission(3) &&
-                  <Buton text="Gestionar Usuarios" onPress={handleGoToUsuario} />
-                }
+                <Buton text="Gestionar Sedes" onPress={handleGoToSede} />
+
+                <Buton text="Gestionar Usuarios" onPress={handleGoToUsuario} />
               </div>
             </div>
           </CardBody>
@@ -159,29 +153,24 @@ const AreaTable = () => {
         {selectedArea && (
           <FormUpdate
             areas={areasWithKey ?? []}
-            areaId={selectedArea.idArea as number}
+            areaId={selectedArea.id_area as number}
             id="FormUpdate"
             onclose={handleCloseUpdate}
           />
         )}
       </Modall>
 
-      {userHasPermission(11) && areasWithKey && (
-        <Globaltable
-          data={areasWithKey}
-          columns={columns}
-          onEdit={userHasPermission(12) ? handleEdit : undefined}
-          onDelete={userHasPermission(13) ? (area) => handleState(area.idArea) : undefined}
-          extraHeaderContent={
-            <div>
-              {userHasPermission(10) &&
-              <Buton text="Añadir Area" onPress={() => setIsOpen(true)} />
-              }
-            </div>
-
-          }
-        />
-      )}
+      <Globaltable
+        data={areasWithKey ?? []}
+        columns={columns}
+        onEdit={handleEdit}
+        onDelete={(area) => handleState(area.id_area)}
+        extraHeaderContent={
+          <div>
+            <Buton text="Añadir Area" onPress={() => setIsOpen(true)} />
+          </div>
+        }
+      />
     </div>
   );
 };

@@ -103,7 +103,7 @@ export default function FormularioArea({
 
         <Controller
           control={control}
-          name="fkSede"
+          name="fk_sede"
           render={({ field }) => (
             <div className=" flex w-full">
               <Select
@@ -114,8 +114,8 @@ export default function FormularioArea({
                 className="w-full"
                 placeholder="Selecciona una sede..."
                 aria-label="Seleccionar Sede"
-                isInvalid={!!errors.fkSede}
-                errorMessage={errors.fkSede?.message}
+                isInvalid={!!errors.fk_sede}
+                errorMessage={errors.fk_sede?.message}
               >
                 {sede?.length ? (
                   sede
@@ -142,7 +142,7 @@ export default function FormularioArea({
 
         <Controller
           control={control}
-          name="fkUsuario"
+          name="fk_usuario"
           render={({ field }) => (
             <div className="flex w-full">
               <Select
@@ -153,14 +153,14 @@ export default function FormularioArea({
                 className="w-full"
                 placeholder="Selecciona un usuario..."
                 aria-label="Seleccionar Usuario"
-                isInvalid={!!errors.fkUsuario}
-                errorMessage={errors.fkUsuario?.message}
+                isInvalid={!!errors.fk_usuario}
+                errorMessage={errors.fk_usuario?.message}
               >
                 {users?.length ? (
                   users
                     .filter((u) => u.estado === true)
                     .map((u) => (
-                      <SelectItem key={u.idUsuario} textValue={u.nombre}>
+                      <SelectItem key={u.id} textValue={u.nombre}>
                         {u.nombre}
                       </SelectItem>
                     ))
@@ -180,7 +180,6 @@ export default function FormularioArea({
             </div>
           )}
         />
-        
       </Form>
       <Modal
         ModalTitle="Agregar Sede"
