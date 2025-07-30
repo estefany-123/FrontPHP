@@ -32,15 +32,15 @@ export const FormUpdateFicha = ({
     resolver: zodResolver(fichaUpdateSchema),
     mode: "onChange",
     defaultValues: {
-      idFicha: foundFicha.idFicha,
-      codigoFicha: foundFicha.codigoFicha,
+      id_ficha: foundFicha.id_ficha,
+      codigo_ficha: foundFicha.codigo_ficha,
     },
   });
 
   const onSubmit = async (data: fichaUpdate) => {
-    if (!data.idFicha) return;
+    if (!data.id_ficha) return;
     try {
-      await updateFicha(data.idFicha, data);
+      await updateFicha(data.id_ficha, data);
       onclose();
       addToast({
         title: "Actualizacion Exitosa",
@@ -63,9 +63,9 @@ export const FormUpdateFicha = ({
       <Input
         label="Código Ficha"
         placeholder="Ingrese el código de ficha"
-        {...register("codigoFicha", { valueAsNumber: true })}
-        isInvalid={!!errors.codigoFicha}
-        errorMessage={errors.codigoFicha?.message}
+        {...register("codigo_ficha", { valueAsNumber: true })}
+        isInvalid={!!errors.codigo_ficha}
+        errorMessage={errors.codigo_ficha?.message}
       />
 
       <Buton

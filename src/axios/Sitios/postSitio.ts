@@ -3,11 +3,11 @@ import { axiosAPI } from "../axiosAPI";
 export interface SitioPostData {
     idSitio?: number;
     nombre: string;
-    personaEncargada?: string;
+    persona_encargada?: string;
     ubicacion?: string;
     estado?: boolean;
-    fkTipoSitio?: number;
-    fkArea?: number;
+    fk_tipoSitio?: number;
+    fk_area?: number;
 }
 
 export async function postSitio(data:SitioPostData):Promise<any> {

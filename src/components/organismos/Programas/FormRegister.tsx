@@ -112,7 +112,7 @@ export default function FormularioPrograma({
                   areas
                     .filter((p) => p.estado === true)
                     .map((area) => (
-                      <SelectItem key={area.idArea}>{area.nombre}</SelectItem>
+                      <SelectItem key={area.id_area}>{area.nombre}</SelectItem>
                     ))
                 ) : (
                   <SelectItem isDisabled>No hay áreas disponibles</SelectItem>

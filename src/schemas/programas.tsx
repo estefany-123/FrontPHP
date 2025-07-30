@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const programaUpdateSchema = z.object({
-  idPrograma: z.number(),
+  id_programa: z.number(),
   
   nombre: z
     .string()
@@ -21,7 +21,7 @@ export const programaCreateSchema = z.object({
 
   estado: z.boolean({ required_error: "Estado es requerido" }),
 
-  fkArea: z.number({ message: "area  es requerido" }),
+  fk_area: z.number({ message: "area  es requerido" }),
 });
 
 export type programaCreate = z.infer<typeof programaCreateSchema>;

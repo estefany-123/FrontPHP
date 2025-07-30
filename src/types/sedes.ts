@@ -1,8 +1,8 @@
 export type Sede = {
-    idSede?: number;
-    nombre: string;
-    estado?: boolean;
-    createdAt?:string;
-    updatedAt?:string;
-    fkCentro?: number;
-}
+  id_sede?: number;
+  nombre: string;
+  estado?: boolean;
+  created_at?: string;
+  updated_at?: string;
+  fk_centro?: number;
+};

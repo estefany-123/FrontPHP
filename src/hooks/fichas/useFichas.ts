@@ -33,12 +33,12 @@ export function useFichas() {
     id: number,
     Ficha: Ficha[] | undefined = data
   ): Ficha | null => {
-    return Ficha?.find((Ficha) => Ficha.idFicha === id) || null;
+    return Ficha?.find((Ficha) => Ficha.id_ficha === id) || null;
   };
 
   const updateAreaMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Ficha }) => {
-      const { idFicha, ...resto } = data;
+      const { id_ficha, ...resto } = data;
       return putFicha(id, resto);
     },
     onSuccess: () => {
@@ -80,8 +80,8 @@ export function useFichas() {
     return updateAreaMutation.mutateAsync({ id, data });
   };
 
-  const changeState = async (idFicha: number) => {
-    return changeStateMutation.mutateAsync(idFicha);
+  const changeState = async (id_ficha: number) => {
+    return changeStateMutation.mutateAsync(id_ficha);
   };
 
   return {

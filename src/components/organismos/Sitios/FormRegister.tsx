@@ -135,7 +135,7 @@ export default function FormularioSitio({
                   areas
                     .filter((s) => s.estado === true)
                     .map((area) => (
-                      <SelectItem key={area.idArea} textValue={area.nombre}>
+                      <SelectItem key={area.id_area} textValue={area.nombre}>
                         {area.nombre}
                       </SelectItem>
                     ))

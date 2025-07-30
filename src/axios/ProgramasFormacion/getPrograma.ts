@@ -2,6 +2,6 @@ import { Pformacion } from "@/types/programaFormacion";
 import { axiosAPI } from "../axiosAPI";
 
 export const getPrograma = async ():Promise<Pformacion[]> => {
-    const res = await axiosAPI.get(`programas-formacion`);
+    const res = await axiosAPI.get(`programaF`);
     return res.data
 }

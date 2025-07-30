@@ -121,7 +121,7 @@ export default function FormularioArea({
                   sede
                     .filter((s) => s.estado === true)
                     .map((s) => (
-                      <SelectItem key={s.idSede} textValue={s.nombre}>
+                      <SelectItem key={s.id_sede} textValue={s.nombre}>
                         {s.nombre}
                       </SelectItem>
                     ))

@@ -12,7 +12,6 @@ import usePermissions from "@/hooks/Usuarios/usePermissions";
 import FormularioSitio from "@/components/organismos/Sitios/FormRegister";
 
 const SitiosTable = () => {
-
   const { userHasPermission } = usePermissions();
 
   const { sitios, isLoading, isError, error, addSitio, changeState } =
@@ -37,8 +36,8 @@ const SitiosTable = () => {
     setSelectedSitio(null);
   };
 
-  const handleState = async (idSitio: number) => {
-    await changeState(idSitio);
+  const handleState = async (id_sitio: number) => {
+    await changeState(id_sitio);
   };
 
   const handleAddSitio = async (sitio: Sitios) => {
@@ -58,34 +57,34 @@ const SitiosTable = () => {
   // Definir las columnas de la tabla
   const columns: TableColumn<ListarSitios>[] = [
     { key: "nombre", label: "Nombre" },
-    { key: "personaEncargada", label: "personaEncargada" },
+    { key: "persona_encargada", label: "persona_encargada" },
     { key: "ubicacion", label: "ubicacion" },
     {
-      key: "createdAt",
+      key: "created_at",
       label: "Fecha CReacion",
       render: (sitio: ListarSitios) => (
         <span>
-          {sitio.createdAt
-            ? new Date(sitio.createdAt).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+          {sitio.created_at
+            ? new Date(sitio.created_at).toLocaleDateString("es-ES", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
     },
     {
-      key: "updatedAt",
+      key: "updated_at",
       label: "Fecha Actualización",
       render: (sitio: ListarSitios) => (
         <span>
-          {sitio.updatedAt
-            ? new Date(sitio.updatedAt).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+          {sitio.updated_at
+            ? new Date(sitio.updated_at).toLocaleDateString("es-ES", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
@@ -102,11 +101,11 @@ const SitiosTable = () => {
   }
 
   const sitiosWithKey = sitios
-    ?.filter((sitio) => sitio?.idSitio !== undefined)
+    ?.filter((sitio) => sitio?.id_sitio !== undefined)
     .map((sitio) => ({
       ...sitio,
-      key: sitio.idSitio ? sitio.idSitio.toString() : crypto.randomUUID(),
-      idSitio: sitio.idSitio || 0,
+      key: sitio.id_sitio ? sitio.id_sitio.toString() : crypto.randomUUID(),
+      id_sitio: sitio.id_sitio || 0,
       estado: Boolean(sitio.estado),
     }));
 
@@ -118,9 +117,9 @@ const SitiosTable = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Sitios</h1>
               <div className="flex gap-2">
-                {userHasPermission(56) &&
+                {userHasPermission(56) && (
                   <Buton text="Gestionar Tipos" onPress={handleGoToTipo} />
-                }
+                )}
               </div>
             </div>
           </CardBody>
@@ -152,7 +151,7 @@ const SitiosTable = () => {
         {selectedSitio && (
           <FormUpdate
             sitios={sitiosWithKey ?? []}
-            sitioId={selectedSitio.idSitio as number}
+            sitioId={selectedSitio.id_sitio as number}
             id="FormUpdate"
             onclose={handleCloseUpdate}
           />
@@ -163,19 +162,27 @@ const SitiosTable = () => {
         <Globaltable
           data={sitiosWithKey}
           columns={columns}
-          onEdit={userHasPermission(16) ? (item) => {
-            const sitioParaEditar: Sitios = {
-              ...item,
-              fkArea: item.fkArea?.idArea,
-            };
-            handleEdit(sitioParaEditar);
-          } : undefined}
-          onDelete={userHasPermission(17) ? (sitio) => handleState(sitio.idSitio) : undefined}
+          onEdit={
+            userHasPermission(16)
+              ? (item) => {
+                  const sitioParaEditar: Sitios = {
+                    ...item,
+                    fk_area: item.fk_area?.idArea,
+                  };
+                  handleEdit(sitioParaEditar);
+                }
+              : undefined
+          }
+          onDelete={
+            userHasPermission(17)
+              ? (sitio) => handleState(sitio.id_sitio)
+              : undefined
+          }
           extraHeaderContent={
             <div>
-              {userHasPermission(14) &&
-              <Buton text="Añadir sitio" onPress={() => setIsOpen(true)} />
-              }
+              {userHasPermission(14) && (
+                <Buton text="Añadir sitio" onPress={() => setIsOpen(true)} />
+              )}
             </div>
           }
         />
