@@ -1,15 +1,15 @@
 import { axiosAPI } from "../axiosAPI";
 
 export interface AreaPostData {
-  idArea?:number
+  id_area?: number;
   nombre: string;
   estado?: boolean;
-  fkUsuario?:number;
-  fkSede?: number;
+  fk_usuario?: number;
+  fk_sede?: number;
 }
 
 export async function postArea(data: AreaPostData): Promise<any> {
-  const {idArea, ...resto} = data;
+  const { id_area, ...resto } = data;
   const res = await axiosAPI.post("areas", resto);
   return res.data;
 }

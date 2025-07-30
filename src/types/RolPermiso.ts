@@ -1,22 +1,22 @@
 export type RolPermiso = {
-  idRolPermiso: number;
+  id_rol_permiso: number;
   estado: boolean;
-  createdAt: string;
-  updatedAt: string;
-  fkPermiso: {
+  created_at: string;
+  updated_at: string;
+  fk_permiso: {
     idPermiso: number;
     permiso: string;
   };
-  fkRol: {
-    idRol: number;
+  fk_rol: {
+    id_ol: number;
     nombre: string;
   };
-}
+};
 export type RolPermisoPost = {
-  idRolPermiso?: number;
+  id_rol_permiso?: number;
   estado: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-  fkPermiso:number
-  fkRol:number
-}
+  created_at?: string;
+  updated_at?: string;
+  fk_permiso: number;
+  fk_rol: number;
+};

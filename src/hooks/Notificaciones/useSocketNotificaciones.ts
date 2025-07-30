@@ -50,6 +50,6 @@ export function useSocketNotificaciones(
       socket.disconnect();
     };
   }, [usuarioId, onNotificacion]);
-  
+
   return socketRef;
 }

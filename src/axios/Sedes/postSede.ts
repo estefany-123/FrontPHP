@@ -1,16 +1,16 @@
 import { axiosAPI } from "../axiosAPI";
 
 export interface SedePostData {
-    idSede?: number;
+    id_Sede?: number;
     nombre: string;
     estado?: boolean;
-    createdAt?:string;
-    updatedAt?:string;
+    created_at?:string;
+    updated_at?:string;
     fkCentro?: number;
 }
 
 export async function postSede(data:SedePostData):Promise<any> {
-    const {idSede, ...resto}= data;
+    const {id_Sede, ...resto}= data;
     const res = await axiosAPI.post(`sedes`, resto);
     return res.data
 }

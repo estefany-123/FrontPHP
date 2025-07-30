@@ -1,26 +1,26 @@
 export type Sitios = {
-    idSitio?: number;
-    nombre: string;
-    personaEncargada?: string;
-    ubicacion?: string;
-    estado?: boolean;
-    createdAt?:string;
-    updatedAt?:string;
-    fkTipoSitio?: number;
-    fkArea?: number;
-}
+  id_sitio?: number;
+  nombre: string;
+  persona_encargada?: string;
+  ubicacion?: string;
+  estado?: boolean;
+  created_at?: string;
+  updated_at?: string;
+  fk_tipo_sitio?: number;
+  fk_area?: number;
+};
 
 export type ListarSitios = {
-    idSitio?: number;
+  id_sitio?: number;
+  nombre: string;
+  persona_encargada?: string;
+  ubicacion?: string;
+  estado?: boolean;
+  created_at?: string;
+  updated_at?: string;
+  fk_tipo_sitio?: number;
+  fk_area?: {
+    id_area: number;
     nombre: string;
-    personaEncargada?: string;
-    ubicacion?: string;
-    estado?: boolean;
-    createdAt?:string;
-    updatedAt?:string;
-    fkTipoSitio?: number;
-    fkArea?: {
-        idArea:number
-        nombre:string
-    };
-}
+  };
+};

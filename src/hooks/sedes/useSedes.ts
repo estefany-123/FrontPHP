@@ -33,13 +33,14 @@ export function useSede() {
     id: number,
     sedes: Sede[] | undefined = data
   ): Sede | null => {
-    return sedes?.find((sede) => sede.idSede === id) || null;
+    return sedes?.find((sede) => sede.id_sede === id) || null;
   };
 
   const updateSedesMutation = useMutation({
-    mutationFn: ({id,data}:{id: number, data: Sede; }) =>{
-      const {idSede, ...resto}=data
-    return putSede(id, resto)},
+    mutationFn: ({ id, data }: { id: number; data: Sede }) => {
+      const { id_sede, ...resto } = data;
+      return putSede(id, resto);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["sedes"],
@@ -52,7 +53,7 @@ export function useSede() {
   });
 
   const changeStateMutation = useMutation({
-    mutationFn:deleteSede,
+    mutationFn: deleteSede,
 
     onSuccess: () => {
       addToast({
@@ -75,12 +76,12 @@ export function useSede() {
     return addSedeMutation.mutateAsync(sede);
   };
 
-  const updateSede = async (id: number, data:Sede) => {
+  const updateSede = async (id: number, data: Sede) => {
     return updateSedesMutation.mutateAsync({ id, data });
   };
 
-  const changeState = async (idSede: number) => {
-    return changeStateMutation.mutateAsync(idSede);
+  const changeState = async (id_sede: number) => {
+    return changeStateMutation.mutateAsync(id_sede);
   };
 
   return {

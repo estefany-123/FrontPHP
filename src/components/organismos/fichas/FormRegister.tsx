@@ -59,92 +59,94 @@ export default function FormularioFichas({
   console.log("Errores", errors);
   return (
     <>
-    <Form
-      id={id}
-      onSubmit={handleSubmit(onSubmit)}
-      className="w-full space-y-4"
-    >
-      <Input
-        label="Código de Ficha"
-        type="text"
-        placeholder="Código de Ficha"
-        {...register("codigoFicha", { valueAsNumber: true })}
-        isInvalid={!!errors.codigoFicha}
-        errorMessage={errors.codigoFicha?.message}
-      />
+      <Form
+        id={id}
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full space-y-4"
+      >
+        <Input
+          label="Código de Ficha"
+          type="text"
+          placeholder="Código de Ficha"
+          {...register("codigo_ficha", { valueAsNumber: true })}
+          isInvalid={!!errors.codigo_ficha}
+          errorMessage={errors.codigo_ficha?.message}
+        />
 
-      <Controller
-        control={control}
-        name="estado"
-        render={({ field }) => (
-          <Select
-            label="Estado"
-            placeholder="Seleccione un estado"
-            {...field}
-            value={field.value ? "true" : "false"}
-            onChange={(e) => field.onChange(e.target.value === "true")}
-            isInvalid={!!errors.estado}
-            errorMessage={errors.estado?.message}
-            isDisabled
-            defaultSelectedKeys={["true"]}
-          >
-            <SelectItem key="true">Activo</SelectItem>
-            <SelectItem key="false">Inactivo</SelectItem>
-          </Select>
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="fkPrograma"
-        render={({ field }) => (
-          <div className="w-full flex">
+        <Controller
+          control={control}
+          name="estado"
+          render={({ field }) => (
             <Select
-              label="Programa"
-              placeholder="Selecciona un programa"
+              label="Estado"
+              placeholder="Seleccione un estado"
               {...field}
-              value={field.value ?? ""}
-              onChange={(e) => field.onChange(Number(e.target.value))}
-              isInvalid={!!errors.fkPrograma}
-              errorMessage={errors.fkPrograma?.message}
+              value={field.value ? "true" : "false"}
+              onChange={(e) => field.onChange(e.target.value === "true")}
+              isInvalid={!!errors.estado}
+              errorMessage={errors.estado?.message}
+              isDisabled
+              defaultSelectedKeys={["true"]}
             >
-              {programas?.length ? (
-                programas
-                  .filter((p) => p.estado === true)
-                  .map((programa) => (
-                    <SelectItem key={programa.idPrograma}>
-                      {programa.nombre}
-                    </SelectItem>
-                  ))
-              ) : (
-                <SelectItem isDisabled>No hay programas disponibles</SelectItem>
-              )}
+              <SelectItem key="true">Activo</SelectItem>
+              <SelectItem key="false">Inactivo</SelectItem>
             </Select>
-            <Buton
-              type="button"
-              className="m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl "
-              onPress={() => setShowModal(true)}
-            >
-              <PlusCircleIcon />
-            </Buton>
-          </div>
-        )}
-      />
-    </Form>
-    <Modal
-            ModalTitle="Agregar Programa"
-            isOpen={showModal}
-            onOpenChange={handleClose}
-          >
-            <FormularioPrograma
-              id="programa"
-              onClose={() => setShowModal(false)}
-              addData={async (data) => {
-                await addPrograma(data);
-              }}
-            />
-            <Buton form="programa" text="Guardar" type="submit" />
-          </Modal>
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="fk_programa"
+          render={({ field }) => (
+            <div className="w-full flex">
+              <Select
+                label="Programa"
+                placeholder="Selecciona un programa"
+                {...field}
+                value={field.value ?? ""}
+                onChange={(e) => field.onChange(Number(e.target.value))}
+                isInvalid={!!errors.fk_programa}
+                errorMessage={errors.fk_programa?.message}
+              >
+                {programas?.length ? (
+                  programas
+                    .filter((p) => p.estado === true)
+                    .map((programa) => (
+                      <SelectItem key={programa.id_programa}>
+                        {programa.nombre}
+                      </SelectItem>
+                    ))
+                ) : (
+                  <SelectItem isDisabled>
+                    No hay programas disponibles
+                  </SelectItem>
+                )}
+              </Select>
+              <Buton
+                type="button"
+                className="m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl "
+                onPress={() => setShowModal(true)}
+              >
+                <PlusCircleIcon />
+              </Buton>
+            </div>
+          )}
+        />
+      </Form>
+      <Modal
+        ModalTitle="Agregar Programa"
+        isOpen={showModal}
+        onOpenChange={handleClose}
+      >
+        <FormularioPrograma
+          id="programa"
+          onClose={() => setShowModal(false)}
+          addData={async (data) => {
+            await addPrograma(data);
+          }}
+        />
+        <Buton form="programa" text="Guardar" type="submit" />
+      </Modal>
     </>
   );
 }
