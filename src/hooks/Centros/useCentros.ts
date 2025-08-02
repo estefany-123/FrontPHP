@@ -33,12 +33,12 @@ export function useCentro() {
     id: number,
     centro: Centro[] | undefined = data
   ): Centro | null => {
-    return centro?.find((centro) => centro.idCentro === id) || null;
+    return centro?.find((centro) => centro.id_centro === id) || null;
   };
 
   const updateCentroMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: PutCentro }) => {
-      const { idCentro, ...resto } = data;
+      const { id_centro, ...resto } = data;
       return updateCentro(id, resto);
     },
     onSuccess: () => {
@@ -79,8 +79,8 @@ export function useCentro() {
     return updateCentroMutation.mutateAsync({ id, data });
   };
 
-  const changeState = async (idCentro: number) => {
-    return changeStateMutation.mutateAsync(idCentro);
+  const changeState = async (id_centro: number) => {
+    return changeStateMutation.mutateAsync(id_centro);
   };
 
   return {
