@@ -38,8 +38,8 @@ const MunicipiosTable = () => {
   };
 
   const handleState = async (municipios: Municipio) => {
-    await changeState(municipios.idMunicipio as number);
-    console.log(municipios.idMunicipio);
+    await changeState(municipios.id_municipio as number);
+    console.log(municipios.id_municipio);
   };
 
   const handleAddMunicipio = async (municipios: Municipio) => {
@@ -61,12 +61,12 @@ const MunicipiosTable = () => {
     { key: "nombre", label: "Nombre" },
     { key: "departamento", label: "Departamento" },
     {
-          key: "createdAt",
+          key: "created_at",
           label: "Fecha Creacion",
           render: (municipio: Municipio) => (
             <span>
-              {municipio.createdAt
-                ? new Date(municipio.createdAt).toLocaleDateString("es-ES", {
+              {municipio.created_at
+                ? new Date(municipio.created_at).toLocaleDateString("es-ES", {
                     year: "numeric",
                     month: "2-digit",
                     day: "2-digit",
@@ -76,12 +76,12 @@ const MunicipiosTable = () => {
           ),
         },
         {
-          key: "updatedAt",
+          key: "updated_at",
           label: "Fecha Actualización",
           render: (municipio: Municipio) => (
             <span>
-              {municipio.updatedAt
-                ? new Date(municipio.updatedAt).toLocaleDateString("es-ES", {
+              {municipio.updated_at
+                ? new Date(municipio.updated_at).toLocaleDateString("es-ES", {
                     year: "numeric",
                     month: "2-digit",
                     day: "2-digit",
@@ -102,11 +102,11 @@ const MunicipiosTable = () => {
   }
 
   const municipiosWithKey = municipios
-    ?.filter((municipios) => municipios?.idMunicipio !== undefined)
+    ?.filter((municipios) => municipios?.id_municipio !== undefined)
     .map((municipios) => ({
       ...municipios,
-      key: municipios.idMunicipio
-        ? municipios.idMunicipio.toString()
+      key: municipios.id_municipio
+        ? municipios.id_municipio.toString()
         : crypto.randomUUID(),
       estado: Boolean(municipios.estado),
     }));
@@ -152,7 +152,7 @@ const MunicipiosTable = () => {
         {selectedMunicipio && (
           <FormUpMunicipio
             municipios={municipiosWithKey ?? []}
-            municipioId={selectedMunicipio.idMunicipio as number}
+            municipioId={selectedMunicipio.id_municipio as number}
             id="FormUpMuni"
             onclose={handleCloseUpdate}
           />

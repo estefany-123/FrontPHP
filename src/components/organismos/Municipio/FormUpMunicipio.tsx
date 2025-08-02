@@ -27,7 +27,7 @@ const FormUpMunicipio = ({ municipioId, id, onclose }: Props) => {
   } = useForm({
     resolver: zodResolver(MunicipioUPSchema),
     defaultValues: {
-      idMunicipio: foundMunicipio.idMunicipio,
+      id_municipio: foundMunicipio.id_municipio,
       nombre: foundMunicipio.nombre,
     },
   });
@@ -36,7 +36,7 @@ const FormUpMunicipio = ({ municipioId, id, onclose }: Props) => {
     console.log("submiting...");
     console.log(data);
     try {
-      await updateMunicipio(data.idMunicipio as number, data);
+      await updateMunicipio(data.id_municipio as number, data);
       console.log("Sended success");
       onclose();
       addToast({
