@@ -12,7 +12,8 @@ import { FormatrackLogo } from "../atoms/Icons";
 import { BellIcon } from "@heroicons/react/24/outline";
 import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/providers/AuthProvider";
+import { usePerfil } from "@/hooks/Usuarios/usePerfil";
+
 
 type NavProps = {
   children?: ReactNode;
@@ -26,7 +27,13 @@ export function Nav({
   cantidadNoLeidas = 0,
 }: NavProps) {
   const navigate = useNavigate();
-  const { nombre, perfil } = useAuth();
+    const { perfilInfo, setPerfilInfo, isLoading, error } = usePerfil();
+
+    
+  if (isLoading) return <div>Cargando...</div>;
+   if (!perfilInfo) return <div>No se encontraron datos del perfil</div>;
+   if (error) return <div>Error: {error.message}</div>;
+  
 
   return (
     <Navbar>
@@ -80,9 +87,9 @@ export function Nav({
         </div>
 
         <User
-          name={nombre}
+          name={perfilInfo.nombre}
           avatarProps={{
-            src: `http://localhost:3000/img/perfiles/${perfil ?? "defaultPerfil.png"}`,
+            src: `http://127.0.0.1:8000/storage/${perfilInfo.perfil ?? "users/defaultPerfil.png"}`,
             onClick: () => navigate("/perfil"),
             isBordered: true,
           }}

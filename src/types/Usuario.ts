@@ -21,9 +21,7 @@ export type Perfil={
     telefono : string,
     correo : string,
     perfil: string,
-    fk_rol: {
-        nombre: string
-    }
+    rol:string
 
 }
 export type UpPerfil={

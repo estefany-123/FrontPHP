@@ -10,22 +10,22 @@ import { useNotificaciones } from "@/hooks/Notificaciones/useNotificaciones";
 
 export default function Layout() {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
-  const { idUsuario } = useAuth();
+  const { id } = useAuth();
 
-  const { notificaciones } = useNotificaciones(idUsuario!);
+  const { notificaciones } = useNotificaciones(id!);
   const cantidadNoLeidas = notificaciones?.filter(n => !n.leido).length ?? 0;
 
   // useEffect(() => {
-  //   if (idUsuario) {
-  //     console.log("✅ idUsuario disponible:", idUsuario);
+  //   if (id) {
+  //     console.log("✅ id disponible:", id);
   //   }
-  // }, [idUsuario]);  
+  // }, [id]);  
 
-  // useSocketNotificaciones(idUsuario!, (noti) => {
+  // useSocketNotificaciones(id!, (noti) => {
   //   console.log("🔔 Nueva notificación:", noti);
   // });
 
-  // if (!idUsuario) {
+  // if (!id) {
   //   return <div className="text-center mt-10">🔄 Cargando usuario...</div>;
   // }
 
