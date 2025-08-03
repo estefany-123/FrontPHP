@@ -3,9 +3,9 @@ import {UpTipoSitio} from "@/types/TipoSitio"
 
 
 export async function updateTipoSitio(
-  idTipo: number,
+  id_tipo: number,
   data: UpTipoSitio
 ): Promise<any> {
-  const response = await axiosAPI.patch(`tipos_sitio/update/${idTipo}`, data);
+  const response = await axiosAPI.put(`tipos_sitio/update/${id_tipo}`, data);
   return response.data;
 }
