@@ -161,7 +161,7 @@ export default function FormularioSitio({
             <div className="w-full flex">
               <Select
                 label="Tipo Sitio"
-                value={field.value ? String(field.value) : ""}
+                value={field.value ?? ""}
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 placeholder="Selecciona un tipo..."
                 isInvalid={!!errors.fk_tipo_sitio}
@@ -171,7 +171,7 @@ export default function FormularioSitio({
                   tipos
                     .filter((t) => t.estado === true)
                     .map((tipo) => (
-                      <SelectItem key={tipo.idTipo} textValue={tipo.nombre}>
+                      <SelectItem key={tipo.id_tipo} textValue={tipo.nombre}>
                         {tipo.nombre}
                       </SelectItem>
                     ))

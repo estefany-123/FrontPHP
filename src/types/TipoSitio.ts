@@ -1,12 +1,12 @@
 export type TipoSitio = {
-    idTipo ?:number,
-    nombre : string,
-    estado : boolean
-    createdAt?: string
-    updatedAt?: string
-}
+  id_tipo?: number;
+  nombre: string;
+  estado: boolean;
+  created_at?: string;
+  updated_at?: string;
+};
 
 export type UpTipoSitio = {
-    idTipo ?:number,
-    nombre : string
-}
+  id_tipo?: number;
+  nombre: string;
+};
