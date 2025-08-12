@@ -97,7 +97,7 @@ export default function FormCentros({ addData, onClose, id }: FormularioProps) {
         {!loadingMuni && !errormuni && municipios && (
           <Controller
             control={control}
-            name="fkMunicipio"
+            name="fk_municipio"
             render={({ field }) => (
               <div className="w-full flex">
                 <Select
@@ -108,14 +108,14 @@ export default function FormCentros({ addData, onClose, id }: FormularioProps) {
                   className="w-full"
                   placeholder="Selecciona un municipio..."
                   aria-label="Seleccionar Municipio"
-                  isInvalid={!!errors.fkMunicipio}
-                  errorMessage={errors.fkMunicipio?.message}
+                  isInvalid={!!errors.fk_municipio}
+                  errorMessage={errors.fk_municipio?.message}
                 >
                   {municipios?.length ? (
                     municipios
                       .filter((m) => m.estado === true)
                       .map((m) => (
-                        <SelectItem key={m.idMunicipio} textValue={m.nombre}>
+                        <SelectItem key={m.id_municipio} textValue={m.nombre}>
                           {m.nombre}
                         </SelectItem>
                       ))

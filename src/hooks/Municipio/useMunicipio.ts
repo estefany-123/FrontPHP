@@ -33,13 +33,13 @@ export function useMunicipio() {
     municipios: Municipio[] | undefined = data
   ): Municipio | null => {
     return (
-      municipios?.find((municipio) => municipio.idMunicipio === id) || null
+      municipios?.find((municipio) => municipio.id_municipio === id) || null
     );
   };
 
   const updateMunicipioMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: UpdMunicipio }) =>{
-      const {idMunicipio, ...resto} = data
+      const {id_municipio, ...resto} = data
       return UpMunicipio(id, resto)},
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -79,8 +79,8 @@ export function useMunicipio() {
     return updateMunicipioMutation.mutateAsync({ id, data });
   };
 
-  const changeState = async (idMunicipio: number) => {
-    return changeStateMutation.mutateAsync(idMunicipio);
+  const changeState = async (id_municipio: number) => {
+    return changeStateMutation.mutateAsync(id_municipio);
   };
 
   return {

@@ -33,8 +33,8 @@ const TipoSitioTable = () => {
   };
 
   const handleState = async (tipos: TipoSitio) => {
-    await changeState(tipos.idTipo as number);
-    console.log(tipos.idTipo);
+    await changeState(tipos.id_tipo as number);
+    console.log(tipos.id_tipo);
   };
 
   const handleAddCentro = async (tipos: TipoSitio) => {
@@ -55,12 +55,12 @@ const TipoSitioTable = () => {
   const columns: TableColumn<TipoSitio>[] = [
     { key: "nombre", label: "Nombre" },
     {
-      key: "createdAt",
+      key: "created_at",
       label: "Fecha Creacion",
       render: (tipoSitio: TipoSitio) => (
         <span>
-          {tipoSitio.createdAt
-            ? new Date(tipoSitio.createdAt).toLocaleDateString("es-ES", {
+          {tipoSitio.created_at
+            ? new Date(tipoSitio.created_at).toLocaleDateString("es-ES", {
                 year: "numeric",
                 month: "2-digit",
                 day: "2-digit",
@@ -70,12 +70,12 @@ const TipoSitioTable = () => {
       ),
     },
     {
-      key: "updatedAt",
+      key: "updated_at",
       label: "Fecha Actualización",
       render: (tipoSitio: TipoSitio) => (
         <span>
-          {tipoSitio.updatedAt
-            ? new Date(tipoSitio.updatedAt).toLocaleDateString("es-ES", {
+          {tipoSitio.updated_at
+            ? new Date(tipoSitio.updated_at).toLocaleDateString("es-ES", {
                 year: "numeric",
                 month: "2-digit",
                 day: "2-digit",
@@ -96,11 +96,11 @@ const TipoSitioTable = () => {
   }
 
   const tiposWithKey = tipos
-    ?.filter((tipos) => tipos?.idTipo !== undefined)
+    ?.filter((tipos) => tipos?.id_tipo !== undefined)
     .map((tipos) => ({
       ...tipos,
-      key: tipos.idTipo ? tipos.idTipo.toString() : crypto.randomUUID(),
-      idTipo: tipos.idTipo as number,
+      key: tipos.id_tipo ? tipos.id_tipo.toString() : crypto.randomUUID(),
+      id_tipo: tipos.id_tipo as number,
       estado: Boolean(tipos.estado),
     }));
 
@@ -145,7 +145,7 @@ const TipoSitioTable = () => {
         {selectedUser && (
           <FormUpTipos
             tipos={tiposWithKey ?? []}
-            tipoSitioId={selectedUser.idTipo as number}
+            tipoSitioId={selectedUser.id_tipo as number}
             id="FormUpdate"
             onclose={handleCloseUpdate}
           />

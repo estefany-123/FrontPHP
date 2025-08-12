@@ -32,12 +32,12 @@ export function useTipoSitio() {
     id: number,
     tipo: TipoSitio[] | undefined = data
   ): TipoSitio | null => {
-    return tipo?.find((tipos) => tipos.idTipo === id) || null;
+    return tipo?.find((tipos) => tipos.id_tipo === id) || null;
   };
 
   const updateTipoMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: UpTipoSitio }) => {
-      const { idTipo, ...resto } = data;
+      const { id_tipo, ...resto } = data;
       return updateTipoSitio(id, resto);
     },
     onSuccess: () => {
@@ -78,8 +78,8 @@ export function useTipoSitio() {
     return updateTipoMutation.mutateAsync({ id, data });
   };
 
-  const changeState = async (idTipo: number) => {
-    return changeStateMutation.mutateAsync(idTipo);
+  const changeState = async (id_tipo: number) => {
+    return changeStateMutation.mutateAsync(id_tipo);
   };
 
   return {

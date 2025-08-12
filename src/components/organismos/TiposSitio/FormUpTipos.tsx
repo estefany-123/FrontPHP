@@ -25,6 +25,8 @@ const FormUpTipos = ({ tipos, tipoSitioId, id, onclose }: Props) => {
 
   const foundTipoSitio = getTipoById(tipoSitioId) as TipoSitioUpdate;
 
+  console.log("tipoencontrado",foundTipoSitio);
+
   const {
     register,
     handleSubmit,
@@ -38,7 +40,7 @@ const FormUpTipos = ({ tipos, tipoSitioId, id, onclose }: Props) => {
 
   const onSubmit = async (data: TipoSitioUpdate) => {
     try {
-      await updateTipo(data.idTipo, data);
+      await updateTipo(data.id_tipo, data);
       onclose();
       addToast({
         title: "Actualizacion Exitosa",

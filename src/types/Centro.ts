@@ -1,13 +1,13 @@
 export type Centro = {
-    idCentro ?: number,
+    id_centro ?: number,
     nombre : string,
     estado : boolean,
-    createdAt?: string
-    updatedAt?: string
-    fkMunicipio : number
+    created_at?: string
+    updated_at?: string
+    fk_municipio : number
 }
 
 export type PutCentro = {
-    idCentro ?: number,
+    id_centro ?: number,
     nombre : string
 }

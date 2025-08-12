@@ -9,11 +9,9 @@ import { useCentro } from "@/hooks/Centros/useCentros";
 import { useNavigate } from "react-router-dom";
 import { Card, CardBody } from "@heroui/react";
 import { Centro } from "@/types/Centro";
-import usePermissions from "@/hooks/Usuarios/usePermissions";
 
 const CentrosTable = () => {
 
-  const { userHasPermission } = usePermissions();
 
   const { centros, isLoading, isError, error, addCentro, changeState } =
     useCentro();
@@ -42,8 +40,8 @@ const CentrosTable = () => {
   };
 
   const handleState = async (centros: Centro) => {
-    await changeState(centros.idCentro as number);
-    console.log(centros.idCentro);
+    await changeState(centros.id_centro as number);
+    console.log(centros.id_centro);
   };
 
   const handleAddCentro = async (centros: Centro) => {
@@ -64,12 +62,12 @@ const CentrosTable = () => {
   const columns: TableColumn<Centro>[] = [
     { key: "nombre", label: "Nombre" },
     {
-      key: "createdAt",
+      key: "created_at",
       label: "Fecha Creacion",
       render: (centro: Centro) => (
         <span>
-          {centro.createdAt
-            ? new Date(centro.createdAt).toLocaleDateString("es-ES", {
+          {centro.created_at
+            ? new Date(centro.created_at).toLocaleDateString("es-ES", {
               year: "numeric",
               month: "2-digit",
               day: "2-digit",
@@ -79,12 +77,12 @@ const CentrosTable = () => {
       ),
     },
     {
-      key: "updatedAt",
+      key: "updated_at",
       label: "Fecha Actualización",
       render: (centro: Centro) => (
         <span>
-          {centro.updatedAt
-            ? new Date(centro.updatedAt).toLocaleDateString("es-ES", {
+          {centro.updated_at
+            ? new Date(centro.updated_at).toLocaleDateString("es-ES", {
               year: "numeric",
               month: "2-digit",
               day: "2-digit",
@@ -105,11 +103,11 @@ const CentrosTable = () => {
   }
 
   const centrosWithKey = centros
-    ?.filter((centros) => centros?.idCentro !== undefined)
+    ?.filter((centros) => centros?.id_centro !== undefined)
     .map((centros) => ({
       ...centros,
-      key: centros.idCentro ? centros.idCentro.toString() : crypto.randomUUID(),
-      idCentro: centros.idCentro as number,
+      key: centros.id_centro ? centros.id_centro.toString() : crypto.randomUUID(),
+      id_centro: centros.id_centro as number,
       estado: Boolean(centros.estado),
     }));
 
@@ -121,16 +119,16 @@ const CentrosTable = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Centros</h1>
               <div className="flex gap-2">
-                {userHasPermission(44) &&
+               
                   <Buton text="Sedes" onPress={handleGoToSede} />
-                }
-                {userHasPermission(52) &&
+                
+                
 
                   <Buton
                     text="Gestionar Municipios"
                     onPress={handleGoToMunicipio}
                   />
-                }
+                
               </div>
             </div>
           </CardBody>
@@ -163,24 +161,23 @@ const CentrosTable = () => {
         {selectedUser && (
           <FormUpCentro
             centros={centrosWithKey ?? []}
-            centroId={selectedUser.idCentro as number}
+            centroId={selectedUser.id_centro as number}
             id="FormUpdate"
             onclose={handleCloseUpdate}
           />
         )}
       </Modall>
 
-      {userHasPermission(48) && centrosWithKey && (
+      {centrosWithKey && (
         <Globaltable
           data={centrosWithKey}
           columns={columns}
-          onEdit={userHasPermission(49) ? handleEdit : undefined}
-          onDelete={userHasPermission(50) ? handleState : undefined}
+          onEdit={ handleEdit}
+          onDelete={handleState}
           extraHeaderContent={
             <div>
-              {userHasPermission(47) &&
                 <Buton text="Añadir Centro" onPress={() => setIsOpen(true)} />
-              }
+              
             </div>
           }
         />
