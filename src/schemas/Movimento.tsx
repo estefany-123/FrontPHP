@@ -27,14 +27,14 @@ export const MovimientoUpdateSchema = z.object({
     })
     .optional(),
 
-  fecha_devolucion: z
-    .string().date()
-    .nullable()
-    .optional()
-    .refine(
-      (val) => !val || (typeof val === "string" && !isNaN(Date.parse(val))),
-      { message: "Fecha inválida" }
-    ),
+  // fecha_devolucion: z
+  //   .string().date()
+  //   .nullable()
+  //   .optional()
+  //   .refine(
+  //     (val) => !val || (typeof val === "string" && !isNaN(Date.parse(val))),
+  //     { message: "Fecha inválida" }
+  //   ),
 });
 
 export type MovimientoUpdate = z.infer<typeof MovimientoUpdateSchema>;

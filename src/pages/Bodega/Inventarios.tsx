@@ -16,10 +16,10 @@ export const Inventario = () => {
       <div className="flex flex-wrap gap-4">
         {areas?.map((area) => (
           <Card
-            key={area.idArea}
+            key={area.id_area}
             className="w-64 p-4 ml-3 shadow-md hover:shadow-xl hover:bg-blue-600 hover:text-white dark:hover:text-black border-1 transition"
           >
-            <Link to={`/bodega/inventario/areas/${area.idArea}`}>
+            <Link to={`/bodega/inventario/areas/${area.id_area}`}>
               <h2 className="text-lg text-center font-semibold">
                 {area.nombre}
               </h2>
