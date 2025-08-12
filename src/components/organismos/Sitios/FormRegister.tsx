@@ -171,7 +171,7 @@ export default function FormularioSitio({
                   tipos
                     .filter((t) => t.estado === true)
                     .map((tipo) => (
-                      <SelectItem key={tipo.idTipo} textValue={tipo.nombre}>
+                      <SelectItem key={tipo.id_tipo} textValue={tipo.nombre}>
                         {tipo.nombre}
                       </SelectItem>
                     ))

@@ -116,7 +116,7 @@ export default function FormularioSede({
                     .filter((c) => c.estado === true)
                     .map((centro) => (
                       <SelectItem
-                        key={centro.idCentro}
+                        key={centro.id_centro}
                         textValue={centro.nombre}
                       >
                         {centro.nombre}

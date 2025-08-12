@@ -12,7 +12,6 @@ import usePermissions from "@/hooks/Usuarios/usePermissions";
 import FormularioSitio from "@/components/organismos/Sitios/FormRegister";
 
 const SitiosTable = () => {
-  const { userHasPermission } = usePermissions();
 
   const { sitios, isLoading, isError, error, addSitio, changeState } =
     useSitios();
@@ -159,7 +158,7 @@ const SitiosTable = () => {
       <Globaltable
         data={sitiosWithKey ?? []}
         columns={columns}
-        onEdit={handleEdit}
+        // onEdit={handleEdit}
         onDelete={(sitio) => handleState(sitio.id_sitio)}
         extraHeaderContent={
           <div>
