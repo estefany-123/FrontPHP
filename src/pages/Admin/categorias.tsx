@@ -14,7 +14,7 @@ const CategoriasTable = () => {
   const { categorias, isLoading, isError, error, addCategoria, changeState } =
     useCategoria();
 
-  //Modal agregar
+
   const [isOpen, setIsOpen] = useState(false);
   const handleClose = () => setIsOpen(false);
 
@@ -36,8 +36,8 @@ const CategoriasTable = () => {
   };
 
   const handleState = async (categorias: Categoria) => {
-    await changeState(categorias.idCategoria as number);
-    console.log(categorias.idCategoria);
+    await changeState(categorias.id_categoria as number);
+    console.log(categorias.id_categoria);
   };
 
   const handleAddCategoria = async (categoria: Categoria) => {
@@ -57,14 +57,14 @@ const CategoriasTable = () => {
   // Definir las columnas de la tabla
   const columns: TableColumn<Categoria>[] = [
     { key: "nombre", label: "Nombre" },
-    { key: "codigoUNPSC", label: "Codigo" },
+    { key: "codigo_unpsc", label: "Codigo" },
     {
-      key: "createdAt",
+      key: "created_at",
       label: "Fecha Creacion",
       render: (categoria: Categoria) => (
         <span>
-          {categoria.createdAt
-            ? new Date(categoria.createdAt).toLocaleDateString("es-ES", {
+          {categoria.created_at
+            ? new Date(categoria.created_at).toLocaleDateString("es-ES", {
                 year: "numeric",
                 month: "2-digit",
                 day: "2-digit",
@@ -74,12 +74,12 @@ const CategoriasTable = () => {
       ),
     },
     {
-      key: "updatedAt",
+      key: "updated_at",
       label: "Fecha Actualización",
       render: (categoria: Categoria) => (
         <span>
-          {categoria.updatedAt
-            ? new Date(categoria.updatedAt).toLocaleDateString("es-ES", {
+          {categoria.updated_at
+            ? new Date(categoria.updated_at).toLocaleDateString("es-ES", {
                 year: "numeric",
                 month: "2-digit",
                 day: "2-digit",
@@ -100,14 +100,14 @@ const CategoriasTable = () => {
   }
 
   const categoriasWithKey = categorias
-    ?.filter((categorias) => categorias?.idCategoria !== undefined)
+    ?.filter((categorias) => categorias?.id_categoria !== undefined)
     .map((categorias) => ({
       ...categorias,
-      key: categorias.idCategoria
-        ? categorias.idCategoria.toString()
+      key: categorias.id_categoria
+        ? categorias.id_categoria.toString()
         : crypto.randomUUID(),
       estado: Boolean(categorias.estado),
-      idCategoria:categorias.idCategoria
+      id_categoria:categorias.id_categoria
     }));
 
   return (
@@ -116,7 +116,7 @@ const CategoriasTable = () => {
         <Card className="w-full">
           <CardBody>
             <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-bold">Gestionar Categoras</h1>
+              <h1 className="text-2xl font-bold">Gestionar Categorias</h1>
               <div className="flex gap-2">
                 <Buton text="Elementos" onPress={handleGoToElemento} />
               </div>
@@ -150,7 +150,7 @@ const CategoriasTable = () => {
         {selectedCategoria && (
           <FormUpCategoria
             categorias={categoriasWithKey ?? []}
-            categoriaId={selectedCategoria.idCategoria as number}
+            categoriaId={selectedCategoria.id_categoria as number}
             id="FormUpdate"
             onclose={handleCloseUpdate}
           />

@@ -7,6 +7,7 @@ import {
   DropdownMenu,
   User,
   DropdownItem,
+  Spinner
 } from "@heroui/react";
 import { FormatrackLogo } from "../atoms/Icons";
 import { BellIcon } from "@heroicons/react/24/outline";
@@ -27,13 +28,15 @@ export function Nav({
   cantidadNoLeidas = 0,
 }: NavProps) {
   const navigate = useNavigate();
-    const { perfilInfo, setPerfilInfo, isLoading, error } = usePerfil();
+  const { perfilInfo, setPerfilInfo, isLoading, error } = usePerfil();
 
-    
+  console.log("Perfil Info:", perfilInfo);
+
+
   if (isLoading) return <div>Cargando...</div>;
-   if (!perfilInfo) return <div>No se encontraron datos del perfil</div>;
-   if (error) return <div>Error: {error.message}</div>;
-  
+  if (!perfilInfo) return <div>No se encontraron datos del perfil</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
 
   return (
     <Navbar>
@@ -85,7 +88,7 @@ export function Nav({
         <div>
           {children}
         </div>
-
+        {isLoading && <Spinner className="flex justify-center" />}
         <User
           name={perfilInfo.nombre}
           avatarProps={{
