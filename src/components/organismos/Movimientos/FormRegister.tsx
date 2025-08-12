@@ -332,7 +332,7 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
                   errorMessage={errors.fk_sitio?.message}
                 >
                   {(sitios ?? []).map((sitio) => (
-                    <SelectItem key={sitio.idSitio} textValue={sitio.nombre}>
+                    <SelectItem key={sitio.id_sitio} textValue={sitio.nombre}>
                       {sitio.nombre}
                     </SelectItem>
                   ))}

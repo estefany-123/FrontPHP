@@ -101,7 +101,7 @@ export default function FormularioInventario({
             name="fk_sitio"
             defaultValue={typeof idSitio === "number" ? idSitio : undefined}
             render={({ field }) => {
-              const sitioActual = sitios.find((s) => s.idSitio === idSitio);
+              const sitioActual = sitios.find((s) => s.id_sitio === idSitio);
 
               return (
                 <div className="w-full">
@@ -130,7 +130,7 @@ export default function FormularioInventario({
                         .filter((i) => i.estado === true)
                         .map((sitio) => (
                           <SelectItem
-                            key={sitio.idSitio}
+                            key={sitio.id_sitio}
                             textValue={sitio.nombre}
                           >
                             {sitio.nombre}

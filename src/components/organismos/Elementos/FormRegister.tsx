@@ -237,7 +237,7 @@ export default function FormularioElementos({
                   categorias
                     .filter((cat) => cat.estado === true)
                     .map((cat) => (
-                      <SelectItem key={cat.idCategoria} textValue={cat.nombre}>
+                      <SelectItem key={cat.id_categoria} textValue={cat.nombre}>
                         {cat.nombre}
                       </SelectItem>
                     ))

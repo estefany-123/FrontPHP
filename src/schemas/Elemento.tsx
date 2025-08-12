@@ -42,11 +42,11 @@ export const ElementoCreateSchema = z.object({
     .min(1, { message: "Descripcion es requerida" })
     .min(2, { message: "Longitud minima 2" }),
 
-  perecedero: z.boolean(),
+  perecedero: z.boolean().default(false),
 
-  no_perecedero: z.boolean(),
+  no_perecedero: z.boolean().default(true),
 
-  estado: z.boolean({ required_error: "Estado es requerido" }),
+  estado: z.boolean({ required_error: "Estado es requerido" }).default(true),
 
   baja: z.boolean({ required_error: "baja es requerida" }).default(false).optional(),
 
