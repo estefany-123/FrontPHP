@@ -1,5 +1,5 @@
 import { axiosAPI } from "../axiosAPI";
-import {LoginCrede,LoginRes} from "@/types/Usuario"
+import { LoginCrede, LoginRes } from "@/types/Usuario";
 
 export async function postLogin(
     data: LoginCrede

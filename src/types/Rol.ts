@@ -2,8 +2,8 @@ export type Rol = {
   id_rol?: number;
   nombre: string;
   estado?: boolean;
-  createdAt?: string;
-  updatedAt?: string;
+  created_at?: string;
+  updated_at?: string;
   asignarPermisos?: string;
 };
 

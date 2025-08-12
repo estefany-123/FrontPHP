@@ -1,33 +1,33 @@
 
 
 export type Movimiento = {
-  idMovimiento?: number;
+  id_movimiento?: number;
   descripcion?: string;
   cantidad?: number;
-  horaIngreso?: string;
-  horaSalida?: string;
+  hora_ingreso?: string;
+  hora_salida?: string;
   estado?: boolean;
   aceptado?: boolean;
-  enProceso?: boolean;
+  en_proceso?: boolean;
   cancelado?: boolean;
-  lugarDestino?: string;
+  lugar_destino?: string;
   devolutivo?: boolean;
-  noDevolutivo?: boolean;
-  fechaDevolucion?: Date | string | null;
-  createdAt?: string;
-  updatedAt?: string;
-  fkUsuario?: number;
-  fkTipoMovimiento?: number;
-  fkSitio?: number;
-  fkInventario?: number;
+  no_devolutivo?: boolean;
+  fecha_devolucion?: Date | string | null;
+  created_at?: string;
+  updated_at?: string;
+  fk_usuario?: number;
+  fk_tipo_movimiento?: number;
+  fk_sitio?: number;
+  fk_inventario?: number;
   tipo_bien?: string;
   codigos?: string[];
 };
 
 export type MovimientoExtendido = Movimiento & {
-  fkTipoMovimiento?: { nombre: string };
-  fkUsuario?: { nombre: string };
-  fkInventario?: {
-    fkElemento?: { nombre: string };
+  fk_tipo_movimiento?: { nombre: string };
+  fk_usuario?: { nombre: string };
+  fk_enventario?: {
+    fk_elemento?: { nombre: string };
   };
 };

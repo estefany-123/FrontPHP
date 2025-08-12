@@ -1,6 +1,6 @@
 import { axiosAPI } from "../axiosAPI";
 
-export async function deleteTipo(idTipo:number):Promise<any> {
-    await axiosAPI.patch(`tipos-movimiento/state/${idTipo}`);
-    return idTipo;
+export async function deleteTipo(id_tipo:number):Promise<any> {
+    await axiosAPI.patch(`tipos/state/${id_tipo}`);
+    return id_tipo;
 }

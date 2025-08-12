@@ -5,7 +5,7 @@ export interface AreaPutData {
 
 }
 
-export async function putArea(idArea: number, data: AreaPutData): Promise<any> {
-  const res = await axiosAPI.patch(`areas/${idArea}`, data);
+export async function putArea(id_area: number, data: AreaPutData): Promise<any> {
+  const res = await axiosAPI.patch(`areas/${id_area}`, data);
   return res.data;
 }

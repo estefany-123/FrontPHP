@@ -8,7 +8,7 @@ import { addToast } from "@heroui/react";
 import Buton from "@/components/molecules/Button";
 
 type Props = {
-  roles: (RolUpdate & { idRol?: number })[];
+  roles: (RolUpdate & { id_rol?: number })[];
   rolId: number;
   id: string;
   onclose: () => void;
@@ -27,16 +27,16 @@ export const FormUpdate = ({ roles, rolId, id, onclose }: Props) => {
     resolver: zodResolver(RolUpdateSchema),
     mode: "onChange",
     defaultValues: {
-      idRol: foundRol.idRol,
+      id_rol: foundRol.id_rol,
       nombre: foundRol.nombre,
     },
   });
 
   const onSubmit = async (data: RolUpdate) => {
     console.log(data);
-    if (!data.idRol) return;
+    if (!data.id_rol) return;
     try {
-      await updateRol(data.idRol, data);
+      await updateRol(data.id_rol, data);
       onclose();
       addToast({
         title: "Actualizacion Exitosa",

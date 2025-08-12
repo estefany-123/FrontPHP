@@ -1,14 +1,14 @@
 import { axiosAPI } from "../axiosAPI";
 
 export interface MovimientoPutData {
-  idMovimiento?: number;
+  id_movimiento?: number;
   descripcion?: string;
   cantidad?: number;
-  horaIngreso?: string;
-  horaSalida?: string;
+  hora_ingreso?: string;
+  hora_salida?: string;
 }
 
-export async function putMovimiento(idMovimiento:number, data:MovimientoPutData):Promise<any> {
-    const res = await axiosAPI.patch(`movimientos/${idMovimiento}`,data);
+export async function putMovimiento(id_movimiento:number, data:MovimientoPutData):Promise<any> {
+    const res = await axiosAPI.patch(`movimientos/${id_movimiento}`,data);
     return res.data
 }

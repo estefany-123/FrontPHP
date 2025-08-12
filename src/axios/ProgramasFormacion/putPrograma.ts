@@ -1,12 +1,14 @@
 import { axiosAPI } from "../axiosAPI";
 
 export interface ProgramaPutData {
-  idPrograma?: number;
+  id_programa?: number;
   nombre: string;
-
 }
 
-export async function putPrograma(idPrograma:number, data:ProgramaPutData):Promise<any> {
-    const res = await axiosAPI.patch(`programas-formacion/${idPrograma}`, data);
-    return res.data
+export async function putPrograma(
+  id_programa: number,
+  data: ProgramaPutData
+): Promise<any> {
+  const res = await axiosAPI.patch(`programaF/${id_programa}`, data);
+  return res.data;
 }

@@ -33,12 +33,12 @@ export function useSitios() {
     id: number,
     sitios: ListarSitios[] | undefined = data
   ): ListarSitios | null => {
-    return sitios?.find((sitio) => sitio.idSitio === id) || null;
+    return sitios?.find((sitio) => sitio.id_sitio === id) || null;
   };
 
   const updateSitioMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Sitios }) => {
-      const { idSitio, ...resto } = data;
+      const { id_sitio, ...resto } = data;
       return putSitio(id, resto);
     },
     onSuccess: () => {
@@ -80,8 +80,8 @@ export function useSitios() {
     return updateSitioMutation.mutateAsync({ id, data });
   };
 
-  const changeState = async (idSitio: number) => {
-    return changeStateMutation.mutateAsync(idSitio);
+  const changeState = async (id_sitio: number) => {
+    return changeStateMutation.mutateAsync(id_sitio);
   };
 
   return {

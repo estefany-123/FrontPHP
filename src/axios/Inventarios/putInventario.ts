@@ -4,7 +4,7 @@ export interface InventarioPutData {
     stock?: number;
 }
 
-export async function putInventario(idInventario:number, data:InventarioPutData):Promise<any> {
-    const res = await axiosAPI.patch(`inventarios/${idInventario}`, data);
+export async function putInventario(id_inventario:number, data:InventarioPutData):Promise<any> {
+    const res = await axiosAPI.patch(`inventarios/${id_inventario}`, data);
     return res.data;
 }

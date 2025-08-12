@@ -33,12 +33,12 @@ export function usePrograma() {
     id: number,
     Programa: Pformacion[] | undefined = data
   ): Pformacion | null => {
-    return Programa?.find((Programa) => Programa.idPrograma === id) || null;
+    return Programa?.find((Programa) => Programa.id_programa === id) || null;
   };
 
   const updateProgramaMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Pformacion }) => {
-      const { idPrograma, ...resto } = data;
+      const { id_programa, ...resto } = data;
       return putPrograma(id, resto);
     },
     onSuccess: () => {
@@ -79,8 +79,8 @@ export function usePrograma() {
     return updateProgramaMutation.mutateAsync({ id, data });
   };
 
-  const changeState = async (idPrograma: number) => {
-    return changeStateMutation.mutateAsync(idPrograma);
+  const changeState = async (id_programa: number) => {
+    return changeStateMutation.mutateAsync(id_programa);
   };
 
   return {

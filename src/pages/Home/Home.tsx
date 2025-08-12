@@ -28,7 +28,7 @@ const Dashboard = () => {
   const { inventarios = [] } = useInventario();
 
   const movimientosPendientes = movimientos.filter(
-    (m: any) => m.enProceso && !m.aceptado && !m.cancelado
+    (m: any) => m.en_proceso && !m.aceptado && !m.cancelado
   );
 
   const estadisticas = {
@@ -50,14 +50,14 @@ const Dashboard = () => {
   const ultimosMovimientos = [...movimientos]
     .sort(
       (a: any, b: any) =>
-        new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
+        new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime()
     )
     .slice(0, 5);
 
   const movimientosPorMes = (() => {
     const conteo: Record<string, number> = {};
     movimientos.forEach((mov) => {
-      const fecha = mov.createdAt ? new Date(mov.createdAt) : null;
+      const fecha = mov.created_at ? new Date(mov.created_at) : null;
       if (!fecha) return;
       const mes = fecha.toLocaleString("default", { month: "short" });
       conteo[mes] = (conteo[mes] || 0) + 1;
@@ -77,9 +77,9 @@ const Dashboard = () => {
   })();
 
   const movimientosHoy = movimientos.filter((m: any) => {
-    if (!m.createdAt) return false;
+    if (!m.created_at) return false;
     const hoy = new Date().toDateString();
-    return new Date(m.createdAt).toDateString() === hoy;
+    return new Date(m.created_at).toDateString() === hoy;
   });
 
   const stockData = (() => {
@@ -218,8 +218,8 @@ const Dashboard = () => {
             </thead>
             <tbody>
               {ultimosMovimientos.map((mov: any) => {
-                const fecha = mov.createdAt
-                  ? new Date(mov.createdAt).toLocaleDateString()
+                const fecha = mov.created_at
+                  ? new Date(mov.created_at).toLocaleDateString()
                   : "Sin fecha";
                 const estado = mov.aceptado
                   ? "Aceptado"

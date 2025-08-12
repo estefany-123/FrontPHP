@@ -12,7 +12,6 @@ import usePermissions from "@/hooks/Usuarios/usePermissions";
 import FormularioPrograma from "@/components/organismos/Programas/FormRegister";
 
 const ProgramasTable = () => {
-
   const { userHasPermission } = usePermissions();
 
   const { programas, isLoading, isError, error, addPrograma, changeState } =
@@ -38,8 +37,8 @@ const ProgramasTable = () => {
     setSelectedPrograma(null);
   };
 
-  const handleState = async (idPrograma: number) => {
-    await changeState(idPrograma);
+  const handleState = async (id_programa: number) => {
+    await changeState(id_programa);
   };
 
   const handleAddPrograma = async (programa: Pformacion) => {
@@ -60,31 +59,31 @@ const ProgramasTable = () => {
   const columns: TableColumn<Pformacion>[] = [
     { key: "nombre", label: "Nombre" },
     {
-      key: "createdAt",
+      key: "created_at",
       label: "Fecha Creación",
       render: (programa: Pformacion) => (
         <span>
-          {programa.createdAt
-            ? new Date(programa.createdAt).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+          {programa.created_at
+            ? new Date(programa.created_at).toLocaleDateString("es-ES", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
     },
     {
-      key: "updatedAt",
+      key: "updated_at",
       label: "Fecha Actualizacion",
       render: (programa: Pformacion) => (
         <span>
-          {programa.updatedAt
-            ? new Date(programa.updatedAt).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+          {programa.updated_at
+            ? new Date(programa.updated_at).toLocaleDateString("es-ES", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
@@ -103,16 +102,16 @@ const ProgramasTable = () => {
   const usersWithKey = programas
     ?.filter(
       (programa) =>
-        programa?.idPrograma !== undefined &&
-        programa?.createdAt &&
-        programa?.updatedAt
+        programa?.id_programa !== undefined &&
+        programa?.created_at &&
+        programa?.updated_at
     )
     .map((programa) => ({
       ...programa,
-      key: programa.idPrograma
-        ? programa.idPrograma.toString()
+      key: programa.id_programa
+        ? programa.id_programa.toString()
         : crypto.randomUUID(),
-      idPrograma: programa.idPrograma || 0,
+      id_programa: programa.id_programa || 0,
       estado: Boolean(programa.estado),
     }));
 
@@ -124,9 +123,7 @@ const ProgramasTable = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Fichas</h1>
               <div className="flex gap-2">
-                {userHasPermission(7) &&
-                  <Buton text="Fichas" onPress={handleGoToFicha} />
-                }
+                <Buton text="Fichas" onPress={handleGoToFicha} />
               </div>
             </div>
           </CardBody>
@@ -158,28 +155,24 @@ const ProgramasTable = () => {
         {selectedPrograma && (
           <FormUpdate
             programas={usersWithKey ?? []}
-            programaId={selectedPrograma.idPrograma as number}
+            programaId={selectedPrograma.id_programa as number}
             id="FormUpdate"
             onclose={handleCloseUpdate}
           />
         )}
       </Modall>
 
-      {userHasPermission(40) && usersWithKey && (
-        <Globaltable
-          data={usersWithKey}
-          columns={columns}
-          onEdit={userHasPermission(41) ? handleEdit : undefined}
-          onDelete={userHasPermission(42) ? (programa) => handleState(programa.idPrograma) : undefined}
-          extraHeaderContent={
-            <div>
-              {userHasPermission(39) &&
-                <Buton text="Añadir Programa" onPress={() => setIsOpen(true)} />
-              }
-            </div>
-          }
-        />
-      )}
+      <Globaltable
+        data={usersWithKey ?? []}
+        columns={columns}
+        onEdit={handleEdit}
+        onDelete={(programa) => handleState(programa.id_programa)}
+        extraHeaderContent={
+          <div>
+            <Buton text="Añadir Programa" onPress={() => setIsOpen(true)} />
+          </div>
+        }
+      />
     </div>
   );
 };

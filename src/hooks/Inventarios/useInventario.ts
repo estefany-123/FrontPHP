@@ -36,13 +36,13 @@ export function useInventario() {
     inventarios: Inventario[] | undefined = data
   ): Inventario | null => {
     return (
-      inventarios?.find((inventario) => inventario.idInventario === id) || null
+      inventarios?.find((inventario) => inventario.id_inventario === id) || null
     );
   };
 
   const updateInventarioMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Inventario }) => {
-      const { idInventario, ...resto } = data;
+      const { id_inventario, ...resto } = data;
       return putInventario(id, resto);
     },
     onSuccess: () => {
@@ -94,8 +94,8 @@ export function useInventario() {
     return updateInventarioMutation.mutateAsync({ id, data });
   };
 
-  const changeState = async (idInventario: number) => {
-    return changeStateMutation.mutateAsync(idInventario);
+  const changeState = async (id_inventario: number) => {
+    return changeStateMutation.mutateAsync(id_inventario);
   };
 
   const agregarStockInventario = async (data: AgregateStockData) => {

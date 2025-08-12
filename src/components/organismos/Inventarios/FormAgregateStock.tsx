@@ -4,14 +4,14 @@ import { addToast, Input } from "@heroui/react";
 import { useState } from "react";
 
 type Props = {
-  fkInventario?: number;
-  fkElemento: number;
-  fkSitio: number;
+  fk_inventario?: number;
+  fk_elemento: number;
+  fk_sitio: number;
   onClose: () => void;
 };
 
-export const FormAgregateStock = ({ fkElemento, fkSitio, onClose }: Props) => {
-  console.log("🚀 Se montó <FormAgregateStock />", { fkElemento, fkSitio });
+export const FormAgregateStock = ({ fk_elemento, fk_sitio, onClose }: Props) => {
+  console.log("🚀 Se montó <FormAgregateStock />", { fk_elemento, fk_sitio });
   const [codigos, setCodigos] = useState<string[]>([]);
   const [nuevoCodigo, setNuevoCodigo] = useState("");
   const { agregarStockInventario } = useInventario();
@@ -24,7 +24,7 @@ export const FormAgregateStock = ({ fkElemento, fkSitio, onClose }: Props) => {
 
   const guardar = async () => {
     try {
-      await agregarStockInventario({ fkElemento, fkSitio, codigos });
+      await agregarStockInventario({ fk_elemento, fk_sitio, codigos });
       addToast({
         title: "Éxito",
         description: `${codigos.length} códigos agregados correctamente`,

@@ -34,7 +34,7 @@ export function useElemento() {
     id: number,
     elementos: Elemento[] | undefined = data
   ): Elemento | null => {
-    return elementos?.find((elemento) => elemento.idElemento === id) || null;
+    return elementos?.find((elemento) => elemento.id_elemento === id) || null;
   };
 
   const updateElementoMutation = useMutation({

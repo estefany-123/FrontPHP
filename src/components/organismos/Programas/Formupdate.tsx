@@ -30,16 +30,16 @@ export const FormUpdate = ({ programas, programaId, id, onclose }: Props) => {
     resolver: zodResolver(programaUpdateSchema),
     mode: "onChange",
     defaultValues: {
-      idPrograma: foundPrograma.idPrograma,
+      id_programa: foundPrograma.id_programa,
       nombre: foundPrograma.nombre,
     },
   });
 
   const onSubmit = async (data: programaUpdate) => {
     console.log(data);
-    if (!data.idPrograma) return;
+    if (!data.id_programa) return;
     try {
-      await updatePrograma(data.idPrograma, data);
+      await updatePrograma(data.id_programa, data);
       onclose();
       addToast({
         title: "Actualizacion Exitosa",

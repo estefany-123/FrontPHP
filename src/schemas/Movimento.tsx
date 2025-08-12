@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const MovimientoUpdateSchema = z.object({
-  idMovimiento: z.number(),
+  id_movimiento: z.number(),
 
   descripcion: z
     .string()
@@ -14,20 +14,20 @@ export const MovimientoUpdateSchema = z.object({
       required_error: "Cantidad es requerida y debe ser entero",
     })
     .optional(),
-  horaIngreso: z
+  hora_ingreso: z
     .string()
     .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
       message: "La hora debe tener el formato HH:mm (24h)",
     })
     .optional(),
-  horaSalida: z
+  hora_salida: z
     .string()
     .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
       message: "La hora debe tener el formato HH:mm (24h)",
     })
     .optional(),
 
-  fechaDevolucion: z
+  fecha_devolucion: z
     .string().date()
     .nullable()
     .optional()
@@ -48,8 +48,8 @@ export const MovimientoCreateSchema = z
 
     cantidad: z.number().optional(),
 
-    horaIngreso: z.string().optional(),
-    horaSalida: z
+    hora_ingreso: z.string().optional(),
+    hora_salida: z
       .string()
       .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
         message: "La hora debe tener el formato HH:mm (24h)",
@@ -58,13 +58,13 @@ export const MovimientoCreateSchema = z
 
     estado: z.boolean().optional(),
     aceptado: z.boolean().default(false).optional(),
-    enProceso: z.boolean().default(true).optional(),
+    en_proceso: z.boolean().default(true).optional(),
     cancelado: z.boolean().default(false).optional(),
 
     devolutivo: z.boolean().optional(),
-    noDevolutivo: z.boolean().optional(),
+    no_devolutivo: z.boolean().optional(),
 
-    fechaDevolucion: z
+    fecha_devolucion: z
       .string()
       .nullable()
       .optional()
@@ -73,11 +73,11 @@ export const MovimientoCreateSchema = z
         { message: "Fecha inválida" }
       ),
 
-    fkUsuario: z.number({ message: "Usuario es requerido" }),
-    lugarDestino: z.string({ message: "Lugar de destino es requerido" }),
-    fkTipoMovimiento: z.number({ message: "Tipo de Movimiento es requerido" }),
-    fkSitio: z.number({ message: "Sitio es requerido" }),
-    fkInventario: z.number({ message: "Inventario es requerido" }),
+    fk_usuario: z.number({ message: "Usuario es requerido" }),
+    lugar_destino: z.string({ message: "Lugar de destino es requerido" }),
+    fk_tipo_movimiento: z.number({ message: "Tipo de Movimiento es requerido" }),
+    fk_sitio: z.number({ message: "Sitio es requerido" }),
+    fk_inventario: z.number({ message: "Inventario es requerido" }),
 
     tipo_bien: z.enum(["devolutivo", "no_devolutivo"], {
       required_error: "Debe seleccionar un tipo de bien",
@@ -92,13 +92,13 @@ export const MovimientoCreateSchema = z
   })
   .superRefine((data, ctx) => {
     if (data.tipoMovimientoNombre === "ingreso") {
-      if (!data.horaIngreso) {
+      if (!data.hora_ingreso) {
         ctx.addIssue({
           path: ["horaIngreso"],
           code: z.ZodIssueCode.custom,
           message: "Hora de ingreso es requerida para tipo ingreso",
         });
-      } else if (!/^([01]\d|2[0-3]):([0-5]\d)$/.test(data.horaIngreso)) {
+      } else if (!/^([01]\d|2[0-3]):([0-5]\d)$/.test(data.hora_ingreso)) {
         ctx.addIssue({
           path: ["horaIngreso"],
           code: z.ZodIssueCode.custom,

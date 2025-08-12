@@ -10,7 +10,7 @@ import {
 } from "@/schemas/CodigoInventario";
 
 type Props = {
-  codigos: (CodigoInventarioUpdate & { idCodigoInventario?: number })[];
+  codigos: (CodigoInventarioUpdate & { id_codigo_inventario?: number })[];
   codigoId: number;
   id: string;
   onClose: () => void;

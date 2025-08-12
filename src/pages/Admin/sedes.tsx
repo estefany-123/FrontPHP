@@ -8,13 +8,9 @@ import { Card, CardBody } from "@heroui/react";
 import { Sede } from "@/types/sedes";
 import { useNavigate } from "react-router-dom";
 import { FormUpdate } from "@/components/organismos/Sedes/Formupdate";
-import usePermissions from "@/hooks/Usuarios/usePermissions";
 import FormularioSede from "@/components/organismos/Sedes/FormRegister";
 
 const SedeTable = () => {
-
-
-  const { userHasPermission } = usePermissions();
 
 
   const { sede, isLoading, isError, error, addSede, changeState } = useSede();
@@ -41,15 +37,14 @@ const SedeTable = () => {
     setSelectedSede(null);
   };
 
-  const handleState = async (sede: Sede) => {
-    const idSede = sede.idSede ?? 0;
-    await changeState(idSede);
+  const handleState = async (id_sede: number) => {
+    await changeState(id_sede);
   };
 
   const handleAddSede = async (sede: Sede) => {
     try {
-      const idSede = sede.idSede ?? 0;
-      await addSede({ ...sede, idSede });
+      const id_sede = sede.id_sede ?? 0;
+      await addSede({ ...sede, id_sede });
       handleClose();
     } catch (error) {
       console.error("Error al agregar la sede:", error);
@@ -65,31 +60,31 @@ const SedeTable = () => {
   const columns: TableColumn<Sede>[] = [
     { key: "nombre", label: "Nombre" },
     {
-      key: "createdAt",
+      key: "created_at",
       label: "Fecha CReacion",
       render: (sede: Sede) => (
         <span>
-          {sede.createdAt
-            ? new Date(sede.createdAt).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+          {sede.created_at
+            ? new Date(sede.created_at).toLocaleDateString("es-ES", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
     },
     {
-      key: "updatedAt",
+      key: "updated_at",
       label: "Fecha Actualización",
       render: (sede: Sede) => (
         <span>
-          {sede.updatedAt
-            ? new Date(sede.updatedAt).toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })
+          {sede.updated_at
+            ? new Date(sede.updated_at).toLocaleDateString("es-ES", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })
             : "N/A"}
         </span>
       ),
@@ -106,11 +101,11 @@ const SedeTable = () => {
   }
 
   const sedeWithKey = sede
-    ?.filter((sede) => sede?.idSede !== undefined)
+    ?.filter((sede) => sede?.id_sede !== undefined)
     .map((sede) => ({
       ...sede,
-      key: sede.idSede ? sede.idSede.toString() : crypto.randomUUID(),
-      idSede: sede.idSede || 0,
+      key: sede.id_sede ? sede.id_sede.toString() : crypto.randomUUID(),
+      id_sede: sede.id_sede || 0,
       estado: Boolean(sede.estado),
     }));
 
@@ -122,12 +117,9 @@ const SedeTable = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Sedes</h1>
               <div className="flex gap-2">
-                {userHasPermission(11) &&
-                  <Buton text="Areas" onPress={handleGoToArea} />
-                }
-                {userHasPermission(48) &&
-                  <Buton text="Gestionar Centros" onPress={handleGoToCentro} />
-                }
+                <Buton text="Areas" onPress={handleGoToArea} />
+
+                <Buton text="Gestionar Centros" onPress={handleGoToCentro} />
               </div>
             </div>
           </CardBody>
@@ -162,28 +154,24 @@ const SedeTable = () => {
         {selectedSede && (
           <FormUpdate
             sedes={sedeWithKey ?? []}
-            sedeId={selectedSede.idSede as number}
+            sedeId={selectedSede.id_sede as number}
             id="FormUpdate"
             onclose={handleCloseUpdate}
           />
         )}
       </Modall>
 
-      {userHasPermission(44) && sedeWithKey && (
-        <Globaltable
-          data={sedeWithKey}
-          columns={columns}
-          onEdit={userHasPermission(45) ? handleEdit : undefined}
-          onDelete={userHasPermission(46) ? handleState : undefined}
-          extraHeaderContent={
-            <div>
-              {userHasPermission(43) &&
-                <Buton text="Añadir sede" onPress={() => setIsOpen(true)} />
-              }
-            </div>
-          }
-        />
-      )}
+      <Globaltable
+        data={sedeWithKey ?? []}
+        columns={columns}
+        onEdit={handleEdit}
+        onDelete={(sede) => handleState(sede.id_sede)}
+        extraHeaderContent={
+          <div>
+            <Buton text="Añadir sede" onPress={() => setIsOpen(true)} />
+          </div>
+        }
+      />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 export type Permisos = {
-  idPermiso?: number;
+  id_permiso?: number;
   permiso: string;
-  createdAt?: string;
-  updatedAt?: string;
-  fkModulo?:number
+  created_at?: string;
+  updated_at?: string;
+  fk_modulo?: number;
 };
