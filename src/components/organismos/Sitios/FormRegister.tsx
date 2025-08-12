@@ -161,7 +161,7 @@ export default function FormularioSitio({
             <div className="w-full flex">
               <Select
                 label="Tipo Sitio"
-                value={field.value ?? ""}
+                value={field.value ? String(field.value) : ""}
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 placeholder="Selecciona un tipo..."
                 isInvalid={!!errors.fk_tipo_sitio}
