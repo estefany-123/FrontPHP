@@ -12,12 +12,12 @@ export const InventarioSitio = () => {
   if (isLoading) return <p>Cargando sitio...</p>;
   if (isError) return <p>Error al cargar el sitio.</p>;
 
-  const sitio = sitios?.find((s) => s.idSitio === idSitios);
+  const sitio = sitios?.find((s) => s.id_sitio === idSitios);
 
   if (!sitio) return <p>Sitio no encontrado</p>;
   return (
     <div>
-      <Link to={`/bodega/inventario/areas/${sitio.fkArea?.idArea}`}>
+      <Link to={`/bodega/inventario/areas/${sitio.fk_area?.id_area}`}>
         <h2 className="text-lg m-4 font-semibold">
           <Buton text="Regresar " className=" hover hover:text-white dark:hover:text-white"/>
         </h2>

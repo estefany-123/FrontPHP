@@ -11,10 +11,12 @@ export const InventarioArea = () => {
   const { areas } = useAreas();
   const { sitios, isLoading, isError } = useSitios();
 
-  const area = areas?.find((a) => a.idArea === areaId);
+  const area = areas?.find((a) => a.id_area === areaId);
 const sitiosFiltrados = sitios?.filter(
-  (sitio) => Number(sitio.fkArea?.idArea) === Number(id)
+  (sitio) => Number(sitio.fk_area) === areaId
 );
+
+
 
   if (isLoading) return <p>Cargando sitios...</p>;
   if (isError) return <p>Error al cargar los sitios</p>;
@@ -33,11 +35,11 @@ const sitiosFiltrados = sitios?.filter(
       </h1>
       <div className="flex flex-wrap gap-4">
         {sitiosFiltrados?.map((sitio) => (
-          <Card key={sitio.idSitio} 
+          <Card key={sitio.id_sitio} 
           className="w-64 p-4 ml-3 shadow-md hover:shadow-xl hover:bg-blue-600 hover:text-white dark:hover:text-black border-1 transition"
 >
             <Link
-              to={`/bodega/inventario/areas/${areaId}/sitios/${sitio.idSitio}`}
+              to={`/bodega/inventario/areas/${areaId}/sitios/${sitio.id_sitio}`}
             >
               <h2 className="text-lg text-center font-semibold">{sitio.nombre}</h2>
             </Link>

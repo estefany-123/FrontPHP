@@ -8,10 +8,10 @@ import { useSitios } from "@/hooks/sitios/useSitios";
 import { ListarSitios, Sitios } from "@/types/sitios";
 import { Card, CardBody } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
-import usePermissions from "@/hooks/Usuarios/usePermissions";
 import FormularioSitio from "@/components/organismos/Sitios/FormRegister";
 
 const SitiosTable = () => {
+
 
   const { sitios, isLoading, isError, error, addSitio, changeState } =
     useSitios();

@@ -13,6 +13,7 @@ import { FormAgregateStock } from "@/components/organismos/Inventarios/FormAgreg
 import { FormUpdate } from "@/components/organismos/Inventarios/FormUpdate";
 import { CodigoInventario } from "../../CodigoInventario";
 import { DocumentTextIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
+import FormularioInventario from "@/components/organismos/Inventarios/FormRegister";
 
 interface InventariosTableProps {
   inventarios?: Inventario[];
@@ -23,15 +24,17 @@ export const InventariosTable = ({
   inventarios: inventariosProp,
   id_sitio,
 }: InventariosTableProps) => {
-
-
   const {
     inventarios: inventariosHook,
     isLoading,
     isError,
     error,
     changeState,
+    addInventario,
   } = useInventario();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const handleClose = () => setIsOpen(false);
 
   //Modal actualizar
   const [IsOpenUpdate, setIsOpenUpdate] = useState(false);
@@ -56,6 +59,14 @@ export const InventariosTable = ({
     setSelectedInventarioStock(null);
   };
 
+  const handleAddInventario = async (inventario: Inventario) => {
+    try {
+      await addInventario(inventario);
+      handleClose(); // Cerrar el modal después de darle agregar usuario
+    } catch (error) {
+      console.error("Error al agregar el tipo de movimiento:", error);
+    }
+  };
   const handleState = async (id_inventario: number) => {
     await changeState(id_inventario);
   };
@@ -197,25 +208,30 @@ export const InventariosTable = ({
 
   const filtered = (inventariosProp ?? inventariosHook) as InventarioConSitio[];
 
-  const InventariosWithKey = filtered
-    ?.filter(
-      (inventario) =>
-        inventario?.id_inventario !== undefined &&
-        (id_sitio ? inventario.fk_sitio?.id_sitio === id_sitio : true)
-    )
-    .map((inventario) => ({
-      ...inventario,
-      key: inventario.id_inventario
+const InventariosWithKey = filtered
+  ?.filter(
+    (inventario) =>
+      inventario?.id_inventario !== undefined &&
+      (id_sitio
+        ? inventario.fk_sitio === id_sitio || 
+          inventario.fk_sitio?.id_sitio === id_sitio
+        : true)
+  )
+  .map((inventario) => ({
+    ...inventario,
+    key:
+      inventario.id_inventario !== undefined && inventario.id_inventario !== null
         ? inventario.id_inventario.toString()
         : crypto.randomUUID(),
-      id_inventario: inventario.id_inventario || 0,
-      estado: Boolean(inventario.estado),
-      tieneCaracteristicas: Array.isArray(
-        inventario.fk_elemento?.fk_caracteristica
-      )
-        ? inventario.fk_elemento.fk_caracteristica.length > 0
-        : !!inventario.fk_elemento?.fk_caracteristica,
-    }));
+    id_inventario: inventario.id_inventario || 0,
+    estado: Boolean(inventario.estado),
+    tieneCaracteristicas: Array.isArray(
+      inventario.fk_elemento?.fk_caracteristica
+    )
+      ? inventario.fk_elemento.fk_caracteristica.length > 0
+      : !!inventario.fk_elemento?.fk_caracteristica,
+  }));
+
 
   console.log("Inventarios filtrados:", filtered);
   console.log("id_sitio recibido por props:", id_sitio);
@@ -227,6 +243,23 @@ export const InventariosTable = ({
           Inventarios Registrados
         </h1>
       )}
+      <Modall
+        ModalTitle="Registrar Nueva Caracteristica"
+        isOpen={isOpen}
+        onOpenChange={handleClose}
+      >
+        <FormularioInventario
+          id="inventario-form"
+          addData={handleAddInventario}
+          onClose={handleClose}
+        />
+        <Buton
+          text="Guardar"
+          type="submit"
+          form="inventario-form"
+          className="w-full rounded-xl"
+        />
+      </Modall>
 
       <Modall
         ModalTitle="Agregar Stock"
@@ -274,6 +307,11 @@ export const InventariosTable = ({
         data={InventariosWithKey}
         columns={columns ?? []}
         onDelete={(inventario) => handleState(inventario.id_inventario)}
+        extraHeaderContent={
+          <div>
+            <Buton text="Añadir Inventario" onPress={() => setIsOpen(true)} />
+          </div>
+        }
       />
     </div>
   );

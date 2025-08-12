@@ -314,118 +314,118 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
         ) : null}
 
         <Controller
-          control={control}
-          name="fk_sitio"
-          render={({ field }) => (
-            <>
-              <div className="w-full flex">
-                <Select
-                  label="Sitio"
-                  placeholder="Selecciona un sitio"
-                  {...field}
-                  onChange={(e) => {
-                    const sitioId = Number(e.target.value);
-                    field.onChange(sitioId);
-                    setSitioSeleccionado(sitioId);
-                  }}
-                  isInvalid={!!errors.fk_sitio}
-                  errorMessage={errors.fk_sitio?.message}
-                >
-                  {(sitios ?? []).map((sitio) => (
-                    <SelectItem key={sitio.idSitio} textValue={sitio.nombre}>
-                      {sitio.nombre}
-                    </SelectItem>
-                  ))}
-                </Select>
-                <Buton
-                  type="button"
-                  className=" m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl"
-                  onPress={() => setShowModalSitio(true)}
-                >
-                  <PlusCircleIcon />
-                </Buton>
-              </div>
-            </>
-          )}
-        />
+  control={control}
+  name="fk_sitio"
+  render={({ field }) => (
+    <>
+      <div className="w-full flex">
+        <Select
+          label="Sitio"
+          placeholder="Selecciona un sitio"
+          {...field}
+          onChange={(e) => {
+            const sitioId = Number(e.target.value);
+            field.onChange(sitioId);
+            setSitioSeleccionado(sitioId);
+            setInventarioSeleccionado(null); // Reset inventario al cambiar sitio
+            setCodigosDisponibles([]); // Limpiar códigos disponibles
+            setTieneCaracteristicas(false);
+          }}
+          isInvalid={!!errors.fk_sitio}
+          errorMessage={errors.fk_sitio?.message}
+          value={field.value}
+        >
+          {(sitios ?? []).map((sitio) => (
+            <SelectItem key={sitio.id_sitio} textValue={sitio.nombre}>
+              {sitio.nombre}
+            </SelectItem>
+          ))}
+        </Select>
+        <Buton
+          type="button"
+          className="m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl"
+          onPress={() => setShowModalSitio(true)}
+        >
+          <PlusCircleIcon />
+        </Buton>
+      </div>
+    </>
+  )}
+/>
 
-        {sitioSeleccionado && (
-          <Controller
-            control={control}
-            name="fk_inventario"
-            render={({ field }) => (
-              <>
-                <div className="flex w-full">
-                  <Select
-                    label="Elemento del Inventario"
-                    placeholder="Selecciona un elemento"
-                    {...field}
-                    onChange={(e) => {
-                      const id = Number(e.target.value);
-                      field.onChange(id);
-                      setInventarioSeleccionado(id);
-                      const inventario = (inventarios ?? []).find(
-                        (i) => i.id_inventario === id
-                      );
-                      if (
-                        inventario?.codigos &&
-                        Array.isArray(inventario.codigos)
-                      ) {
-                        const disponibles = inventario.codigos.filter(
-                          (c) => !c.uso
-                        );
-                        setCodigosDisponibles(
-                          disponibles.map((c) => ({
-                            id_codigo_inventario: c.id_codigo_inventario,
-                            codigo: c.codigo,
-                          }))
-                        );
-                        setTieneCaracteristicas(disponibles.length > 0);
-                      } else {
-                        setCodigosDisponibles([]);
-                        setTieneCaracteristicas(false);
-                      }
-                    }}
-                    isInvalid={!!errors.fk_inventario}
-                    errorMessage={errors.fk_inventario?.message}
-                  >
-                    {(inventarios ?? [])
+{sitioSeleccionado && (
+  <Controller
+    control={control}
+    name="fk_inventario"
+    render={({ field }) => {
+      const inventariosFiltrados = (inventarios ?? [])
+        .filter((i) => i.fk_sitio === sitioSeleccionado)
+        .filter((i) => i.estado === true);
 
-                      .filter((i) => i.fk_sitio.id_sitio === sitioSeleccionado)
-                      .filter((i) => i.estado === true)
-                      .map((inventario) => {
-                        console.log(
-                          "Inventarios del sitio seleccionado:",
-                          inventarios?.filter(
-                            (i) => i.fk_sitio.id_sitio === sitioSeleccionado
-                          )
-                        );
-                        return (
-                          <SelectItem
-                            key={inventario.id_inventario}
-                            textValue={
-                              inventario.fk_elemento?.nombre ||
-                              "Elemento no disponible"
-                            }
-                          >
-                            {inventario.fk_elemento?.nombre ||
-                              "Elemento no disponible"}
-                          </SelectItem>
-                        );
-                      })}
-                  </Select>
-                  <Buton
-                    type="button"
-                    className="m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl"
-                    onPress={() => setShowModalInventario(true)}
-                  >
-                    <PlusCircleIcon />
-                  </Buton>
-                </div>
-              </>
-            )}
-          />
-        )}
+      return (
+        <>
+          <div className="flex w-full">
+            <Select
+              label="Elemento del Inventario"
+              placeholder="Selecciona un elemento"
+              {...field}
+              onChange={(e) => {
+                const id = Number(e.target.value);
+                field.onChange(id);
+                setInventarioSeleccionado(id);
+
+                const inventario = inventariosFiltrados.find(
+                  (i) => i.id_inventario === id
+                );
+
+                if (
+                  inventario?.codigos &&
+                  Array.isArray(inventario.codigos)
+                ) {
+                  const disponibles = inventario.codigos.filter(
+                    (c) => !c.uso
+                  );
+                  setCodigosDisponibles(
+                    disponibles.map((c) => ({
+                      id_codigo_inventario: c.id_codigo_inventario,
+                      codigo: c.codigo,
+                    }))
+                  );
+                  setTieneCaracteristicas(disponibles.length > 0);
+                } else {
+                  setCodigosDisponibles([]);
+                  setTieneCaracteristicas(false);
+                }
+              }}
+              isInvalid={!!errors.fk_inventario}
+              errorMessage={errors.fk_inventario?.message}
+              value={field.value}
+            >
+              {inventariosFiltrados.map((inventario) => (
+                <SelectItem
+                  key={inventario.id_inventario}
+                  textValue={
+                    inventario.fk_elemento?.nombre ?? "Elemento no disponible"
+                  }
+                >
+                  {inventario.fk_elemento?.nombre ?? "Elemento no disponible"}
+                </SelectItem>
+              ))}
+            </Select>
+            <Buton
+              type="button"
+              className="m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl"
+              onPress={() => setShowModalInventario(true)}
+            >
+              <PlusCircleIcon />
+            </Buton>
+          </div>
+        </>
+      );
+    }}
+  />
+)}
+
 
         {inventarioSeleccionado &&
           tipoMovimientoSeleccionado &&
@@ -590,7 +590,7 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
           addData={async (data) => {
             await addInventario(data);
           }}
-          idSitio={0}
+          id_sitio={0}
         />
         <Buton form="inventario" text="Guardar" type="submit" />
       </Modal>

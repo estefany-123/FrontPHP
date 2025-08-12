@@ -58,13 +58,17 @@ export default function FormularioElementos({
   const onSubmit = async (data: ElementoCreate) => {
     try {
       await addData({
+        
         ...data,
-        estado: data.estado,
+        estado: Boolean(data.estado),
+        no_perecedero: Boolean(data.no_perecedero),
+        perecedero: Boolean(data.perecedero),
         tipoElemento: data.tipoElemento as "perecedero" | "no_perecedero",
         fk_caracteristica: tieneCaracteristica
           ? data.fk_caracteristica
           : undefined,
       });
+      
 
       onClose();
       addToast({
@@ -78,6 +82,7 @@ export default function FormularioElementos({
       console.error("Error al guardar el elemento:", error);
     }
   };
+
   console.log("Errores", errors);
   return (
     <>
@@ -226,10 +231,7 @@ export default function FormularioElementos({
                 className="w-full"
                 placeholder="Selecciona una categoría..."
                 aria-label="Seleccionar Categoría"
-                onChange={(e) => {
-                  const value = Number(e.target.value);
-                  field.onChange(value);
-                }}
+                onChange={(e) => field.onChange(Number(e.target.value))}
                 isInvalid={!!errors.fk_categoria}
                 errorMessage={errors.fk_categoria?.message}
               >
@@ -237,7 +239,7 @@ export default function FormularioElementos({
                   categorias
                     .filter((cat) => cat.estado === true)
                     .map((cat) => (
-                      <SelectItem key={cat.idCategoria} textValue={cat.nombre}>
+                      <SelectItem key={cat.id_categoria} textValue={cat.nombre}>
                         {cat.nombre}
                       </SelectItem>
                     ))
