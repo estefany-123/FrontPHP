@@ -8,7 +8,7 @@ import { addToast } from "@heroui/react";
 import Buton from "@/components/molecules/Button";
 
 type Props = {
-  sitios: (sitioUpdate & { idSitio: number })[];
+  sitios: (sitioUpdate & { id_sitio: number })[];
   sitioId: number;
   id: string;
   onclose: () => void;
@@ -27,18 +27,18 @@ export const FormUpdate = ({ sitios, sitioId, id, onclose }: Props) => {
     resolver: zodResolver(sitioUpdateSchema),
     mode: "onChange",
     defaultValues: {
-      idSitio: foundSitio?.idSitio,
+      id_sitio: foundSitio?.id_sitio,
       nombre: foundSitio?.nombre,
-      personaEncargada: foundSitio?.personaEncargada,
+      persona_encargada: foundSitio?.persona_encargada,
       ubicacion: foundSitio?.ubicacion,
     },
   });
 
   const onSubmit = async (data: sitioUpdate) => {
     console.log(data);
-    if (!data.idSitio) return;
+    if (!data.id_sitio) return;
     try {
-      await updateSitio(data.idSitio, data);
+      await updateSitio(data.id_sitio, data);
       onclose();
       addToast({
         title: "Actualizacion Exitosa",
@@ -73,9 +73,9 @@ export const FormUpdate = ({ sitios, sitioId, id, onclose }: Props) => {
         label="Persona encargada"
         type="text"
         placeholder="Encargado"
-        {...register("personaEncargada")}
-        isInvalid={!!errors.personaEncargada}
-        errorMessage={errors.personaEncargada?.message}
+        {...register("persona_encargada")}
+        isInvalid={!!errors.persona_encargada}
+        errorMessage={errors.persona_encargada?.message}
       />
 
       <Input

@@ -97,7 +97,7 @@ export default function FormularioSede({
 
         <Controller
           control={control}
-          name="fkCentro"
+          name="fk_centro"
           render={({ field }) => (
             <div className="w-full flex">
               <Select
@@ -108,8 +108,8 @@ export default function FormularioSede({
                 className="w-full"
                 placeholder="Selecciona un centro..."
                 aria-label="Seleccionar Centro"
-                isInvalid={!!errors.fkCentro}
-                errorMessage={errors.fkCentro?.message}
+                isInvalid={!!errors.fk_centro}
+                errorMessage={errors.fk_centro?.message}
               >
                 {centros?.length ? (
                   centros

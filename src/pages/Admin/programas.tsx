@@ -123,9 +123,7 @@ const ProgramasTable = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Fichas</h1>
               <div className="flex gap-2">
-                {userHasPermission(7) && (
-                  <Buton text="Fichas" onPress={handleGoToFicha} />
-                )}
+                <Buton text="Fichas" onPress={handleGoToFicha} />
               </div>
             </div>
           </CardBody>
@@ -164,25 +162,17 @@ const ProgramasTable = () => {
         )}
       </Modall>
 
-      {userHasPermission(40) && usersWithKey && (
-        <Globaltable
-          data={usersWithKey}
-          columns={columns}
-          onEdit={userHasPermission(41) ? handleEdit : undefined}
-          onDelete={
-            userHasPermission(42)
-              ? (programa) => handleState(programa.id_programa)
-              : undefined
-          }
-          extraHeaderContent={
-            <div>
-              {userHasPermission(39) && (
-                <Buton text="Añadir Programa" onPress={() => setIsOpen(true)} />
-              )}
-            </div>
-          }
-        />
-      )}
+      <Globaltable
+        data={usersWithKey ?? []}
+        columns={columns}
+        onEdit={handleEdit}
+        onDelete={(programa) => handleState(programa.id_programa)}
+        extraHeaderContent={
+          <div>
+            <Buton text="Añadir Programa" onPress={() => setIsOpen(true)} />
+          </div>
+        }
+      />
     </div>
   );
 };

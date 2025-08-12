@@ -37,8 +37,7 @@ const SedeTable = () => {
     setSelectedSede(null);
   };
 
-  const handleState = async (sede: Sede) => {
-    const id_sede = sede.id_sede ?? 0;
+  const handleState = async (id_sede: number) => {
     await changeState(id_sede);
   };
 
@@ -118,12 +117,9 @@ const SedeTable = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Sedes</h1>
               <div className="flex gap-2">
+                <Buton text="Areas" onPress={handleGoToArea} />
 
-                  <Buton text="Areas" onPress={handleGoToArea} />
-
-
-                  <Buton text="Gestionar Centros" onPress={handleGoToCentro} />
- 
+                <Buton text="Gestionar Centros" onPress={handleGoToCentro} />
               </div>
             </div>
           </CardBody>
@@ -165,18 +161,17 @@ const SedeTable = () => {
         )}
       </Modall>
 
-
-        <Globaltable
-          data={sedeWithKey ?? []}
-          columns={columns}
-          onEdit={handleEdit}
-          onDelete={handleState}
-          extraHeaderContent={
-            <div>
-                <Buton text="Añadir sede" onPress={() => setIsOpen(true)} />
-            </div>
-          }
-        />
+      <Globaltable
+        data={sedeWithKey ?? []}
+        columns={columns}
+        onEdit={handleEdit}
+        onDelete={(sede) => handleState(sede.id_sede)}
+        extraHeaderContent={
+          <div>
+            <Buton text="Añadir sede" onPress={() => setIsOpen(true)} />
+          </div>
+        }
+      />
     </div>
   );
 };

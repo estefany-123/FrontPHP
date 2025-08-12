@@ -117,18 +117,15 @@ const FichasTable = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Fichas</h1>
               <div className="flex gap-2">
-                {userHasPermission(40) && ( //listar programas
-                  <Buton
-                    text="Gestionar Programas"
-                    onPress={handleGoToPrograma}
-                  />
-                )}
+                <Buton
+                  text="Gestionar Programas"
+                  onPress={handleGoToPrograma}
+                />
               </div>
             </div>
           </CardBody>
         </Card>
       </div>
-
       <Modall
         ModalTitle="Agregar Ficha"
         isOpen={isOpen}
@@ -148,7 +145,6 @@ const FichasTable = () => {
           />
         </div>
       </Modall>
-
       <Modall
         ModalTitle="Editar Ficha"
         isOpen={IsOpenUpdate}
@@ -164,26 +160,17 @@ const FichasTable = () => {
         )}
       </Modall>
 
-      {userHasPermission(7) &&
-        fichasWithKey && ( //listar
-          <Globaltable
-            data={fichasWithKey}
-            columns={columns}
-            onEdit={userHasPermission(8) ? handleEdit : undefined}
-            onDelete={
-              userHasPermission(9)
-                ? (ficha) => handleState(ficha.id_ficha)
-                : undefined
-            }
-            extraHeaderContent={
-              <div>
-                {userHasPermission(6) && (
-                  <Buton text="Añadir Ficha" onPress={() => setIsOpen(true)} />
-                )}
-              </div>
-            }
-          />
-        )}
+      <Globaltable
+        data={fichasWithKey ?? []}
+        columns={columns}
+        onEdit={handleEdit}
+        onDelete={(ficha) => handleState(ficha.id_ficha)}
+        extraHeaderContent={
+          <div>
+            <Buton text="Añadir Ficha" onPress={() => setIsOpen(true)} />
+          </div>
+        }
+      />
     </div>
   );
 };
