@@ -1,7 +1,7 @@
 import { axiosAPI } from "../axiosAPI";
 
 export interface FichaPutData {
-  codigoFicha: number;
+  codigo_ficha: number;
 }
 
 export async function putFicha(

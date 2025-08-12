@@ -96,7 +96,7 @@ export default function FormularioPrograma({
 
         <Controller
           control={control}
-          name="fkArea"
+          name="fk_area"
           render={({ field }) => (
             <div className="w-full flex ">
               <Select
@@ -105,8 +105,8 @@ export default function FormularioPrograma({
                 {...field}
                 value={field.value ?? ""}
                 onChange={(e) => field.onChange(Number(e.target.value))}
-                isInvalid={!!errors.fkArea}
-                errorMessage={errors.fkArea?.message}
+                isInvalid={!!errors.fk_area}
+                errorMessage={errors.fk_area?.message}
               >
                 {areas?.length ? (
                   areas

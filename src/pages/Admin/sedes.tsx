@@ -38,8 +38,7 @@ const SedeTable = () => {
     setSelectedSede(null);
   };
 
-  const handleState = async (sede: Sede) => {
-    const id_sede = sede.id_sede ?? 0;
+  const handleState = async (id_sede: number) => {
     await changeState(id_sede);
   };
 
@@ -119,12 +118,9 @@ const SedeTable = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Sedes</h1>
               <div className="flex gap-2">
-                {userHasPermission(11) && (
-                  <Buton text="Areas" onPress={handleGoToArea} />
-                )}
-                {userHasPermission(48) && (
-                  <Buton text="Gestionar Centros" onPress={handleGoToCentro} />
-                )}
+                <Buton text="Areas" onPress={handleGoToArea} />
+
+                <Buton text="Gestionar Centros" onPress={handleGoToCentro} />
               </div>
             </div>
           </CardBody>
@@ -166,21 +162,17 @@ const SedeTable = () => {
         )}
       </Modall>
 
-      {userHasPermission(44) && sedeWithKey && (
-        <Globaltable
-          data={sedeWithKey}
-          columns={columns}
-          onEdit={userHasPermission(45) ? handleEdit : undefined}
-          onDelete={userHasPermission(46) ? handleState : undefined}
-          extraHeaderContent={
-            <div>
-              {userHasPermission(43) && (
-                <Buton text="Añadir sede" onPress={() => setIsOpen(true)} />
-              )}
-            </div>
-          }
-        />
-      )}
+      <Globaltable
+        data={sedeWithKey ?? []}
+        columns={columns}
+        onEdit={handleEdit}
+        onDelete={(sede) => handleState(sede.id_sede)}
+        extraHeaderContent={
+          <div>
+            <Buton text="Añadir sede" onPress={() => setIsOpen(true)} />
+          </div>
+        }
+      />
     </div>
   );
 };

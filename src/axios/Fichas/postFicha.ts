@@ -1,14 +1,14 @@
 import { axiosAPI } from "../axiosAPI";
 
 export interface FichaPostData {
-  idFicha?: number;
-  codigoFicha: number;
+  id_ficha?: number;
+  codigo_ficha: number;
   estado?: boolean;
-  fkPrograma?: number;
+  fk_programa?: number;
 }
 
 export async function postFicha(data: FichaPostData): Promise<any> {
-  const { idFicha, ...resto } = data;
+  const { id_ficha, ...resto } = data;
   const res = await axiosAPI.post(`fichas`, resto);
   return res.data;
 }

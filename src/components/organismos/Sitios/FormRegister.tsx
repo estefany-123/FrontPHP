@@ -83,9 +83,9 @@ export default function FormularioSitio({
           label="Persona encargada"
           type="text"
           placeholder="Encargado"
-          {...register("personaEncargada")}
-          isInvalid={!!errors.personaEncargada}
-          errorMessage={errors.personaEncargada?.message}
+          {...register("persona_encargada")}
+          isInvalid={!!errors.persona_encargada}
+          errorMessage={errors.persona_encargada?.message}
         />
 
         <Input
@@ -120,7 +120,7 @@ export default function FormularioSitio({
 
         <Controller
           control={control}
-          name="fkArea"
+          name="fk_area"
           render={({ field }) => (
             <div className="w-full mb-4 flex">
               <Select
@@ -128,8 +128,8 @@ export default function FormularioSitio({
                 value={field.value ?? 0}
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 placeholder="Selecciona un área..."
-                isInvalid={!!errors.fkArea}
-                errorMessage={errors.fkArea?.message}
+                isInvalid={!!errors.fk_area}
+                errorMessage={errors.fk_area?.message}
               >
                 {areas?.length ? (
                   areas
@@ -156,16 +156,16 @@ export default function FormularioSitio({
 
         <Controller
           control={control}
-          name="fkTipoSitio"
+          name="fk_tipo_sitio"
           render={({ field }) => (
             <div className="w-full flex">
               <Select
                 label="Tipo Sitio"
-                value={field.value ?? 0}
+                value={field.value ?? ""}
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 placeholder="Selecciona un tipo..."
-                isInvalid={!!errors.fkTipoSitio}
-                errorMessage={errors.fkTipoSitio?.message}
+                isInvalid={!!errors.fk_tipo_sitio}
+                errorMessage={errors.fk_tipo_sitio?.message}
               >
                 {tipos?.length ? (
                   tipos

@@ -117,9 +117,7 @@ const SitiosTable = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Sitios</h1>
               <div className="flex gap-2">
-                {userHasPermission(56) && (
-                  <Buton text="Gestionar Tipos" onPress={handleGoToTipo} />
-                )}
+                <Buton text="Gestionar Tipos" onPress={handleGoToTipo} />
               </div>
             </div>
           </CardBody>
@@ -158,35 +156,17 @@ const SitiosTable = () => {
         )}
       </Modall>
 
-      {userHasPermission(15) && sitiosWithKey && (
-        <Globaltable
-          data={sitiosWithKey}
-          columns={columns}
-          onEdit={
-            userHasPermission(16)
-              ? (item) => {
-                  const sitioParaEditar: Sitios = {
-                    ...item,
-                    fk_area: item.fk_area?.idArea,
-                  };
-                  handleEdit(sitioParaEditar);
-                }
-              : undefined
-          }
-          onDelete={
-            userHasPermission(17)
-              ? (sitio) => handleState(sitio.id_sitio)
-              : undefined
-          }
-          extraHeaderContent={
-            <div>
-              {userHasPermission(14) && (
-                <Buton text="Añadir sitio" onPress={() => setIsOpen(true)} />
-              )}
-            </div>
-          }
-        />
-      )}
+      <Globaltable
+        data={sitiosWithKey ?? []}
+        columns={columns}
+        onEdit={handleEdit}
+        onDelete={(sitio) => handleState(sitio.id_sitio)}
+        extraHeaderContent={
+          <div>
+            <Buton text="Añadir sitio" onPress={() => setIsOpen(true)} />
+          </div>
+        }
+      />
     </div>
   );
 };

@@ -42,6 +42,8 @@ export default function FormularioFichas({
   const handleClose = () => setShowModal(false);
 
   const onSubmit = async (data: FichaCreate) => {
+    console.log("Payload formulario (raw):", data);
+
     try {
       await addData(data);
       onClose();
