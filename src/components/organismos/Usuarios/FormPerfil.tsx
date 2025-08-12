@@ -15,6 +15,7 @@ type PropsPerfil = {
 }
 
 function FormPerfil({ inicialData, onclose }: PropsPerfil) {
+    
     const { register, handleSubmit, formState: { errors } } = useForm<Perfil>({
         defaultValues: inicialData,
         resolver: zodResolver(PerfilSchema),
@@ -23,8 +24,7 @@ function FormPerfil({ inicialData, onclose }: PropsPerfil) {
 
     const onSubmit = async (data: Perfil) => {
         try {
-            const response = await patchPerfil(data);
-            console.log("datos actualizados",response)
+            await patchPerfil(data);
             onclose();
             window.location.reload();
         } catch (error) {

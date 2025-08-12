@@ -8,11 +8,10 @@ import { Card, CardBody } from "@heroui/react";
 import { Sede } from "@/types/sedes";
 import { useNavigate } from "react-router-dom";
 import { FormUpdate } from "@/components/organismos/Sedes/Formupdate";
-import usePermissions from "@/hooks/Usuarios/usePermissions";
 import FormularioSede from "@/components/organismos/Sedes/FormRegister";
 
 const SedeTable = () => {
-  const { userHasPermission } = usePermissions();
+
 
   const { sede, isLoading, isError, error, addSede, changeState } = useSede();
 
@@ -119,12 +118,12 @@ const SedeTable = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">Gestionar Sedes</h1>
               <div className="flex gap-2">
-                {userHasPermission(11) && (
+
                   <Buton text="Areas" onPress={handleGoToArea} />
-                )}
-                {userHasPermission(48) && (
+
+
                   <Buton text="Gestionar Centros" onPress={handleGoToCentro} />
-                )}
+ 
               </div>
             </div>
           </CardBody>
@@ -166,21 +165,18 @@ const SedeTable = () => {
         )}
       </Modall>
 
-      {userHasPermission(44) && sedeWithKey && (
+
         <Globaltable
-          data={sedeWithKey}
+          data={sedeWithKey ?? []}
           columns={columns}
-          onEdit={userHasPermission(45) ? handleEdit : undefined}
-          onDelete={userHasPermission(46) ? handleState : undefined}
+          onEdit={handleEdit}
+          onDelete={handleState}
           extraHeaderContent={
             <div>
-              {userHasPermission(43) && (
                 <Buton text="Añadir sede" onPress={() => setIsOpen(true)} />
-              )}
             </div>
           }
         />
-      )}
     </div>
   );
 };

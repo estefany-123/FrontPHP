@@ -11,13 +11,15 @@ import Modall from '@/components/organismos/modal';
 
 function Perfil() {
   const { perfilInfo, setPerfilInfo, isLoading, error } = usePerfil();
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  
   const { setPerfil: setperfilcontext } = useAuth();
 
-  const [isOpenModal, setIsOpenModal] = useState(false);
-
+  
   if (isLoading) return <div>Cargando...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-  if (!perfilInfo) return <div>No se encontraron datos del perfil</div>;
+   if (!perfilInfo) return <div>No se encontraron datos del perfil</div>;
+   if (error) return <div>Error: {error.message}</div>;
+
 
   async function handleEditFoto(e: any) {
     const file = e.target.files[0] ?? undefined;
@@ -25,6 +27,7 @@ function Perfil() {
     const response = await patchFotoPerfil(file);
     setPerfilInfo(response.updated);
     setperfilcontext(response.updated.perfil)
+    
   }
 
     const handleClose = () => setIsOpenModal(false);
@@ -49,11 +52,12 @@ function Perfil() {
             </div>
           )}
           <h1 className="text-3xl font-bold text-gray-800 mb-2 text-center dark:text-white">
-            {perfilInfo.fkRol.nombre}
+            {perfilInfo?.rol}
           </h1>
           <div className='relative w-32 h-32 rounded-full mb-4 border-4 border-blue-200 group'>
             <Avatar
-              src={`http://localhost:3000/img/perfiles/${perfilInfo.perfil || 'defaultPerfil.png'}`}
+              src={`http://127.0.0.1:8000/storage/${perfilInfo.perfil || 'users/defaultPerfil.png'}`}
+              
               className="w-full h-full group-hover:opacity-70 transition duration-200"
             />
             <PencilIcon color='#fff' className='absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-full h-full p-6 opacity-0 group-hover:opacity-100 transition duration-200' />
