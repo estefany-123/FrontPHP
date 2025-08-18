@@ -34,7 +34,7 @@ export const UserSchema = z.object({
 
     documento: z
         .number({ message: "Documento es requerido y debe ser un numero" })
-        .min(10, { message: "Longitud minima de 10" }),
+        .min(6, { message: "Longitud minima de 6" }),
 
     nombre: z
         .string()
