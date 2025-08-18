@@ -8,7 +8,7 @@ import { CaracteristicaUpdate, CaracteristicaUpdateSchema } from "@/schemas/Cara
 import { useCaracteristica } from "@/hooks/Caracteristicas/useCaracteristicas";
 
 type Props = {
-  caracteristicas: (CaracteristicaUpdate & { id_caracteristica?: number })[];
+  caracteristicas: (CaracteristicaUpdate)[];
   caracteristicaId: number;
   id: string;
   onclose: () => void;
@@ -29,6 +29,7 @@ export const FormUpdate = ({ caracteristicas, caracteristicaId, id, onclose }: P
     defaultValues: {
       id_caracteristica: foundCaracteristica.id_caracteristica,
       nombre: foundCaracteristica.nombre,
+      simbolo: foundCaracteristica.simbolo,
     },
   });
 
@@ -60,10 +61,18 @@ export const FormUpdate = ({ caracteristicas, caracteristicaId, id, onclose }: P
     >
       <Input
         label="Nombre"
-        placeholder="Nombre"
+        placeholder="Nombre...."
         {...register("nombre")}
         isInvalid={!!errors.nombre}
         errorMessage={errors.nombre?.message}
+      />
+
+      <Input
+        label="Simbolo"
+        placeholder="Simbolo...."
+        {...register("simbolo")}
+        isInvalid={!!errors.simbolo}
+        errorMessage={errors.simbolo?.message}
       />
 
         <Buton

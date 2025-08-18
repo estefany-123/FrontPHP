@@ -1,4 +1,4 @@
-import { useQuery, useMutation} from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import { getNotificacionesPorUsuario } from "@/axios/Notificaciones/getNotificacionesPorUsuario";
 import { marcarComoLeida } from "@/axios/Notificaciones/marcarComoLeida";
 import { cambiarEstadoNotificacion } from "@/axios/Notificaciones/cambiarEstado";
@@ -7,6 +7,7 @@ import { Notificacion } from "@/types/Notificacion";
 import { useEffect, useState } from "react";
 
 export function useNotificaciones(usuarioId: number) {
+  const queryClient = useQueryClient();
   const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);
 
   const { data, isLoading, error, refetch } = useQuery<Notificacion[]>({
@@ -39,17 +40,20 @@ export function useNotificaciones(usuarioId: number) {
     },
   });
 
-const { mutate: cambiarEstado,  } = useMutation({
+const { mutate: cambiarEstado } = useMutation({
   mutationFn: ({ id, estado }: { id: number; estado: 'aceptado' | 'cancelado' }) =>
     cambiarEstadoNotificacion(id, estado),
+
   onSuccess: (_, { id, estado }) => {
     setNotificaciones((prev) =>
       prev.map((n) =>
         n.id_notificacion === id ? { ...n, estado, leido: true } : n
       )
     );
+
+    queryClient.invalidateQueries({ queryKey: ["notificaciones"] });
+    queryClient.invalidateQueries({ queryKey: ["movimientos"] });
   },
-  
 });
 
   return {

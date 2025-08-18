@@ -6,7 +6,7 @@ import { useUsuario } from "@/hooks/Usuarios/useUsuario";
 import { useTipoMovimiento } from "@/hooks/TiposMovimento/useTipoMovimiento";
 import { useInventario } from "@/hooks/Inventarios/useInventario";
 import { useSitios } from "@/hooks/sitios/useSitios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MovimientoCreate, MovimientoCreateSchema } from "@/schemas/Movimento";
 import { mapMovimiento } from "@/utils/MapMovimientos";
 import { MovimientoPostData } from "@/axios/Movimentos/postMovimiento";
@@ -17,6 +17,7 @@ import FormularioTiposMovimiento from "../TiposMovimiento/FormRegister";
 import FormularioU from "../Usuarios/FormRegister";
 import FormularioInventario from "../Inventarios/FormRegister";
 import FormularioSitio from "../Sitios/FormRegister";
+import { useMovimiento } from "@/hooks/Movimientos/useMovimiento";
 
 type FormularioProps = {
   addData: (movimiento: MovimientoPostData) => Promise<void>;
@@ -25,15 +26,17 @@ type FormularioProps = {
 };
 
 type CodigoDisponible = {
-  id_codigo_inventario: number;
+  idCodigoInventario: number;
   codigo: string;
+  uso:boolean;
 };
 
-export default function Formulario({ addData, onClose, id }: FormularioProps) {
+export default function Formulario({ onClose, id }: FormularioProps) {
   const {
     control,
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<MovimientoCreate>({
     resolver: zodResolver(MovimientoCreateSchema),
@@ -55,6 +58,7 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
   });
 
   const { users, addUser } = useUsuario();
+  const { addMovimiento } = useMovimiento();
   const { tipos, addTipoMovimiento } = useTipoMovimiento();
   const { sitios, addSitio } = useSitios();
   const { inventarios, addInventario } = useInventario();
@@ -91,26 +95,7 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
         : undefined,
     };
 
-    console.log("🎯 Inventario seleccionado:", data.fk_inventario);
-    console.log("🎯 Códigos seleccionados:", data.codigos);
-
-    // Mostrar todos los valores del formulario con su tipo de dato
-    console.log("📦 Datos del formulario (campos y tipos):");
-    Object.entries(data).forEach(([key, value]) => {
-      let tipo: string;
-      if (Array.isArray(value)) {
-        tipo = "array";
-      } else if (value === null) {
-        tipo = "null";
-      } else {
-        tipo = typeof value;
-      }
-      console.log(`- ${key}:`, value, `(tipo: ${tipo})`);
-    });
-
-    // Mostrar el payload que se enviará al backend
-    console.log("✅ Payload enviado al backend:", payload);
-
+    // Validación de códigos obligatorios en algunos tipos de movimiento
     if (
       tipoMovimientoSeleccionado &&
       ["salida", "baja", "préstamo"].includes(tipoMovimientoSeleccionado) &&
@@ -125,8 +110,12 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
       });
       return;
     }
+
+    console.log("🚀 Enviando payload al backend:", payload);
+
     try {
-      await addData(payload);
+      const res = await addMovimiento(payload);
+      console.log("✅ Respuesta del servidor:", res);
 
       onClose();
       addToast({
@@ -137,17 +126,49 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
         shouldShowTimeoutProgress: true,
       });
     } catch (error: any) {
+      const campo = error?.response?.data?.campo;
       const mensaje = error?.response?.data?.message;
+
+      console.log("🔍 Error completo:", error);
+      console.log("🔍 Error response:", error?.response?.data);
+
+      let descripcion;
+
+      if (Array.isArray(mensaje)) {
+        descripcion = mensaje.join(", ");
+      } else if (typeof mensaje === "string") {
+        descripcion = mensaje;
+      } else {
+        descripcion =
+          "Uno de los códigos ya se encuentra registrado en el inventario";
+      }
+
+      // Si es un error de códigos, marcamos el input con setError
+      if (campo === "codigos") {
+        setError("codigos", {
+          type: "manual",
+          message: descripcion,
+        });
+      }
+
+      const esErrorCodigos =
+        campo === "codigos" ||
+        (typeof descripcion === "string" &&
+          (descripcion.toLowerCase().includes("códigos ya existen") ||
+            descripcion.toLowerCase().includes("no están disponibles")));
+
       addToast({
-        title: "Error al guardar movimiento",
-        description: Array.isArray(mensaje)
-          ? mensaje.join(", ")
-          : (mensaje ?? "Ocurrió un error inesperado."),
-        color: "danger",
-        timeout: 3000,
+        title: esErrorCodigos
+          ? "Códigos duplicados o no disponibles"
+          : "Error al guardar movimiento",
+        description: descripcion,
+        color: esErrorCodigos ? "warning" : "danger",
+        timeout: 4000,
+        shouldShowTimeoutProgress: true,
       });
     }
   };
+
   console.log("Errores", errors);
 
   return (
@@ -221,26 +242,62 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
         <Controller
           control={control}
           name="fk_usuario"
-          render={({ field }) => (
-            <>
-              <div className="w-full flex">
-                <Select
-                  label="Usuario"
-                  placeholder="Selecciona un usuario"
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                  isInvalid={!!errors.fk_usuario}
-                  errorMessage={errors.fk_usuario?.message}
-                >
-                  {(users ?? []).map((usuario) => (
-                    <SelectItem
-                      key={usuario.id}
-                      textValue={usuario.nombre}
-                    >
-                      {usuario.nombre}
-                    </SelectItem>
-                  ))}
-                </Select>
+          render={({ field }) => {
+            const [queryUsuario, setQueryUsuario] = useState("");
+            const [showOptionsUsuario, setShowOptionsUsuario] = useState(false);
+
+            const filteredUsuarios = (users ?? []).filter((u) =>
+              u.nombre.toLowerCase().includes(queryUsuario.toLowerCase())
+            );
+
+            const selectedUsuario = users?.find(
+              (u) => u.id === field.value
+            );
+
+            useEffect(() => {
+              if (selectedUsuario) {
+                setQueryUsuario(selectedUsuario.nombre);
+              }
+            }, [selectedUsuario?.id]);
+
+            return (
+              <div className="relative w-full flex items-start gap-2">
+                <div className="w-full">
+                  <Input
+                    label="Usuario"
+                    placeholder="Selecciona un usuario..."
+                    value={queryUsuario}
+                    onChange={(e) => {
+                      setQueryUsuario(e.target.value);
+                      setShowOptionsUsuario(true);
+                      field.onChange(null);
+                    }}
+                    onFocus={() => setShowOptionsUsuario(true)}
+                    onBlur={() =>
+                      setTimeout(() => setShowOptionsUsuario(false), 150)
+                    }
+                    isInvalid={!!errors.fk_usuario}
+                    errorMessage={errors.fk_usuario?.message}
+                  />
+                  {showOptionsUsuario && filteredUsuarios.length > 0 && (
+                    <div className="absolute z-20 mt-1 w-80 max-h-52 overflow-auto rounded-lg border border-gray-200 bg-white/80 shadow-lg transition-all duration-200 backdrop-blur-sm">
+                      {filteredUsuarios.map((usuario) => (
+                        <div
+                          key={usuario.id}
+                          className="px-4 py-2 text-sm text-black-700 hover:bg-gray-300 cursor-pointer"
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            field.onChange(usuario.id);
+                            setQueryUsuario(usuario.nombre);
+                            setShowOptionsUsuario(false);
+                          }}
+                        >
+                          {usuario.nombre}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 <Buton
                   type="button"
                   className="m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl"
@@ -249,37 +306,70 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
                   <PlusCircleIcon />
                 </Buton>
               </div>
-            </>
-          )}
+            );
+          }}
         />
 
         <Controller
           control={control}
           name="fk_tipo_movimiento"
-          render={({ field }) => (
-            <>
-              <div className="flex w-full">
-                <Select
-                  label="Tipo de Movimiento"
-                  placeholder="Selecciona un tipo"
-                  {...field}
-                  onChange={(e) => {
-                    const id = Number(e.target.value);
-                    field.onChange(id);
-                    const tipo = tipos?.find((t) => t.id_tipo === id);
-                    setTipoMovimientoSeleccionado(
-                      tipo?.nombre.toLowerCase() ?? null
-                    );
-                  }}
-                  isInvalid={!!errors.fk_tipo_movimiento}
-                  errorMessage={errors.fk_tipo_movimiento?.message}
-                >
-                  {(tipos ?? []).map((tipo) => (
-                    <SelectItem key={tipo.id_tipo} textValue={tipo.nombre}>
-                      {tipo.nombre}
-                    </SelectItem>
-                  ))}
-                </Select>
+          render={({ field }) => {
+            const [queryTipo, setQueryTipo] = useState("");
+            const [showOptionsTipo, setShowOptionsTipo] = useState(false);
+
+            const filteredTipos = (tipos ?? []).filter((t) =>
+              t.nombre.toLowerCase().includes(queryTipo.toLowerCase())
+            );
+
+            const selectedTipo = tipos?.find((t) => t.id_tipo === field.value);
+
+            useEffect(() => {
+              if (selectedTipo) {
+                setQueryTipo(selectedTipo.nombre);
+              }
+            }, [selectedTipo?.id_tipo]);
+
+            return (
+              <div className="relative w-full flex items-start gap-2">
+                <div className="w-full">
+                  <Input
+                    label="Tipo de Movimiento"
+                    placeholder="Selecciona un tipo..."
+                    value={queryTipo}
+                    onChange={(e) => {
+                      setQueryTipo(e.target.value);
+                      setShowOptionsTipo(true);
+                      field.onChange(null);
+                    }}
+                    onFocus={() => setShowOptionsTipo(true)}
+                    onBlur={() =>
+                      setTimeout(() => setShowOptionsTipo(false), 150)
+                    }
+                    isInvalid={!!errors.fk_tipo_movimiento}
+                    errorMessage={errors.fk_tipo_movimiento?.message}
+                  />
+                  {showOptionsTipo && filteredTipos.length > 0 && (
+                    <div className="absolute z-20 mt-1 w-80 max-h-52 overflow-auto rounded-lg border border-gray-200 bg-white/80 shadow-lg transition-all duration-200 backdrop-blur-sm">
+                      {filteredTipos.map((tipo) => (
+                        <div
+                          key={tipo.id_tipo}
+                          className="px-4 py-2 text-sm text-black-700 hover:bg-gray-300 cursor-pointer"
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            field.onChange(tipo.id_tipo);
+                            setQueryTipo(tipo.nombre);
+                            setShowOptionsTipo(false);
+                            setTipoMovimientoSeleccionado(
+                              tipo?.nombre.toLowerCase() ?? null
+                            );
+                          }}
+                        >
+                          {tipo.nombre}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 <Buton
                   type="button"
                   className="m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl"
@@ -288,8 +378,8 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
                   <PlusCircleIcon />
                 </Buton>
               </div>
-            </>
-          )}
+            );
+          }}
         />
 
         {tipoMovimientoSeleccionado === "ingreso" ? (
@@ -316,27 +406,64 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
         <Controller
           control={control}
           name="fk_sitio"
-          render={({ field }) => (
-            <>
-              <div className="w-full flex">
-                <Select
-                  label="Sitio"
-                  placeholder="Selecciona un sitio"
-                  {...field}
-                  onChange={(e) => {
-                    const sitioId = Number(e.target.value);
-                    field.onChange(sitioId);
-                    setSitioSeleccionado(sitioId);
-                  }}
-                  isInvalid={!!errors.fk_sitio}
-                  errorMessage={errors.fk_sitio?.message}
-                >
-                  {(sitios ?? []).map((sitio) => (
-                    <SelectItem key={sitio.id_sitio} textValue={sitio.nombre}>
-                      {sitio.nombre}
-                    </SelectItem>
-                  ))}
-                </Select>
+          render={({ field }) => {
+            const [querySitio, setQuerySitio] = useState("");
+            const [showOptionsSitio, setShowOptionsSitio] = useState(false);
+
+            const filteredSitios = (sitios ?? []).filter((s) =>
+              s.nombre.toLowerCase().includes(querySitio.toLowerCase())
+            );
+
+            const selectedSitio = sitios?.find(
+              (s) => s.id_sitio === field.value
+            );
+
+            useEffect(() => {
+              if (selectedSitio) {
+                setQuerySitio(selectedSitio.nombre);
+              }
+            }, [selectedSitio?.id_sitio]);
+
+            return (
+              <div className="relative w-full flex items-start gap-2">
+                <div className="w-full">
+                  <Input
+                    label="Sitio"
+                    placeholder="Selecciona un sitio..."
+                    value={querySitio}
+                    onChange={(e) => {
+                      setQuerySitio(e.target.value);
+                      setShowOptionsSitio(true);
+                      field.onChange(null);
+                    }}
+                    onFocus={() => setShowOptionsSitio(true)}
+                    onBlur={() =>
+                      setTimeout(() => setShowOptionsSitio(false), 150)
+                    }
+                    isInvalid={!!errors.fk_sitio}
+                    errorMessage={errors.fk_sitio?.message}
+                  />
+                  {showOptionsSitio && filteredSitios.length > 0 && (
+                    <div className="absolute z-20 mt-1 w-80 max-h-52 overflow-auto rounded-lg border border-gray-200 bg-white/80 shadow-lg transition-all duration-200 backdrop-blur-sm">
+                      {filteredSitios.map((sitio) => (
+                        <div
+                          key={sitio.id_sitio}
+                          className="px-4 py-2 text-sm text-black-700 hover:bg-gray-300 cursor-pointer"
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            const sitioId = sitio.id_sitio;
+                            field.onChange(sitioId);
+                            setQuerySitio(sitio.nombre);
+                            setShowOptionsSitio(false);
+                            setSitioSeleccionado(sitioId ?? null);
+                          }}
+                        >
+                          {sitio.nombre}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 <Buton
                   type="button"
                   className=" m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl"
@@ -345,75 +472,96 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
                   <PlusCircleIcon />
                 </Buton>
               </div>
-            </>
-          )}
+            );
+          }}
         />
 
         {sitioSeleccionado && (
           <Controller
             control={control}
             name="fk_inventario"
-            render={({ field }) => (
-              <>
-                <div className="flex w-full">
-                  <Select
-                    label="Elemento del Inventario"
-                    placeholder="Selecciona un elemento"
-                    {...field}
-                    onChange={(e) => {
-                      const id = Number(e.target.value);
-                      field.onChange(id);
-                      setInventarioSeleccionado(id);
-                      const inventario = (inventarios ?? []).find(
-                        (i) => i.id_inventario === id
-                      );
-                      if (
-                        inventario?.codigos &&
-                        Array.isArray(inventario.codigos)
-                      ) {
-                        const disponibles = inventario.codigos.filter(
-                          (c) => !c.uso
-                        );
-                        setCodigosDisponibles(
-                          disponibles.map((c) => ({
-                            id_codigo_inventario: c.id_codigo_inventario,
-                            codigo: c.codigo,
-                          }))
-                        );
-                        setTieneCaracteristicas(disponibles.length > 0);
-                      } else {
-                        setCodigosDisponibles([]);
-                        setTieneCaracteristicas(false);
-                      }
-                    }}
-                    isInvalid={!!errors.fk_inventario}
-                    errorMessage={errors.fk_inventario?.message}
-                  >
-                    {(inventarios ?? [])
+            render={({ field }) => {
+              const [query, setQuery] = useState("");
+              const [showOptions, setShowOptions] = useState(false);
 
-                      .filter((i) => i.fk_sitio.id_sitio === sitioSeleccionado)
-                      .filter((i) => i.estado === true)
-                      .map((inventario) => {
-                        console.log(
-                          "Inventarios del sitio seleccionado:",
-                          inventarios?.filter(
-                            (i) => i.fk_sitio.id_sitio === sitioSeleccionado
-                          )
-                        );
-                        return (
-                          <SelectItem
-                            key={inventario.id_inventario}
-                            textValue={
-                              inventario.fk_elemento?.nombre ||
-                              "Elemento no disponible"
-                            }
+              const inventariosFiltrados =
+                (inventarios ?? [])
+                  .filter((i) => i.fk_sitio.id_sitio === sitioSeleccionado)
+                  .filter((i) => i.estado === true)
+                  .filter((i) =>
+                    i.fk_elemento?.nombre
+                      ?.toLowerCase()
+                      .includes(query.toLowerCase())
+                  ) || [];
+
+              const inventarioSeleccionado = (inventarios ?? []).find(
+                (i) => i.id_inventario === field.value
+              );
+
+              useEffect(() => {
+                if (inventarioSeleccionado) {
+                  setQuery(inventarioSeleccionado.fk_elemento?.nombre ?? "");
+                }
+              }, [inventarioSeleccionado?.id_inventario]);
+
+              return (
+                <div className="relative w-full flex items-start gap-2">
+                  <div className="w-full">
+                    <Input
+                      label="Elemento del Inventario"
+                      placeholder="Escribe para buscar..."
+                      value={query}
+                      onChange={(e) => {
+                        setQuery(e.target.value);
+                        setShowOptions(true);
+                        field.onChange(null);
+                      }}
+                      onFocus={() => setShowOptions(true)}
+                      onBlur={() =>
+                        setTimeout(() => setShowOptions(false), 150)
+                      }
+                      isInvalid={!!errors.fk_inventario}
+                      errorMessage={errors.fk_inventario?.message}
+                    />
+
+                    {showOptions && inventariosFiltrados.length > 0 && (
+                      <div
+                        className="absolute z-20 mt-1 w-full max-h-52 overflow-auto 
+                  rounded-lg border border-gray-200 bg-white/80 
+                  shadow-lg transition-all duration-200 backdrop-blur-sm"
+                      >
+                        {inventariosFiltrados.map((inv) => (
+                          <div
+                            key={inv.id_inventario}
+                            className="px-4 py-2 text-sm text-black hover:bg-gray-300 cursor-pointer"
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              field.onChange(inv.id_inventario);
+                              setQuery(inv.fk_elemento?.nombre ?? "");
+                              setShowOptions(false);
+                              setInventarioSeleccionado(
+                                inv.id_inventario ?? null
+                              );
+
+                              const disponibles =
+                                inv.codigos?.filter((c) => !c.uso) || [];
+                              setCodigosDisponibles(
+                                disponibles.map((c) => ({
+                                  idCodigoInventario: c.id_codigo_inventario,
+                                  codigo: c.codigo,
+                                  uso:c.uso
+                                }))
+                              );
+                              setTieneCaracteristicas(disponibles.length > 0);
+                            }}
                           >
-                            {inventario.fk_elemento?.nombre ||
-                              "Elemento no disponible"}
-                          </SelectItem>
-                        );
-                      })}
-                  </Select>
+                            {inv.fk_elemento?.nombre ?? "Elemento sin nombre"}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
                   <Buton
                     type="button"
                     className="m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl"
@@ -422,14 +570,14 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
                     <PlusCircleIcon />
                   </Buton>
                 </div>
-              </>
-            )}
+              );
+            }}
           />
         )}
 
         {inventarioSeleccionado &&
           tipoMovimientoSeleccionado &&
-          ["salida", "baja", "préstamo"].includes(
+          ["salida", "baja", "préstamo", "prestamo", "devolución", "devolucion"].includes(
             tipoMovimientoSeleccionado
           ) && (
             <>
@@ -437,34 +585,42 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
                 <Controller
                   control={control}
                   name="codigos"
-                  render={({ field }) => (
-                    <div className="space-y-2">
-                      <label className="font-semibold">
-                        Selecciona Códigos
-                      </label>
-                      {codigosDisponibles.map((codigoObj) => (
-                        <div
-                          key={codigoObj.id_codigo_inventario}
-                          className="flex items-center gap-2"
-                        >
-                          <input
-                            type="checkbox"
-                            value={codigoObj.codigo}
-                            checked={field.value?.includes(codigoObj.codigo)}
-                            onChange={(e) => {
-                              const updated = e.target.checked
-                                ? [...(field.value ?? []), codigoObj.codigo]
-                                : (field.value ?? []).filter(
-                                    (c) => c !== codigoObj.codigo
-                                  );
-                              field.onChange(updated);
-                            }}
-                          />
-                          <span>{codigoObj.codigo}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  render={({ field }) => {
+                    // Si es devolución, solo mostrar códigos en uso
+                    const codigosFiltrados =
+                      tipoMovimientoSeleccionado.toLowerCase() === "devolucion"
+                        ? codigosDisponibles.filter((c) => c.uso === true)
+                        : codigosDisponibles;
+
+                    return (
+                      <div className="space-y-2">
+                        <label className="font-semibold">
+                          Selecciona Códigos
+                        </label>
+                        {codigosFiltrados.map((codigoObj) => (
+                          <div
+                            key={codigoObj.idCodigoInventario}
+                            className="flex items-center gap-2"
+                          >
+                            <input
+                              type="checkbox"
+                              value={codigoObj.codigo}
+                              checked={field.value?.includes(codigoObj.codigo)}
+                              onChange={(e) => {
+                                const updated = e.target.checked
+                                  ? [...(field.value ?? []), codigoObj.codigo]
+                                  : (field.value ?? []).filter(
+                                      (c) => c !== codigoObj.codigo
+                                    );
+                                field.onChange(updated);
+                              }}
+                            />
+                            <span>{codigoObj.codigo}</span>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  }}
                 />
               ) : (
                 <Input
@@ -590,7 +746,7 @@ export default function Formulario({ addData, onClose, id }: FormularioProps) {
           addData={async (data) => {
             await addInventario(data);
           }}
-          idSitio={0}
+          id_sitio={0}
         />
         <Buton form="inventario" text="Guardar" type="submit" />
       </Modal>

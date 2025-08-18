@@ -1,5 +1,6 @@
 import { acceptMovimiento } from "@/axios/Movimentos/acceptMovimiento";
 import { cancelMovimiento } from "@/axios/Movimentos/cancelMovimiento";
+import { getCodigosDisponiblesParaDevolver } from "@/axios/Movimentos/getCodigosDisponibles";
 import { getMovimiento } from "@/axios/Movimentos/getMovimento";
 import {
   MovimientoPostData,
@@ -19,6 +20,14 @@ export function useMovimiento() {
     gcTime: 1000 * 60 * 10,
     refetchOnWindowFocus: false,
   });
+
+  const getCodigosParaDevolver = (idInventario: number) => {
+    return useQuery<string[]>({
+      queryKey: ["codigos-devolucion", idInventario],
+      queryFn: () => getCodigosDisponiblesParaDevolver(idInventario),
+      enabled: idInventario !== 0, // solo se ejecuta si hay idInventario
+    });
+  };
 
   const addMovimientoMutation = useMutation({
     mutationFn: postMovimiento,
@@ -61,6 +70,7 @@ export function useMovimiento() {
     mutationFn: (id: number) => acceptMovimiento(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["movimientos"] });
+      queryClient.invalidateQueries({ queryKey: ["notificaciones"] });
     },
     onError: (error) => {
       console.error("Error al aceptar el movimiento", error);
@@ -71,6 +81,7 @@ export function useMovimiento() {
     mutationFn: (id: number) => cancelMovimiento(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["movimientos"] });
+      queryClient.invalidateQueries({ queryKey: ["notificaciones"] });
     },
     onError: (error) => {
       console.error("Error al rechazar el movimiento", error);
@@ -85,7 +96,7 @@ export function useMovimiento() {
   };
 
   return {
-    movimientos: Array.isArray(data) ? data : [],
+    movimientos: data,
     isLoading,
     isError,
     error,
@@ -94,5 +105,6 @@ export function useMovimiento() {
     updateMovimiento,
     acceptMovimiento: acceptMovimientoMutation.mutateAsync,
     cancelMovimiento: cancelMovimientoMutation.mutateAsync,
+    getCodigosParaDevolver
   };
 }

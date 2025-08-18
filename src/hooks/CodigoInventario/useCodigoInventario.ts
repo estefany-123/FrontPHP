@@ -16,14 +16,14 @@ export function useCodigoInventario() {
   });
 
   const getCodigosPorInventario = (
-    id_inventario: number,
+    idInventario: number,
     codigosData: CodigoInventario[] = data ?? []
   ): CodigoInventario[] => {
     return codigosData.filter((c) => {
       if (typeof c.fk_inventario === "object" && c.fk_inventario !== null) {
-        return c.fk_inventario.id_inventario === id_inventario;
+        return c.fk_inventario.id_inventario === idInventario;
       }
-      return c.fk_inventario === id_inventario;
+      return c.fk_inventario === idInventario;
     });
   };
 

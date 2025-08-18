@@ -14,14 +14,14 @@ type FormularioProps = {
   addData: (inventario: InventarioCreate) => Promise<void>;
   onClose: () => void;
   id: string;
-  idSitio: number;
+  id_sitio: number;
 };
 
 export default function FormularioInventario({
   addData,
   onClose,
   id,
-  idSitio,
+  id_sitio,
 }: FormularioProps) {
   const {
     control,
@@ -99,13 +99,13 @@ export default function FormularioInventario({
           <Controller
             control={control}
             name="fk_sitio"
-            defaultValue={typeof idSitio === "number" ? idSitio : undefined}
+            defaultValue={typeof id_sitio === "number" ? id_sitio : undefined}
             render={({ field }) => {
-              const sitioActual = sitios.find((s) => s.id_sitio === idSitio);
+              const sitioActual = sitios.find((s) => s.id_sitio === id_sitio);
 
               return (
                 <div className="w-full">
-                  {idSitio && sitioActual ? (
+                  {id_sitio && sitioActual ? (
                     <Input
                       label="Sitio"
                       value={sitioActual.nombre}

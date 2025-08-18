@@ -27,7 +27,7 @@ export type Movimiento = {
 export type MovimientoExtendido = Movimiento & {
   fk_tipo_movimiento?: { nombre: string };
   fk_usuario?: { nombre: string };
-  fk_enventario?: {
+  fk_inventario?: {
     fk_elemento?: { nombre: string };
   };
 };

@@ -14,18 +14,22 @@ export const ElementoUpdateSchema = z.object({
     .min(2, { message: "Longitud minima 2" }),
 
 imagen_elemento: z
-  .any()
-  .refine(
-    (file) =>
-      file === undefined ||
-      file instanceof File ||
-      (typeof file === "string" &&
-        (file.startsWith("http") || file.startsWith("/"))),
-    {
-      message: "Debe ser un archivo o una URL o ruta válida",
-    }
-  )
+    .any()
+    .refine(
+      (file) =>
+        file === undefined || file instanceof File || typeof file === "string",
+      {
+        message: "La imagen debe ser un archivo o una URL válida",
+      }
+    )
   .optional().nullable(),
+  
+  fk_unidad_medida: z.number({ required_error: "Unidad es requerida" }).optional(),
+
+  fk_categoria: z.number({ required_error: "Categoria es requerida" }).optional(),
+
+  fk_caracteristica: z.number({ required_error: "Caracteristica es requerida" }).optional().nullable()
+
 });
 
 export type ElementoUpdate = z.infer<typeof ElementoUpdateSchema>;
@@ -42,11 +46,11 @@ export const ElementoCreateSchema = z.object({
     .min(1, { message: "Descripcion es requerida" })
     .min(2, { message: "Longitud minima 2" }),
 
-  perecedero: z.boolean().default(false),
+  perecedero: z.boolean(),
 
-  no_perecedero: z.boolean().default(true),
+  no_perecedero: z.boolean(),
 
-  estado: z.boolean({ required_error: "Estado es requerido" }).default(true),
+  estado: z.boolean({ required_error: "Estado es requerido" }),
 
   baja: z.boolean({ required_error: "baja es requerida" }).default(false).optional(),
 
@@ -56,7 +60,7 @@ imagen_elemento: z
       (file) =>
         file === undefined || file instanceof File || typeof file === "string",
       {
-        message: "La imagen_elemento debe ser un archivo o una URL válida",
+        message: "La imagen debe ser un archivo o una URL válida",
       }
     ),
 
