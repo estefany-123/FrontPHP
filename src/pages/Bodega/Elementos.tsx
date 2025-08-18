@@ -73,20 +73,20 @@ export const ElementosTable = () => {
   const columns: TableColumn<Elemento>[] = [
     {
       label: "Imagen",
-      key: "imagen",
+      key: "imagen_elemento",
       render: (item: Elemento) => {
-        const imagen = item.imagen;
-        console.log(imagen);
-
-        return imagen ? (
+        const imagen_elemento = item.imagen_elemento;
+        console.log(imagen_elemento);
+  
+        return imagen_elemento ? (
           <img
-            src={`http://localhost:3000/img/img/elementos/${imagen}`}
+            src={`http://localhost:8000/${imagen_elemento}`}
             alt="Imagen"
             width={200}
             height={50}
           />
         ) : (
-          <span>Sin imagen</span>
+          <span>Sin imagen_elemento</span>
         );
       },
     },
@@ -112,10 +112,10 @@ export const ElementosTable = () => {
         <span>
           {elemento.created_at
             ? new Date(elemento.created_at).toLocaleDateString("es-ES", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-              })
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            })
             : "N/A"}
         </span>
       ),
@@ -127,10 +127,10 @@ export const ElementosTable = () => {
         <span>
           {elemento.updated_at
             ? new Date(elemento.updated_at).toLocaleDateString("es-ES", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-              })
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            })
             : "N/A"}
         </span>
       ),

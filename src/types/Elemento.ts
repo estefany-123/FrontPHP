@@ -2,8 +2,8 @@ export type postElementos = {
   nombre: string;
   descripcion: string;
   perecedero?: boolean;
-  no_perecedero?: boolean;
-  estado?: boolean;
+  noPerecedero?: boolean;
+  estado: boolean;
   fecha_vencimiento?: string;
   imagen_elemento?: string | File | undefined;
   fk_unidad_medida?: number;
@@ -16,18 +16,21 @@ export type putElementos = {
   nombre: string;
   descripcion: string;
   imagen_elemento?: string | File | undefined;
+  fk_unidad_medida?: number 
+  fk_categoria?: number 
+  fk_caracteristica?: number |  null;
 };
 
 export type Elemento = {
   id_elemento?: number;
   nombre: string;
   descripcion: string;
-  perecedero?: boolean;
-  no_perecedero?: boolean;
-  estado?: boolean;
+  perecedero?: boolean ;
+  no_perecedero?: boolean ;
+  estado?: boolean ;
   fecha_vencimiento?: string;
-  baja?: boolean;
-  imagen?: string;
+  baja?: boolean ;
+  imagen_elemento?: string;
   fk_unidad_medida?: number;
   fk_categoria?: number;
   fk_caracteristica?: number | null;

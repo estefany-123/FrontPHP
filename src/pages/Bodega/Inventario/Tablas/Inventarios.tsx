@@ -43,6 +43,7 @@ export const InventariosTable = ({
   const [isOpenCodigos, setIsOpenCodigos] = useState(false);
   const [inventarioCodigos, setInventarioCodigos] =
     useState<InventarioConElemento | null>(null);
+  // const [, setSelectedInventario] = useState<Inventario | null>(null);
 
   const handleCloseCodigos = () => {
     setIsOpenCodigos(false);
@@ -76,6 +77,7 @@ export const InventariosTable = ({
     setIsOpenUpdate(true);
   };
 
+
   const columns: TableColumn<Inventario>[] = [
     {
       key: "fk_elemento",
@@ -100,7 +102,7 @@ export const InventariosTable = ({
 
         if (!imagen) return <span>No encontrado</span>;
 
-        const src = `http://localhost:3000/img/img/elementos/${imagen}`;
+        const src = `http://localhost:8000/${imagen}`;
 
         return (
           <img

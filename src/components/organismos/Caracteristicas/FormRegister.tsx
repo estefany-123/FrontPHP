@@ -35,7 +35,6 @@ export default function FormularioCaracteristicas({ addData, onClose, id }: Form
       console.error("Error al guardar:", error);
     }
   };
-  console.log("Errores", errors)
   return (
     <Form
       id={id}

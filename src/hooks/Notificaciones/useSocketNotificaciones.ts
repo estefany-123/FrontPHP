@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 import { Notificacion } from "@/types/Notificacion";
 
-const SOCKET_URL = "http://localhost:3000";
+const SOCKET_URL = "http://localhost:8000";
 
 export function useSocketNotificaciones(
   usuarioId: number,
@@ -50,6 +50,6 @@ export function useSocketNotificaciones(
       socket.disconnect();
     };
   }, [usuarioId, onNotificacion]);
-
+  
   return socketRef;
 }
