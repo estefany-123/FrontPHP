@@ -12,7 +12,6 @@ import usePermissions from "@/hooks/Usuarios/usePermissions";
 import FormularioFichas from "@/components/organismos/fichas/FormRegister";
 
 const FichasTable = () => {
-  const { userHasPermission } = usePermissions();
 
   const { fichas, isLoading, isError, error, addFicha, changeState } =
     useFichas();

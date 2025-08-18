@@ -29,7 +29,6 @@ const menuItems = [
       { name: "Fichas", icon: TagIcon, href: "/admin/fichas" },
       { name: "Areas", icon: GlobeAmericasIcon, href: "/admin/areas" },
       { name: "Sitios", icon: BuildingOfficeIcon, href: "/admin/sitios" },
-      { name: "Permisos", icon: ClipboardDocumentCheckIcon, href: "/admin/permisos" },
     ],
   },
 

@@ -12,7 +12,6 @@ import usePermissions from "@/hooks/Usuarios/usePermissions";
 import FormularioPrograma from "@/components/organismos/Programas/FormRegister";
 
 const ProgramasTable = () => {
-  const { userHasPermission } = usePermissions();
 
   const { programas, isLoading, isError, error, addPrograma, changeState } =
     usePrograma();

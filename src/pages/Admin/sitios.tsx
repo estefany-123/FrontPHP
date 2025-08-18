@@ -158,7 +158,7 @@ const SitiosTable = () => {
       <Globaltable
         data={sitiosWithKey ?? []}
         columns={columns}
-        onEdit={handleEdit}
+        // onEdit={handleEdit}
         onDelete={(sitio) => handleState(sitio.id_sitio)}
         extraHeaderContent={
           <div>
