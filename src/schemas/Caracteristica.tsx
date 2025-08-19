@@ -18,7 +18,12 @@ export const CaracteristicaUpdateSchema = z.object({
   nombre: z
     .string()
     .min(1, { message: "Es necesario un nombre" })
-    .min(2, "Mínimo 2 caracteres"),
+    .min(2, "Mínimo 2 caracteres").optional(),
+  simbolo: z
+    .string()
+    .min(1, { message: "Es necesario un simbolo" })
+    .min(2, "Mínimo 2 caracteres").optional(),
+
 });
 
 export type CaracteristicaUpdate = z.infer<typeof CaracteristicaUpdateSchema>;

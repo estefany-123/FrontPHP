@@ -5,6 +5,7 @@ import { addToast } from "@heroui/react";
 import Buton from "@/components/molecules/Button";
 import { useInventario } from "@/hooks/Inventarios/useInventario";
 import { InventarioUpdate, InventarioUpdateSchema } from "@/schemas/Inventario";
+import { AxiosError } from "axios";
 
 type FormuProps = {
   inventarios: InventarioUpdate[];
@@ -59,6 +60,17 @@ export const FormUpdate = ({
         shouldShowTimeoutProgress: true,
       });
     } catch (error) {
+      const err = error as AxiosError<{ message: string | string[] }>;
+      const backendMessage =
+        err?.response?.data?.message || "Ocurrió un error inesperado";
+
+      addToast({
+        title: "Debes activar el elemento para poder agregar stock",
+        description: backendMessage,
+        color: "danger",
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      });
       console.error("Error al actualizar el área: ", error);
     }
   };
@@ -73,7 +85,7 @@ export const FormUpdate = ({
       <Input
         label="Cantidad"
         placeholder="Ingrese la cantidad ..."
-        {...register("stock", {valueAsNumber:true})}
+        {...register("stock", { valueAsNumber: true })}
         isInvalid={!!errors.stock}
         errorMessage={errors.stock?.message}
       />

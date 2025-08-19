@@ -15,13 +15,35 @@ export function useInventario() {
 
   const { data, isLoading, isError, error } = useQuery<InventarioConSitio[]>({
     queryKey: ["inventarios"],
-    queryFn: getInventario,
+    queryFn: async () => {
+      const res = await getInventario();
+      return res.map((inv: any) => ({
+        ...inv,
+        fk_elemento: inv.elemento, // 👈 reasignamos
+        fk_sitio: inv.sitio, // 👈 reasignamos
+      }));
+    },
     staleTime: 0,
     gcTime: 1000 * 60 * 10,
     refetchOnWindowFocus: true,
-    refetchOnMount:true
+    refetchOnMount: true,
   });
-
+  if (data) {
+    console.log(
+      "📦 Inventarios desde backend (raw):",
+      JSON.parse(JSON.stringify(data))
+    );
+    data.forEach((inv) => {
+      console.log(
+        "➡️ Inventario:",
+        inv.id_inventario,
+        "Elemento:",
+        inv.fk_elemento?.nombre,
+        "Caracteristicas:",
+        inv.fk_elemento?.fk_caracteristica
+      );
+    });
+  }
   const addInventarioMutation = useMutation({
     mutationFn: postInventario,
     onSuccess: () => {

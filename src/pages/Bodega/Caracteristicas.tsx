@@ -38,7 +38,7 @@ export const CaracteristicasTable = () => {
     try {
       await addCaracteristica(caracteristica);
       
-      handleClose(); // Cerrar el modal después de darle agregar usuario
+      handleClose(); 
     } catch (error) {
       console.error("Error al agregar el caracteristica de movimiento:", error);
     }
@@ -48,11 +48,11 @@ export const CaracteristicasTable = () => {
     setSelectedCaracteristicas(caracteristica);
     setIsOpenUpdate(true);
   };
-console.log("Características recibidas:", caracteristicas);
 
-  // Definir las columnas de la tabla
+
   const columns: TableColumn<Caracteristica>[] = [
     { key: "nombre", label: "Nombre" },
+    { key: "simbolo", label: "Simbolo" },
     {
       key: "created_at",
       label: "Fecha Creación",
@@ -109,7 +109,7 @@ console.log("Características recibidas:", caracteristicas);
         <Card className="w-full">
           <CardBody>
             <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-bold">Gestionar Caraccteristicas</h1>
+              <h1 className="text-2xl font-bold">Gestionar Caracteristicas</h1>
               <div className="flex gap-2">
                 <Buton text="Elementos" onPress={handleGoToElemento} />
               </div>

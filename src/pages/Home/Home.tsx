@@ -82,46 +82,46 @@ const Dashboard = () => {
     return new Date(m.created_at).toDateString() === hoy;
   });
 
-  const stockData = (() => {
-    const labels: string[] = [];
-    const data: number[] = [];
+  // const stockData = (() => {
+  //   const labels: string[] = [];
+  //   const data: number[] = [];
 
-    inventarios.forEach((inv: any) => {
-      const elemento = elementos.find(
-        (e: any) =>
-          e.idElemento === inv.id_elemento || e.id_elemento === inv.id_elemento
-      );
+  //   inventarios.forEach((inv: any) => {
+  //     const elemento = elementos.find(
+  //       (e: any) =>
+  //         e.id_elemento === inv.id_elemento || e.id_elemento === inv.id_elemento
+  //     );
 
-      const nombreElemento = elemento?.nombre
-        ? elemento.nombre
-        : `Elemento ID ${inv.id_elemento}`;
+  //     const nombreElemento = elemento?.nombre
+  //       ? elemento.nombre
+  //       : `Elemento ID ${inv.id_elemento}`;
 
-      labels.push(nombreElemento);
-      data.push(Number(inv.stock || 0));
-    });
+  //     labels.push(nombreElemento);
+  //     data.push(Number(inv.stock || 0));
+  //   });
 
-    return {
-      labels,
-      datasets: [
-        {
-          label: "Stock",
-          data,
-          backgroundColor: [
-            "#f87171",
-            "#60a5fa",
-            "#34d399",
-            "#fbbf24",
-            "#a78bfa",
-            "#f472b6",
-            "#facc15",
-            "#38bdf8",
-            "#818cf8",
-            "#5eead4",
-          ],
-        },
-      ],
-    };
-  })();
+  //   return {
+  //     labels,
+  //     datasets: [
+  //       {
+  //         label: "Stock",
+  //         data,
+  //         backgroundColor: [
+  //           "#f87171",
+  //           "#60a5fa",
+  //           "#34d399",
+  //           "#fbbf24",
+  //           "#a78bfa",
+  //           "#f472b6",
+  //           "#facc15",
+  //           "#38bdf8",
+  //           "#818cf8",
+  //           "#5eead4",
+  //         ],
+  //       },
+  //     ],
+  //   };
+  // })();
 
   return (
     <div className="p-4 space-y-6">
@@ -169,7 +169,7 @@ const Dashboard = () => {
         </div>
 
         {/* Gráfico Circular de Stock */}
-        <div className="bg-white p-4 rounded-xl shadow dark:bg-zinc-800 dark:text-white h-[300px]">
+        {/* <div className="bg-white p-4 rounded-xl shadow dark:bg-zinc-800 dark:text-white h-[300px]">
           <h2 className="text-base font-semibold mb-4">
             Distribución de Stock
           </h2>
@@ -188,59 +188,60 @@ const Dashboard = () => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
 
-      {/* 📅 Gráfico de Movimientos por Mes */}
-      <div className="bg-white p-4 rounded-xl shadow dark:bg-zinc-800 dark:text-white h-[300px]">
-        <h2 className="text-base font-semibold mb-4">Movimientos por Mes</h2>
-        <Bar
-          data={movimientosPorMes}
-          options={{
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-          }}
-        />
-      </div>
+        {/* 📅 Gráfico de Movimientos por Mes */}
+        <div className="bg-white p-4 rounded-xl shadow dark:bg-zinc-800 dark:text-white h-[300px]">
+          <h2 className="text-base font-semibold mb-4">Movimientos por Mes</h2>
+          <Bar
+            data={movimientosPorMes}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+            }}
+          />
+        </div>
 
-      {/* 📋 Tabla de últimos movimientos */}
-      <div className="bg-white p-4 rounded-xl shadow dark:bg-zinc-800 dark:text-white">
-        <h2 className="text-lg font-semibold mb-4">Últimos Movimientos</h2>
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm text-left">
-            <thead>
-              <tr className="text-gray-600 dark:text-white">
-                <th className="py-2 px-4">ID</th>
-                <th className="py-2 px-4">Descripción</th>
-                <th className="py-2 px-4">Fecha</th>
-                <th className="py-2 px-4">Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ultimosMovimientos.map((mov: any) => {
-                const fecha = mov.created_at
-                  ? new Date(mov.created_at).toLocaleDateString()
-                  : "Sin fecha";
-                const estado = mov.aceptado
-                  ? "Aceptado"
-                  : mov.cancelado
-                    ? "Cancelado"
-                    : mov.enProceso
-                      ? "Pendiente"
-                      : "Desconocido";
-                return (
-                  <tr key={mov.idMovimiento}>
-                    <td className="py-2 px-4">{mov.idMovimiento}</td>
-                    <td className="py-2 px-4">
-                      {mov.descripcion ?? "Sin descripción"}
-                    </td>
-                    <td className="py-2 px-4">{fecha}</td>
-                    <td className="py-2 px-4">{estado}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        {/* 📋 Tabla de últimos movimientos */}
+        <div className="bg-white p-4 rounded-xl shadow dark:bg-zinc-800 dark:text-white">
+          <h2 className="text-lg font-semibold mb-4">Últimos Movimientos</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm text-left">
+              <thead>
+                <tr className="text-gray-600 dark:text-white">
+                  <th className="py-2 px-4">ID</th>
+                  <th className="py-2 px-4">Descripción</th>
+                  <th className="py-2 px-4">Fecha</th>
+                  <th className="py-2 px-4">Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ultimosMovimientos.map((mov: any) => {
+                  const fecha = mov.created_at
+                    ? new Date(mov.created_at).toLocaleDateString()
+                    : "Sin fecha";
+                  const estado = mov.aceptado
+                    ? "Aceptado"
+                    : mov.cancelado
+                      ? "Cancelado"
+                      : mov.enProceso
+                        ? "Pendiente"
+                        : "Desconocido";
+                  return (
+                    <tr key={mov.idMovimiento}>
+                      <td className="py-2 px-4">{mov.idMovimiento}</td>
+                      <td className="py-2 px-4">
+                        {mov.descripcion ?? "Sin descripción"}
+                      </td>
+                      <td className="py-2 px-4">{fecha}</td>
+                      <td className="py-2 px-4">{estado}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

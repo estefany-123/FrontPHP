@@ -64,9 +64,9 @@ export default function FormCategorias({
         label="Codigo"
         type="text"
         placeholder="Ingrese el codigo UNPSC"
-        {...register("codigoUNPSC")}
-        isInvalid={!!errors.codigoUNPSC}
-        errorMessage={errors.codigoUNPSC?.message}
+        {...register("codigo_unpsc")}
+        isInvalid={!!errors.codigo_unpsc}
+        errorMessage={errors.codigo_unpsc?.message}
       />
       <Controller
         control={control}

@@ -6,7 +6,7 @@ import { useCaracteristica } from "@/hooks/Caracteristicas/useCaracteristicas";
 import { Form } from "@heroui/form";
 import { addToast, Checkbox, Input, Select, SelectItem } from "@heroui/react";
 import { ElementoCreate, ElementoCreateSchema } from "@/schemas/Elemento";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Buton from "@/components/molecules/Button";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import Modal from "../modal";
@@ -37,6 +37,7 @@ export default function FormularioElementos({
     mode: "onChange",
     defaultValues: {
       estado: true,
+      baja:false
     },
   });
 
@@ -56,6 +57,7 @@ export default function FormularioElementos({
   const handleCloseCaracteristica = () => setShowModalCaracteristica(false);
 
   const onSubmit = async (data: ElementoCreate) => {
+    console.log("Datos enviados:", data);
     try {
       await addData({
         
@@ -68,8 +70,7 @@ export default function FormularioElementos({
           ? data.fk_caracteristica
           : undefined,
       });
-      
-
+      console.log("Esto es lo que manda imagen", data.imagen_elemento);
       onClose();
       addToast({
         title: "Registro Exitoso",
@@ -120,6 +121,8 @@ export default function FormularioElementos({
                 field.onChange(value);
                 setValue("perecedero", value === "perecedero");
                 setValue("no_perecedero", value === "no_perecedero");
+
+                console.log("💡 Valores actuales del formulario:", value);
               }}
               isInvalid={!!errors.tipoElemento}
               errorMessage={errors.tipoElemento?.message}
@@ -180,84 +183,151 @@ export default function FormularioElementos({
         <Controller
           control={control}
           name="fk_unidad_medida"
-          render={({ field }) => (
-            <div className="w-full flex">
-              <Select
-                label="Unidad"
-                {...field}
-                className="w-full"
-                placeholder="Selecciona una unidad de medida..."
-                aria-label="Seleccionar Unidad de Medida"
-                onChange={(e) => field.onChange(Number(e.target.value))}
-                isInvalid={!!errors.fk_unidad_medida}
-                errorMessage={errors.fk_unidad_medida?.message}
-              >
-                {unidades?.length ? (
-                  unidades
-                    .filter((u) => u.estado === true)
-                    .map((unidad) => (
-                      <SelectItem
-                        key={unidad.id_unidad}
-                        textValue={unidad.nombre}
-                      >
-                        {unidad.nombre}
-                      </SelectItem>
-                    ))
-                ) : (
-                  <SelectItem isDisabled>
-                    No hay unidades disponibles
-                  </SelectItem>
-                )}
-              </Select>
-              <Buton
-                type="button"
-                className="m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl "
-                onPress={() => setShowModal(true)}
-              >
-                <PlusCircleIcon />
-              </Buton>
-            </div>
-          )}
+          render={({ field }) => {
+            const [query, setQuery] = useState("");
+            const [showOptions, setShowOptions] = useState(false);
+
+            const filteredUnidades =
+              unidades?.filter(
+                (u) =>
+                  u.estado &&
+                  u.nombre.toLowerCase().includes(query.toLowerCase())
+              ) || [];
+
+            const selectedUnidad = unidades?.find(
+              (u) => u.id_unidad === field.value
+            );
+
+            useEffect(() => {
+              if (selectedUnidad) {
+                setQuery(selectedUnidad.nombre);
+              }
+            }, [selectedUnidad?.id_unidad]);
+
+            return (
+              <div className="relative w-full flex items-start gap-2">
+                <div className="w-full">
+                  <Input
+                    label="Unidad"
+                    placeholder="Selecciona una unidad de medida..."
+                    value={query}
+                    onChange={(e) => {
+                      setQuery(e.target.value);
+                      setShowOptions(true);
+                      field.onChange(null); // borra selección anterior si empieza a escribir
+                    }}
+                    onFocus={() => setShowOptions(true)}
+                    onBlur={() => setTimeout(() => setShowOptions(false), 150)}
+                    isInvalid={!!errors.fk_unidad_medida}
+                    errorMessage={errors.fk_unidad_medida?.message}
+                  />
+
+                  {showOptions && filteredUnidades.length > 0 && (
+                    <div
+                      className="absolute z-20 mt-1 w-80 max-h-52 overflow-auto 
+              rounded-lg border border-gray-200 bg-white/80 
+              shadow-lg transition-all duration-200 backdrop-blur-sm"
+                    >
+                      {filteredUnidades.map((unidad) => (
+                        <div
+                          key={unidad.id_unidad}
+                          className="px-4 py-2 text-sm text-black-700 hover:bg-gray-300 cursor-pointer"
+                          onMouseDown={(e) => {
+                            // evita que blur se dispare antes del onClick
+                            e.preventDefault();
+                            field.onChange(unidad.id_unidad);
+                            setQuery(unidad.nombre);
+                            setShowOptions(false);
+                          }}
+                        >
+                          {unidad.nombre}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <Buton
+                  type="button"
+                  className="m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl "
+                  onPress={() => setShowModal(true)}
+                >
+                  <PlusCircleIcon />
+                </Buton>
+              </div>
+            );
+          }}
         />
 
         <Controller
           control={control}
           name="fk_categoria"
-          render={({ field }) => (
-            <div className="w-full flex">
-              <Select
-                label="Categoria"
-                {...field}
-                className="w-full"
-                placeholder="Selecciona una categoría..."
-                aria-label="Seleccionar Categoría"
-                onChange={(e) => field.onChange(Number(e.target.value))}
-                isInvalid={!!errors.fk_categoria}
-                errorMessage={errors.fk_categoria?.message}
-              >
-                {categorias?.length ? (
-                  categorias
-                    .filter((cat) => cat.estado === true)
-                    .map((cat) => (
-                      <SelectItem key={cat.id_categoria} textValue={cat.nombre}>
-                        {cat.nombre}
-                      </SelectItem>
-                    ))
-                ) : (
-                  <SelectItem isDisabled>
-                    No hay categorías disponibles
-                  </SelectItem>
-                )}
-              </Select>
-              <Buton
-                type="button"
-                className="m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl "
-                onPress={() => setShowModalCategoria(true)}
-              >
-                <PlusCircleIcon />
-              </Buton>
-            </div>
-          )}
+          render={({ field }) => {
+            const [query, setQuery] = useState("");
+            const [showOptions, setShowOptions] = useState(false);
+
+            const filteredCategorias =
+              categorias?.filter(
+                (c) =>
+                  c.estado &&
+                  c.nombre.toLowerCase().includes(query.toLowerCase())
+              ) || [];
+
+            const selectedCategoria = categorias?.find(
+              (c) => c.id_categoria === field.value
+            );
+
+            useEffect(() => {
+              if (selectedCategoria) {
+                setQuery(selectedCategoria.nombre);
+              }
+            }, [selectedCategoria?.id_categoria]);
+
+            return (
+              <div className="relative w-full flex items-start gap-2">
+                <div className="w-full">
+                  <Input
+                    label="Categoría"
+                    placeholder="Selecciona una categoría..."
+                    value={query}
+                    onChange={(e) => {
+                      setQuery(e.target.value);
+                      setShowOptions(true);
+                      field.onChange(null);
+                    }}
+                    onFocus={() => setShowOptions(true)}
+                    onBlur={() => setTimeout(() => setShowOptions(false), 150)}
+                    isInvalid={!!errors.fk_categoria}
+                    errorMessage={errors.fk_categoria?.message}
+                  />
+                  {showOptions && filteredCategorias.length > 0 && (
+                    <div className="absolute z-20 mt-1 w-80 max-h-52 overflow-auto rounded-lg border border-gray-200 bg-white/80 shadow-lg transition-all duration-200 backdrop-blur-sm">
+                      {filteredCategorias.map((cat) => (
+                        <div
+                          key={cat.id_categoria}
+                          className="px-4 py-2 text-sm text-black-700 hover:bg-gray-300 cursor-pointer"
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            field.onChange(cat.id_categoria);
+                            setQuery(cat.nombre);
+                            setShowOptions(false);
+                          }}
+                        >
+                          {cat.nombre}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <Buton
+                  type="button"
+                  className="m-2 w-10 h-10 !px-0 !min-w-0 rounded-xl"
+                  onPress={() => setShowModalCategoria(true)}
+                >
+                  <PlusCircleIcon />
+                </Buton>
+              </div>
+            );
+          }}
         />
 
         <Checkbox
@@ -274,29 +344,71 @@ export default function FormularioElementos({
               <Controller
                 control={control}
                 name="fk_caracteristica"
-                render={({ field }) => (
-                  <Select
-                    label="Característica"
-                    {...field}
-                    className="w-full"
-                    placeholder="Selecciona una característica..."
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                    isInvalid={!!errors.fk_caracteristica}
-                    errorMessage={errors.fk_caracteristica?.message}
-                  >
-                    {caracteristicas?.length ? (
-                      caracteristicas.map((cat) => (
-                        <SelectItem key={cat.id_caracteristica}>
-                          {cat.nombre}
-                        </SelectItem>
-                      ))
-                    ) : (
-                      <SelectItem isDisabled>
-                        No hay características disponibles
-                      </SelectItem>
-                    )}
-                  </Select>
-                )}
+                render={({ field }) => {
+                  const [query, setQuery] = useState("");
+                  const [showOptions, setShowOptions] = useState(false);
+
+                  const filteredCaracteristicas =
+                    caracteristicas?.filter((c) =>
+                      c.nombre?.toLowerCase().includes(query.toLowerCase())
+                    ) || [];
+
+                  const selectedCaracteristica = caracteristicas?.find(
+                    (c) => c.id_caracteristica === field.value
+                  );
+
+                  useEffect(() => {
+                    if (selectedCaracteristica) {
+                      setQuery(selectedCaracteristica.nombre as string);
+                    }
+                  }, [selectedCaracteristica?.id_caracteristica]);
+
+                  return (
+                    <div className="relative w-full flex items-start gap-2">
+                      <div className="w-full">
+                        <Input
+                          label="Característica"
+                          placeholder="Selecciona una característica..."
+                          value={query}
+                          onChange={(e) => {
+                            setQuery(e.target.value);
+                            setShowOptions(true);
+                            field.onChange(null);
+                          }}
+                          onFocus={() => setShowOptions(true)}
+                          onBlur={() =>
+                            setTimeout(() => setShowOptions(false), 150)
+                          }
+                          isInvalid={!!errors.fk_caracteristica}
+                          errorMessage={errors.fk_caracteristica?.message}
+                        />
+
+                        {showOptions && filteredCaracteristicas.length > 0 && (
+                          <div
+                            className="absolute z-20 mt-1 w-80 max-h-52 overflow-auto 
+              rounded-lg border border-gray-200 bg-white/80 
+              shadow-lg transition-all duration-200 backdrop-blur-sm"
+                          >
+                            {filteredCaracteristicas.map((car) => (
+                              <div
+                                key={car.id_caracteristica}
+                                className="px-4 py-2 text-sm text-black-700 hover:bg-gray-300 cursor-pointer"
+                                onMouseDown={(e) => {
+                                  e.preventDefault();
+                                  field.onChange(car.id_caracteristica);
+                                  setQuery(car.nombre as string);
+                                  setShowOptions(false);
+                                }}
+                              >
+                                {car.nombre}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                }}
               />
             </div>
 

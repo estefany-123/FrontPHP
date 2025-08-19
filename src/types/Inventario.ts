@@ -1,8 +1,11 @@
+import { Elemento } from "./Elemento";
+import { Sitios } from "./sitios";
+
 export type CodigoInventario = {
   id_codigo_inventario: number;
   codigo: string;
-  uso:boolean
-  baja:boolean
+  uso: boolean;
+  baja: boolean;
 };
 
 export type Inventario = {
@@ -17,7 +20,6 @@ export type Inventario = {
   acciones?: string;
   codigos?: CodigoInventario[];
 };
-
 
 export type InventarioConSitio = Inventario & {
   id_inventario?: number;
@@ -36,8 +38,10 @@ export type InventarioConSitio = Inventario & {
     id_elemento: number;
     nombre: string;
     imagen_elemento?: string;
-    fk_caracteristica?: number
+    fk_caracteristica?: number;
   };
+  sitio?: Sitios;
+  elemento?: Elemento;
 };
 
 export type InventarioConElemento = Inventario & {
@@ -49,6 +53,7 @@ export type InventarioConElemento = Inventario & {
     id_elemento: number;
     nombre: string;
     imagen_elemento?: string;
-    fk_caracteristica: boolean;
+    fk_caracteristica: number;
   };
+  tieneCaracteristicas:boolean
 };

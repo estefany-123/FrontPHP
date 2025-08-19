@@ -1,4 +1,4 @@
-import Globaltable from "@/components/organismos/table.tsx"; // Importar la tabla reutilizable
+import Globaltable from "@/components/organismos/table.tsx";
 import { TableColumn } from "@/components/organismos/table.tsx";
 import Buton from "@/components/molecules/Button";
 import Modall from "@/components/organismos/modal";
@@ -13,7 +13,6 @@ import { FormAgregateStock } from "@/components/organismos/Inventarios/FormAgreg
 import { FormUpdate } from "@/components/organismos/Inventarios/FormUpdate";
 import { CodigoInventario } from "../../CodigoInventario";
 import { DocumentTextIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
-import FormularioInventario from "@/components/organismos/Inventarios/FormRegister";
 
 interface InventariosTableProps {
   inventarios?: Inventario[];
@@ -30,16 +29,14 @@ export const InventariosTable = ({
     isError,
     error,
     changeState,
-    addInventario,
   } = useInventario();
 
-  const [isOpen, setIsOpen] = useState(false);
-  const handleClose = () => setIsOpen(false);
-
-  //Modal actualizar
+  // Modal actualizar
   const [IsOpenUpdate, setIsOpenUpdate] = useState(false);
   const [selectedInventarioStock, setSelectedInventarioStock] =
     useState<InventarioConElemento | null>(null);
+
+  // Modal códigos
   const [isOpenCodigos, setIsOpenCodigos] = useState(false);
   const [inventarioCodigos, setInventarioCodigos] =
     useState<InventarioConElemento | null>(null);
@@ -50,6 +47,11 @@ export const InventariosTable = ({
   };
 
   const handleOpenCodigos = (inventario: InventarioConElemento) => {
+    console.log("📑 handleOpenCodigos - inventario recibido:", inventario);
+    console.log(
+      "📑 Características del elemento:",
+      inventario.fk_elemento?.fk_caracteristica
+    );
     setInventarioCodigos(inventario);
     setIsOpenCodigos(true);
   };
@@ -59,35 +61,66 @@ export const InventariosTable = ({
     setSelectedInventarioStock(null);
   };
 
-  const handleAddInventario = async (inventario: Inventario) => {
-    try {
-      await addInventario(inventario);
-      handleClose(); // Cerrar el modal después de darle agregar usuario
-    } catch (error) {
-      console.error("Error al agregar el tipo de movimiento:", error);
-    }
-  };
   const handleState = async (id_inventario: number) => {
     await changeState(id_inventario);
   };
 
   const handleOpenAddStock = (inventario: InventarioConElemento) => {
-    setSelectedInventarioStock(inventario);
+    console.log("👉 handleOpenAddStock - inventario recibido:", inventario);
+    console.log(
+      "👉 Características del elemento:",
+      inventario.fk_elemento?.fk_caracteristica
+    );
+    setSelectedInventarioStock({
+      ...inventario,
+      tieneCaracteristicas: Array.isArray(
+        inventario.fk_elemento?.fk_caracteristica
+      )
+        ? inventario.fk_elemento.fk_caracteristica.length > 0
+        : !!inventario.fk_elemento?.fk_caracteristica,
+    });
     setIsOpenUpdate(true);
   };
+
+  const filtered = (inventariosProp ?? inventariosHook) as InventarioConSitio[];
+
+  const InventariosWithKey = filtered
+    ?.filter((inventario) => {
+      return (
+        inventario?.id_inventario !== undefined &&
+        (id_sitio
+          ? inventario.fk_sitio === id_sitio ||
+            inventario.fk_sitio?.id_sitio === id_sitio
+          : true)
+      );
+    })
+    .map((inventario) => {
+      console.log("📦 Inventario mapeado:", inventario);
+      console.log(
+        "📦 fk_caracteristica:",
+        inventario.fk_elemento?.fk_caracteristica
+      );
+
+      return {
+        ...inventario,
+        key: inventario.id_inventario?.toString() ?? crypto.randomUUID(),
+        id_inventario: inventario.id_inventario || 0,
+        estado: Boolean(inventario.estado),
+        tieneCaracteristicas: Array.isArray(
+          inventario.fk_elemento?.fk_caracteristica
+        )
+          ? inventario.fk_elemento.fk_caracteristica.length > 0
+          : !!inventario.fk_elemento?.fk_caracteristica,
+      };
+    });
 
   const columns: TableColumn<Inventario>[] = [
     {
       key: "fk_elemento",
       label: "Elemento",
       render: (inventario: Inventario) => {
-        const fk_elemento = (inventario as any).fk_elemento;
-
-        const nombre =
-          typeof fk_elemento === "object" && fk_elemento?.nombre
-            ? fk_elemento.nombre
-            : "No encontrado";
-
+        const elemento = (inventario as any).elemento;
+        const nombre = elemento?.nombre ?? "No encontrado";
         return <span>{nombre}</span>;
       },
     },
@@ -95,13 +128,10 @@ export const InventariosTable = ({
       key: "imagen_elemento",
       label: "Imagen",
       render: (inventario: Inventario) => {
-        const fk_elemento = (inventario as any).fk_elemento;
-        const imagen = fk_elemento?.imagen;
-
-        if (!imagen) return <span>No encontrado</span>;
-
-        const src = `http://localhost:3000/img/img/elementos/${imagen}`;
-
+        const elemento = (inventario as any).elemento;
+        const imagen_elemento = elemento?.imagen_elemento;
+        if (!imagen_elemento) return <span>No encontrado</span>;
+        const src = `http://localhost:8000/${imagen_elemento}`;
         return (
           <img
             src={src}
@@ -116,7 +146,6 @@ export const InventariosTable = ({
       label: "Cantidad",
       render: (inventario: Inventario) => {
         const cantidad = inventario.stock ?? 0;
-
         let color = "text-gray-500";
         let estado = "Sin stock";
 
@@ -198,43 +227,8 @@ export const InventariosTable = ({
     },
   ];
 
-  if (isLoading && !inventariosProp) {
-    return <span>Cargando datos...</span>;
-  }
-
-  if (isError && !inventariosProp) {
-    return <span>Error: {error?.message}</span>;
-  }
-
-  const filtered = (inventariosProp ?? inventariosHook) as InventarioConSitio[];
-
-const InventariosWithKey = filtered
-  ?.filter(
-    (inventario) =>
-      inventario?.id_inventario !== undefined &&
-      (id_sitio
-        ? inventario.fk_sitio === id_sitio || 
-          inventario.fk_sitio?.id_sitio === id_sitio
-        : true)
-  )
-  .map((inventario) => ({
-    ...inventario,
-    key:
-      inventario.id_inventario !== undefined && inventario.id_inventario !== null
-        ? inventario.id_inventario.toString()
-        : crypto.randomUUID(),
-    id_inventario: inventario.id_inventario || 0,
-    estado: Boolean(inventario.estado),
-    tieneCaracteristicas: Array.isArray(
-      inventario.fk_elemento?.fk_caracteristica
-    )
-      ? inventario.fk_elemento.fk_caracteristica.length > 0
-      : !!inventario.fk_elemento?.fk_caracteristica,
-  }));
-
-
-  console.log("Inventarios filtrados:", filtered);
-  console.log("id_sitio recibido por props:", id_sitio);
+  if (isLoading && !inventariosProp) return <span>Cargando datos...</span>;
+  if (isError && !inventariosProp) return <span>Error: {error?.message}</span>;
 
   return (
     <div className="p-4">
@@ -243,47 +237,31 @@ const InventariosWithKey = filtered
           Inventarios Registrados
         </h1>
       )}
-      <Modall
-        ModalTitle="Registrar Nueva Caracteristica"
-        isOpen={isOpen}
-        onOpenChange={handleClose}
-      >
-        <FormularioInventario
-          id="inventario-form"
-          addData={handleAddInventario}
-          onClose={handleClose}
-        />
-        <Buton
-          text="Guardar"
-          type="submit"
-          form="inventario-form"
-          className="w-full rounded-xl"
-        />
-      </Modall>
 
+      {/* Modal Agregar Stock */}
       <Modall
         ModalTitle="Agregar Stock"
         isOpen={IsOpenUpdate}
         onOpenChange={handleCloseUpdate}
       >
-        {selectedInventarioStock ? (
-          selectedInventarioStock.fk_elemento?.fk_caracteristica ? (
-            <FormAgregateStock
-              fk_inventario={selectedInventarioStock.id_inventario!}
-              fk_elemento={selectedInventarioStock.fk_elemento.id_elemento!}
-              fk_sitio={selectedInventarioStock.fk_sitio.id_sitio!}
-              onClose={handleCloseUpdate}
-            />
-          ) : (
-            <FormUpdate
-              inventarios={InventariosWithKey ?? []}
-              inventarioId={selectedInventarioStock.id_inventario!}
-              id="FormUpdate"
-              onclose={handleCloseUpdate}
-            />
-          )
+        {selectedInventarioStock?.tieneCaracteristicas ? (
+          <FormAgregateStock
+            fk_inventario={selectedInventarioStock.id_inventario!}
+            fk_elemento={selectedInventarioStock.fk_elemento.id_elemento!}
+            fk_sitio={selectedInventarioStock.fk_sitio.id_sitio!}
+            onClose={handleCloseUpdate}
+          />
+        ) : selectedInventarioStock ? (
+          <FormUpdate
+            inventarios={InventariosWithKey ?? []}
+            inventarioId={selectedInventarioStock.id_inventario!}
+            id="FormUpdate"
+            onclose={handleCloseUpdate}
+          />
         ) : null}
       </Modall>
+
+      {/* Modal Códigos */}
       <Modall
         ModalTitle="Códigos del Inventario"
         isOpen={isOpenCodigos}
@@ -293,9 +271,7 @@ const InventariosWithKey = filtered
           <CodigoInventario
             id_inventario={inventarioCodigos.id_inventario!}
             tieneCaracteristicas={
-              Array.isArray(inventarioCodigos.fk_elemento?.fk_caracteristica)
-                ? inventarioCodigos.fk_elemento.fk_caracteristica.length > 0
-                : !!inventarioCodigos.fk_elemento?.fk_caracteristica
+              !!inventarioCodigos.fk_elemento?.fk_caracteristica
             }
             isOpen={isOpenCodigos}
             onClose={handleCloseCodigos}
@@ -303,15 +279,11 @@ const InventariosWithKey = filtered
         )}
       </Modall>
 
+      {/* Tabla */}
       <Globaltable
         data={InventariosWithKey}
         columns={columns ?? []}
         onDelete={(inventario) => handleState(inventario.id_inventario)}
-        extraHeaderContent={
-          <div>
-            <Buton text="Añadir Inventario" onPress={() => setIsOpen(true)} />
-          </div>
-        }
       />
     </div>
   );
