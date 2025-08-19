@@ -187,16 +187,17 @@ export const RolTable = () => {
         )}
       </Modall>
 
+      { rolesWithKey && (
         <Globaltable
           data={rolesWithKey ?? []}
           columns={columns}
-          onEdit={ handleEdit}
+          onEdit={handleEdit }
           onDelete={
-         (rol) => handleState(rol.id_rol)
+           (rol) => handleState(rol.id_rol)
           }
           extraHeaderContent={
             <div>
-              {
+              {(
                 <Buton text="Nuevo rol" onPress={() => setIsOpen(true)} />
               }
             </div>

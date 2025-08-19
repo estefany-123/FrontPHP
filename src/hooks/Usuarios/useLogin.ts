@@ -1,5 +1,6 @@
 
 import { postLogin } from "@/axios/Usuarios/postLogin";
+import { useAuth } from "@/providers/AuthProvider";
 import { Credenciales } from "@/schemas/User";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +13,8 @@ export default function useLogin(){
     const [isError,setIsError] = useState<boolean>(false);
     const [error,setError] = useState<string | undefined>(undefined);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const {setAuthenticated, setNombre, setPerfil,setIdUser,setPermissions} = useAuth();
+
 
     const navigate = useNavigate();
 
@@ -21,12 +24,18 @@ export default function useLogin(){
 
         try{
             const response  = await postLogin(data);
-            const token = response.data.access_token
+            console.log("Respuesta del login:", response);
+            const token = response.access_token
+            const permissions = response.modules;
              cookies.set("token",token)
+            cookies.set("permissions",permissions);
+
     
           
             setIsError(false);
             setError(undefined);
+            setPermissions(permissions);
+            setAuthenticated(true);
            
             navigate("/");
         }
