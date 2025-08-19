@@ -28,7 +28,6 @@ export function Nav({
 }: NavProps) {
   const navigate = useNavigate();
     const { perfilInfo, setPerfilInfo, isLoading, error } = usePerfil();
-  console.log("perfilinto", perfilInfo);
     
   if (isLoading) return <div>Cargando...</div>;
    if (!perfilInfo) return <div>No se encontraron datos del perfil</div>;
