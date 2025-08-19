@@ -14,11 +14,11 @@ type Props = {
   onclose: () => void;
 };
 
-const FormUpCentro = ({ categoriaId, id, onclose }: Props) => {
+const FormUpCategoria = ({ categoriaId, id, onclose }: Props) => {
   const { updateCategoria, getCategoriaById } = useCategoria();
 
   const foundCategoria = getCategoriaById(categoriaId) as CategoriaUpdate;
-  console.log(foundCategoria);
+  console.log("foundcate",foundCategoria);
 
   const {
     register,
@@ -27,9 +27,9 @@ const FormUpCentro = ({ categoriaId, id, onclose }: Props) => {
   } = useForm({
     resolver: zodResolver(CategoriaUpdateSchema),
     defaultValues: {
-      idCategoria: foundCategoria.idCategoria,
+      id_categoria: foundCategoria.id_categoria,
       nombre: foundCategoria.nombre,
-      codigoUNPSC: foundCategoria.codigoUNPSC,
+      codigo_unpsc: foundCategoria.codigo_unpsc,
     },
   });
 
@@ -37,7 +37,7 @@ const FormUpCentro = ({ categoriaId, id, onclose }: Props) => {
     console.log("submiting...");
     console.log(data);
     try {
-      await updateCategoria(data.idCategoria as number, data);
+      await updateCategoria(data.id_categoria as number, data);
       console.log("Sended success");
       onclose();
       addToast({
@@ -67,11 +67,11 @@ const FormUpCentro = ({ categoriaId, id, onclose }: Props) => {
       />
 
       <Input
-        {...register("codigoUNPSC")}
+        {...register("codigo_unpsc")}
         label="Codigo UNPSC"
         type="text"
-        isInvalid={!!errors.codigoUNPSC}
-        errorMessage={errors.codigoUNPSC?.message}
+        isInvalid={!!errors.codigo_unpsc}
+        errorMessage={errors.codigo_unpsc?.message}
       />
 
       <Buton
@@ -84,4 +84,4 @@ const FormUpCentro = ({ categoriaId, id, onclose }: Props) => {
   );
 };
 
-export default FormUpCentro;
+export default FormUpCategoria;

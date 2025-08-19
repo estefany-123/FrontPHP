@@ -28,7 +28,7 @@ type FormularioProps = {
 type CodigoDisponible = {
   idCodigoInventario: number;
   codigo: string;
-  uso:boolean;
+  uso: boolean;
 };
 
 export default function Formulario({ onClose, id }: FormularioProps) {
@@ -93,6 +93,10 @@ export default function Formulario({ onClose, id }: FormularioProps) {
       fecha_devolucion: data.fecha_devolucion
         ? new Date(data.fecha_devolucion)
         : undefined,
+
+      cantidad: tieneCaracteristicas
+        ? data.codigos?.length || 0
+        : data.cantidad,
     };
 
     // Validación de códigos obligatorios en algunos tipos de movimiento
@@ -131,41 +135,6 @@ export default function Formulario({ onClose, id }: FormularioProps) {
 
       console.log("🔍 Error completo:", error);
       console.log("🔍 Error response:", error?.response?.data);
-
-      let descripcion;
-
-      if (Array.isArray(mensaje)) {
-        descripcion = mensaje.join(", ");
-      } else if (typeof mensaje === "string") {
-        descripcion = mensaje;
-      } else {
-        descripcion =
-          "Uno de los códigos ya se encuentra registrado en el inventario";
-      }
-
-      // Si es un error de códigos, marcamos el input con setError
-      if (campo === "codigos") {
-        setError("codigos", {
-          type: "manual",
-          message: descripcion,
-        });
-      }
-
-      const esErrorCodigos =
-        campo === "codigos" ||
-        (typeof descripcion === "string" &&
-          (descripcion.toLowerCase().includes("códigos ya existen") ||
-            descripcion.toLowerCase().includes("no están disponibles")));
-
-      addToast({
-        title: esErrorCodigos
-          ? "Códigos duplicados o no disponibles"
-          : "Error al guardar movimiento",
-        description: descripcion,
-        color: esErrorCodigos ? "warning" : "danger",
-        timeout: 4000,
-        shouldShowTimeoutProgress: true,
-      });
     }
   };
 
@@ -250,9 +219,7 @@ export default function Formulario({ onClose, id }: FormularioProps) {
               u.nombre.toLowerCase().includes(queryUsuario.toLowerCase())
             );
 
-            const selectedUsuario = users?.find(
-              (u) => u.id === field.value
-            );
+            const selectedUsuario = users?.find((u) => u.id === field.value);
 
             useEffect(() => {
               if (selectedUsuario) {
@@ -486,10 +453,10 @@ export default function Formulario({ onClose, id }: FormularioProps) {
 
               const inventariosFiltrados =
                 (inventarios ?? [])
-                  .filter((i) => i.fk_sitio.id_sitio === sitioSeleccionado)
+                  .filter((i) => i.sitio?.id_sitio === sitioSeleccionado)
                   .filter((i) => i.estado === true)
                   .filter((i) =>
-                    i.fk_elemento?.nombre
+                    i.elemento?.nombre
                       ?.toLowerCase()
                       .includes(query.toLowerCase())
                   ) || [];
@@ -500,7 +467,7 @@ export default function Formulario({ onClose, id }: FormularioProps) {
 
               useEffect(() => {
                 if (inventarioSeleccionado) {
-                  setQuery(inventarioSeleccionado.fk_elemento?.nombre ?? "");
+                  setQuery(inventarioSeleccionado.elemento?.nombre ?? "");
                 }
               }, [inventarioSeleccionado?.id_inventario]);
 
@@ -534,10 +501,16 @@ export default function Formulario({ onClose, id }: FormularioProps) {
                           <div
                             key={inv.id_inventario}
                             className="px-4 py-2 text-sm text-black hover:bg-gray-300 cursor-pointer"
+                            onBlur={() => {
+                              setTimeout(() => {
+                                setShowOptions(false);
+                                if (!field.value) setQuery(""); // opcional
+                              }, 200); // darle tiempo al onMouseDown
+                            }}
                             onMouseDown={(e) => {
                               e.preventDefault();
                               field.onChange(inv.id_inventario);
-                              setQuery(inv.fk_elemento?.nombre ?? "");
+                              setQuery(inv.elemento?.nombre ?? "");
                               setShowOptions(false);
                               setInventarioSeleccionado(
                                 inv.id_inventario ?? null
@@ -549,13 +522,13 @@ export default function Formulario({ onClose, id }: FormularioProps) {
                                 disponibles.map((c) => ({
                                   idCodigoInventario: c.id_codigo_inventario,
                                   codigo: c.codigo,
-                                  uso:c.uso
+                                  uso: c.uso,
                                 }))
                               );
                               setTieneCaracteristicas(disponibles.length > 0);
                             }}
                           >
-                            {inv.fk_elemento?.nombre ?? "Elemento sin nombre"}
+                            {inv.elemento?.nombre ?? "Elemento sin nombre"}
                           </div>
                         ))}
                       </div>
@@ -577,10 +550,23 @@ export default function Formulario({ onClose, id }: FormularioProps) {
 
         {inventarioSeleccionado &&
           tipoMovimientoSeleccionado &&
-          ["salida", "baja", "préstamo", "prestamo", "devolución", "devolucion"].includes(
-            tipoMovimientoSeleccionado
-          ) && (
+          [
+            "salida",
+            "baja",
+            "préstamo",
+            "prestamo",
+            "devolución",
+            "devolucion",
+          ].includes(tipoMovimientoSeleccionado) && (
             <>
+              {console.log(">>> Movimiento:", tipoMovimientoSeleccionado)}
+              {console.log(
+                ">>> Inventario seleccionado:",
+                inventarioSeleccionado
+              )}
+              {console.log(">>> Tiene características?:", tieneCaracteristicas)}
+              {console.log(">>> Codigos disponibles:", codigosDisponibles)}
+
               {tieneCaracteristicas ? (
                 <Controller
                   control={control}
@@ -591,6 +577,9 @@ export default function Formulario({ onClose, id }: FormularioProps) {
                       tipoMovimientoSeleccionado.toLowerCase() === "devolucion"
                         ? codigosDisponibles.filter((c) => c.uso === true)
                         : codigosDisponibles;
+
+                    console.log(">>> Codigos filtrados:", codigosFiltrados);
+                    console.log(">>> Field value:", field.value);
 
                     return (
                       <div className="space-y-2">
@@ -612,6 +601,10 @@ export default function Formulario({ onClose, id }: FormularioProps) {
                                   : (field.value ?? []).filter(
                                       (c) => c !== codigoObj.codigo
                                     );
+                                console.log(
+                                  ">>> Nuevo value después del cambio:",
+                                  updated
+                                );
                                 field.onChange(updated);
                               }}
                             />
@@ -636,6 +629,13 @@ export default function Formulario({ onClose, id }: FormularioProps) {
 
         {tipoMovimientoSeleccionado === "ingreso" && (
           <>
+            {console.log(">>> Movimiento:", tipoMovimientoSeleccionado)}
+            {console.log(
+              ">>> Inventario seleccionado:",
+              inventarioSeleccionado
+            )}
+            {console.log(">>> Tiene características?:", tieneCaracteristicas)}
+            {console.log(">>> Codigos disponibles:", codigosDisponibles)}
             {tieneCaracteristicas ? (
               <Controller
                 control={control}

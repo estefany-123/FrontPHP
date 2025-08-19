@@ -5,23 +5,23 @@ export function mapMovimiento(data: MovimientoCreate): MovimientoPostData {
   return {
     descripcion: data.descripcion,
     cantidad: data.cantidad ?? 0,
-    horaIngreso: data.horaIngreso ?? "",
-    horaSalida: data.horaSalida ?? "",
+    hora_ingreso: data.hora_ingreso ?? "",
+    hora_salida: data.hora_salida ?? "",
     aceptado: data.aceptado ?? false,
-    enProceso: data.enProceso ?? true,
+    en_proceso: data.en_proceso ?? true,
     cancelado: data.cancelado ?? false,
     devolutivo: data.tipo_bien === "devolutivo",
-    noDevolutivo: data.tipo_bien === "no_devolutivo",
-    fkUsuario: data.fkUsuario,
-    fkTipoMovimiento: data.fkTipoMovimiento,
-    fkSitio: data.fkSitio,
-    fkInventario: data.fkInventario,
-    fechaDevolucion: data.fechaDevolucion
-      ? new Date(data.fechaDevolucion)
+    no_devolutivo: data.tipo_bien === "no_devolutivo",
+    fk_usuario: data.fk_usuario,
+    fk_tipo_movimiento: data.fk_tipo_movimiento,
+    fk_sitio: data.fk_sitio,
+    fk_inventario: data.fk_inventario,
+    fecha_devolucion: data.fecha_devolucion
+      ? new Date(data.fecha_devolucion)
       : undefined,
     codigos: data.codigos ?? [],
-    createdAt: undefined,
-    updatedAt: undefined,
-    lugarDestino: data.lugarDestino
+    created_at: undefined,
+    updated_at: undefined,
+    lugar_destino: data.lugar_destino
   };
 }

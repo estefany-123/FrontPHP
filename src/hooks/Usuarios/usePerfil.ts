@@ -1,37 +1,27 @@
 import { getPerfil } from "@/axios/Usuarios/getPerfil";
+import { patchFotoPerfil } from "@/axios/Usuarios/patchFotoPerfil";
 import { Perfil } from "@/types/Usuario";
-import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 
-export function usePerfil(){
+export function usePerfil() {
+   const queryClient = useQueryClient();
+  const { data: perfilInfo, isLoading, error } = useQuery<Perfil>({
+    queryKey: ['perfil'], // Clave única para cache
+    queryFn: getPerfil, // Tu función de fetch
+    staleTime: 5 * 60 * 1000, // Cache válido por 5 minutos (ajusta según necesidades)
+  });
 
-    const [perfilInfo,setPerfilInfo] = useState<Perfil | undefined>(undefined);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<Error | null>(null);
-  
+  const updatefoto = useMutation({
+    mutationFn: async (file: File) => {
+      const response = await patchFotoPerfil(file);
+      return response.updated; 
+    }, onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["perfil"],
+      });
+    },
+  })
 
-
-    useEffect(() => {
-
-
-  async function getProfile() {
-    setIsLoading(true);
-    try {
-      const perfil = await getPerfil();
-      setPerfilInfo(perfil);
-    } catch (error) {
-      setError(error instanceof Error ? error : new Error("Error desconocido"));
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  getProfile();
-}, []);
-
-    
-    
-    return { setPerfilInfo, perfilInfo, isLoading, error }
+  return { perfilInfo, isLoading, error,updatefoto };
 }
- 
- 

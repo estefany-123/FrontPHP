@@ -7,6 +7,7 @@ import {
   DropdownMenu,
   User,
   DropdownItem,
+  Spinner
 } from "@heroui/react";
 import { FormatrackLogo } from "../atoms/Icons";
 import { BellIcon } from "@heroicons/react/24/outline";
@@ -27,13 +28,15 @@ export function Nav({
   cantidadNoLeidas = 0,
 }: NavProps) {
   const navigate = useNavigate();
-    const { perfilInfo, setPerfilInfo, isLoading, error } = usePerfil();
-  console.log("perfilinto", perfilInfo);
-    
-  if (isLoading) return <div>Cargando...</div>;
-   if (!perfilInfo) return <div>No se encontraron datos del perfil</div>;
-   if (error) return <div>Error: {error.message}</div>;
-  
+  const { perfilInfo, isLoading, error } = usePerfil();
+
+  console.log("Perfil Info:", perfilInfo);
+
+
+  if (isLoading) return <div><Spinner className="flex justify-center" /></div>;
+  if (!perfilInfo) return <div>No se encontraron datos del perfil</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
 
   return (
     <Navbar>
@@ -85,11 +88,11 @@ export function Nav({
         <div>
           {children}
         </div>
-
+      
         <User
           name={perfilInfo.nombre}
           avatarProps={{
-            src: `http://127.0.0.1:8000/storage/${perfilInfo.perfil ?? "users/defaultPerfil.png"}`,
+            src: `http://127.0.0.1:8000/storage/${perfilInfo.perfil ?? "http://127.0.0.1:8000/storage/users/defaultPerfil.png"}`,
             onClick: () => navigate("/perfil"),
             isBordered: true,
           }}

@@ -31,13 +31,13 @@ export function useCategoria() {
     categorias: Categoria[] | undefined = data
   ): Categoria | null => {
     return (
-      categorias?.find((categoria) => categoria.idCategoria === id) || null
+      categorias?.find((categoria) => categoria.id_categoria === id) || null
     );
   };
 
   const updateCategoriaMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: UpCategoria }) => {
-      const { idCategoria, ...resto } = data;
+      const { id_categoria, ...resto } = data;
       return UpdCategoria(id, resto);
     },
     onSuccess: () => {
@@ -79,8 +79,8 @@ export function useCategoria() {
     return updateCategoriaMutation.mutateAsync({ id, data });
   };
 
-  const changeState = async (idCategoria: number) => {
-    return changeStateMutation.mutateAsync(idCategoria);
+  const changeState = async (id_categoria: number) => {
+    return changeStateMutation.mutateAsync(id_categoria);
   };
 
   return {

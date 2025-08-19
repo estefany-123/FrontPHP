@@ -3,6 +3,7 @@ import { axiosAPI } from "../axiosAPI"
 
 
 export const getCategorias = async (): Promise<Categoria[]> => {
-    const response = await axiosAPI.get('/categorias/')
+    const response = await axiosAPI.get('/categorias')
+    console.log("getcategorias",response)
     return response.data
 }

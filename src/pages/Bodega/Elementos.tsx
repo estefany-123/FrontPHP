@@ -146,8 +146,7 @@ export const ElementosTable = () => {
     return <span>Error: {error?.message}</span>;
   }
 
-  const ElementosWithKey = elementos
-    ?.filter((elemento) => elemento?.id_elemento !== undefined)
+  const ElementosWithKey = elementos?.filter((elemento) => elemento?.id_elemento !== undefined)
     .map((elemento) => ({
       ...elemento,
       key: elemento.id_elemento
