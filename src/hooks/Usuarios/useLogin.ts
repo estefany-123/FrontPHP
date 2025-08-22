@@ -53,6 +53,7 @@ export default function useLogin(){
     async function logout(){
         try{
             cookies.remove("token");
+            cookies.remove("permissions")
             navigate('/login');
         }
 
