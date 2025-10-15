@@ -10,6 +10,7 @@ import { Card, CardBody } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import FormularioRolPermiso from "@/components/organismos/RolPermiso/FormularioRolPermiso";
 import FormularioRoles from "@/components/organismos/Roles/FormRegister";
+import usePermissions from "@/hooks/Usuarios/usePermissions";
 
 export const RolTable = () => {
   const { roles, isLoading, isError, error, addRol, changeState } = useRol();
@@ -190,7 +191,7 @@ export const RolTable = () => {
 
       { rolesWithKey && (
         <Globaltable
-          data={rolesWithKey ?? []}
+          data={rolesWithKey}
           columns={columns}
           onEdit={handleEdit }
           onDelete={
@@ -200,11 +201,19 @@ export const RolTable = () => {
             <div>
               {(
                 <Buton text="Nuevo rol" onPress={() => setIsOpen(true)} />
+<<<<<<< HEAD
       )}
             </div>
           }
         />
         )}
+=======
+              )}
+            </div>
+          }
+        />
+      )}
+>>>>>>> 8f620bcd1a1f4ba984c756dbd95129b1e95d2a17
     </div>
   );
 };

@@ -23,6 +23,7 @@ export default function FormularioCaracteristicas({ addData, onClose, id }: Form
   const onSubmit = async (data: CaracteristicaCreate) => {
     try {
       await addData(data);
+      console.log("datos enviados",data)
       onClose();
       addToast({
         title: "Registro Exitoso",

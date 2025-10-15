@@ -1,14 +1,14 @@
-import { axiosAPI } from "../axiosAPI"
+// import { axiosAPI } from "../axiosAPI"
 
 
-export const getRefetchPermisos = async (): Promise<any[]> => {
-    try{
-        const response = await axiosAPI.get('/permisos/refetch')
-        console.log("Permisos actualizados:", response);
-        return response.data;
+// export const getRefetchPermisos = async (): Promise<any[]> => {
+//     try{
+//         const response = await axiosAPI.get('/permisos/refetch')
+//         console.log("Permisos actualizados:", response);
+//         return response.data;
         
-    }
-    catch(error){
-        return []
-    }
-}
+//     }
+//     catch(error){
+//         return []
+//     }
+// }
