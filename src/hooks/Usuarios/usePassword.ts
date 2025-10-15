@@ -23,7 +23,8 @@ export default function usePassword(){
         }
         catch(error:any){
             setIsLoading(false)
-            const err = error.response.data.message
+            console.log("error password",error)
+            const err = error.message
             setIsError(true);
             setError(err);
             throw error;

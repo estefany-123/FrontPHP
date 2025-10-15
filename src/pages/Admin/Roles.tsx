@@ -14,6 +14,7 @@ import FormularioRoles from "@/components/organismos/Roles/FormRegister";
 export const RolTable = () => {
   const { roles, isLoading, isError, error, addRol, changeState } = useRol();
 
+
   //Modal agregar
   const [isOpen, setIsOpen] = useState(false);
   const handleClose = () => setIsOpen(false);
@@ -187,22 +188,23 @@ export const RolTable = () => {
         )}
       </Modall>
 
+      { rolesWithKey && (
         <Globaltable
           data={rolesWithKey ?? []}
           columns={columns}
-          onEdit={ handleEdit}
+          onEdit={handleEdit }
           onDelete={
-         (rol) => handleState(rol.id_rol)
+           (rol) => handleState(rol.id_rol)
           }
           extraHeaderContent={
             <div>
-              {
+              {(
                 <Buton text="Nuevo rol" onPress={() => setIsOpen(true)} />
-              }
+      )}
             </div>
           }
         />
-
+        )}
     </div>
   );
 };
